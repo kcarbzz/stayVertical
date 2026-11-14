@@ -1,0 +1,18 @@
+{
+  "resolucion_m": 80.0,
+  "parche_m": 3040.0,
+  "cuerpos_disponibles": [
+    "Luna",
+    "Marte"
+  ],
+  "zonas_terrestres": [
+    "Monterrey",
+    "Atacama",
+    "Teide",
+    "MeteorCrater"
+  ],
+  "normalizacion": "mediana e IQR terrestres",
+  "peso_fisico": 0.5,
+  "candidatos_geom": null,
+  "validacion": "exploratoria, no geologica"
+}

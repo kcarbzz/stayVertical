@@ -7,3 +7,5 @@ __pycache__/
 data/raw/
 *.img
 *.pyc
+# Los recortes exportados por el notebook son pequeños y hacen falta para scripts/exportar_web.py
+!data/resultados/*.tif
