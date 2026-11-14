@@ -13,14 +13,17 @@
 <div id="aviso" hidden>DATOS DE MUESTRA: los resultados mostrados son de ejemplo y no son reales.</div>
 <header>
   <h1>Stay Vertical</h1>
-  <p class="sub">Elige un sitio lunar y mira dónde en la Tierra se parece su terreno.</p>
+  <p class="sub">Elige un terreno de la Luna o de Marte y mira qué parches de la Tierra se le parecen en relieve.</p>
 </header>
 <main>
   <aside>
-    <label for="sitio">Sitio lunar</label>
-    <select id="sitio"></select>
+    <div id="cuerpos" role="tablist"></div>
+    <label for="ref">Parche de referencia</label>
+    <select id="ref"></select>
     <div id="ficha"></div>
-    <div id="gemelos"></div>
+    <div id="detalle"></div>
+    <div id="lista"></div>
+    <div id="notas"></div>
   </aside>
   <div id="mapa"></div>
 </main>

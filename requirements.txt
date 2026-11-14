@@ -1,6 +1,9 @@
-earthengine-api 
-rasterio 
-numpy 
-pandas 
-pyarrow
+pystac-client
+planetary-computer
+rasterio
+pyproj
+scipy
+numpy
+pandas
 matplotlib
+pillow
