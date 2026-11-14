@@ -9,6 +9,7 @@ Uso:
 """
 import argparse
 import json
+import re
 from pathlib import Path
 
 import numpy as np
@@ -23,12 +24,27 @@ RASGOS = [
     "curvatura_abs_media", "curvatura_abs_p90",
     "rugosidad_mediana", "rugosidad_p90", "rugosidad_std",
 ]
+# Nombre legible de las regiones cuyo identificador no basta por sí solo.
 NOMBRES_REGION = {
     "Monterrey": "Monterrey, México",
     "Atacama": "Atacama, Chile",
-    "Teide": "Teide, Tenerife (España)",
-    "MeteorCrater": "Meteor Crater, Arizona (EE. UU.)",
+    "Teide": "Teide, Tenerife",
+    "MeteorCrater": "Meteor Crater, Arizona",
+    "KingsCanyonAustralia": "Kings Canyon, Australia",
+    "GreatPlainsKansas": "Great Plains, Kansas",
+    "MountStHelens": "Mount St. Helens",
+    "Popocatepetl": "Popocatépetl",
 }
+NOMBRES_CATEGORIA = {
+    "Crateres_calderas": "Cráteres y calderas",
+    "Canones_mesetas": "Cañones y mesetas",
+}
+
+
+def lugar(region):
+    return NOMBRES_REGION.get(region) or re.sub(r"(?<=[a-z])(?=[A-Z])", " ", region)
+
+
 LADO_MINIATURA = 152
 
 
@@ -90,6 +106,13 @@ def main():
     )
     vectores = a_lonlat(vectores).set_index("parche_id")
     rankings = pd.read_csv(ent / "rankings_completos.csv")
+    categorias = {}
+    cat = next(iter(sorted(ent.glob("catalogo_regiones*.csv"))), None)
+    if cat is not None:
+        categorias = {
+            reg: NOMBRES_CATEGORIA.get(c, c)
+            for reg, c in pd.read_csv(cat).set_index("region")["categoria"].items()
+        }
     sens = pd.read_csv(ent / "sensibilidad_pesos.csv")
 
     dems = {}
@@ -127,7 +150,8 @@ def main():
                 cand.update({
                     "puesto": puesto,
                     "region": c["region"],
-                    "lugar": NOMBRES_REGION.get(c["region"], c["region"]),
+                    "lugar": lugar(c["region"]),
+                    "categoria": categorias.get(c["region"], ""),
                     "distancia_fisica": round(c["distancia_fisica"], 4),
                     "corr_forma": round(c["corr_forma"], 4),
                     "rotacion_grados": int(c["rotacion_grados"]),
@@ -155,8 +179,9 @@ def main():
         "muestra": False,
         "config": config,
         "rasgos": RASGOS,
+        "parches_tierra": len(tierra),
         "regiones_tierra": [
-            {"region": reg, "lugar": NOMBRES_REGION.get(reg, reg), "parches": len(g),
+            {"region": reg, "lugar": lugar(reg), "categoria": categorias.get(reg, ""), "parches": len(g),
              "lat": round(g["lat"].mean(), 4), "lon": round(g["lon"].mean(), 4)}
             for reg, g in tierra.groupby("region")
         ],

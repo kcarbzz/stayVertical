@@ -39,7 +39,7 @@ function tablaFicha(a, b) {
   return `<table>${cab}${filas}</table>`;
 }
 
-function elegirCandidato(i) {
+function elegirCandidato(i, volar = true) {
   const c = ref.top[i];
   document.querySelectorAll('.cand').forEach((e, j) => e.classList.toggle('sel', j === i));
   marcas.forEach((m, j) => m.setStyle({fillColor: j === i ? '#f0b429' : '#3b82f6'}));
@@ -57,8 +57,10 @@ function elegirCandidato(i) {
       <tr><td>Score combinado</td><td class="score">${c.score_final}</td><td class="u">menor = mejor</td></tr>
     </table>
     ${tablaFicha(ref, c)}`;
-  mapa.flyToBounds(huella(c, datos.config.parche_m * 4), {duration: 0.8});
-  marcas[i].openPopup();
+  if (volar) {
+    mapa.flyToBounds(huella(c, datos.config.parche_m * 4), {duration: 0.8});
+    marcas[i].openPopup();
+  }
 }
 
 function mostrarRef(id) {
@@ -67,7 +69,9 @@ function mostrarRef(id) {
   capa.clearLayers();
   marcas = [];
   const lista = $('lista');
-  lista.innerHTML = `<h3>Los ${ref.top.length} mejores de ${ref.n_candidatos} parches terrestres</h3>`;
+  const filtro = ref.n_candidatos < datos.parches_tierra
+    ? `<p class="mut">De ${datos.parches_tierra} parches terrestres, los ${ref.n_candidatos} más cercanos en los 8 rasgos pasan a la comparación de forma.</p>` : '';
+  lista.innerHTML = `<h3>Los ${ref.top.length} mejores parches terrestres</h3>${filtro}`;
   // Se dibujan del último al primero para que el puesto 1 quede encima.
   [...ref.top].reverse().forEach(c => {
     L.rectangle(huella(c, datos.config.parche_m), {color: '#f0b429', weight: 1, fillOpacity: 0.15}).addTo(capa);
@@ -81,12 +85,13 @@ function mostrarRef(id) {
     const d = document.createElement('button');
     d.className = 'cand';
     d.innerHTML = `<img class="rot${c.rotacion_grados}" src="${esc(c.img)}" alt="">
-      <span><b>${c.puesto}. ${esc(c.lugar)}</b><br>
+      <span><b>${c.puesto}. ${esc(c.lugar)}</b>${c.categoria ? ` <span class="cat">${esc(c.categoria)}</span>` : ''}<br>
       <span class="score">score ${c.score_final}</span> · física ${c.distancia_fisica} · forma ${c.corr_forma}</span>`;
     d.onclick = () => elegirCandidato(i);
     lista.appendChild(d);
   });
-  elegirCandidato(0);
+  elegirCandidato(0, false);
+  mapa.fitBounds(L.latLngBounds(ref.top.map(c => [c.lat, c.lon])).pad(0.3), {maxZoom: 11});
 }
 
 function mostrarCuerpo(nombre) {
@@ -103,9 +108,10 @@ function mostrarCuerpo(nombre) {
     <table><tr><th>Peso físico</th><th>Mismo nº 1</th><th>Top 3 en común</th></tr>${s}</table>
     <p class="mut">Comparado con el 50/50 usado aquí, promediando las ${cuerpo.referencias.length} referencias de ${esc(cuerpo.nombre)}.</p>
     <h3>Cómo leer esto</h3>
-    <p class="mut">El score ordena ${cuerpo.referencias[0].n_candidatos} parches de ${datos.regiones_tierra.length} zonas
-      (${datos.regiones_tierra.map(r => esc(r.region)).join(', ')}). No es un porcentaje de parecido ni una validación geológica:
-      solo compara relieve a ${datos.config.resolucion_m} m por píxel.</p>
+    <p class="mut">El catálogo terrestre tiene ${datos.parches_tierra} parches de ${datos.regiones_tierra.length} zonas
+      (${[...new Set(datos.regiones_tierra.map(r => r.categoria).filter(Boolean))].map(c => esc(c.toLowerCase())).join(', ')}).
+      El score solo ordena dentro de ese catálogo: no es un porcentaje de parecido ni una validación geológica,
+      y compara únicamente relieve a ${datos.config.resolucion_m} m por píxel.</p>
     <p class="mut">Datos: Copernicus DEM GLO-30 (Tierra), NASA LRO/LOLA (Luna), ESA/DLR Mars Express HRSC (Marte).</p>`;
   mostrarRef(cuerpo.referencias[0].id);
 }

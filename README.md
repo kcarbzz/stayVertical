@@ -8,8 +8,8 @@ Web: https://stay-vertical.wiki
 ## Cómo funciona
 
 1. El notebook descarga modelos de elevación: Copernicus DEM GLO-30 (Tierra), NASA LRO/LOLA (Luna) y ESA/DLR Mars Express HRSC (Marte), y los lleva a 80 m por píxel.
-2. Corta cada terreno en parches de 3,04 km y resume cada uno en 8 descriptores de pendiente, curvatura y rugosidad.
-3. Para cada parche lunar o marciano ordena los parches terrestres combinando la distancia entre descriptores y la correlación de forma (con rotaciones de 0, 90, 180 y 270°).
+2. El catálogo terrestre son 50 regiones (montañas, volcanes, desiertos, cráteres y cañones). Corta cada terreno en parches de 3,04 km y resume cada uno en 8 descriptores de pendiente, curvatura y rugosidad.
+3. Para cada parche lunar o marciano preselecciona los 80 parches terrestres más cercanos en esos descriptores y los ordena combinando la distancia entre descriptores y la correlación de forma (con rotaciones de 0, 90, 180 y 270°).
 4. `scripts/exportar_web.py` convierte esos resultados en lo que muestra la web.
 
 Los resultados son exploratorios: un ranking de relieve dentro de un catálogo pequeño, no una validación geológica. El detalle está en `notebooks/DOCUMENTO_TECNICO.md`.
