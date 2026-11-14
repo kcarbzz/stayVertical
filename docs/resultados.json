@@ -1,0 +1,23 @@
+{
+  "muestra": true,
+  "version": "datos de ejemplo - NO son resultados reales",
+  "sitios": [
+    {
+      "id": "shackleton", "nombre": "Cráter Shackleton (borde)", "luna": [-89.9, 129.2],
+      "ficha": {"pendiente_media": 14.2, "frac_llana": 0.31, "rugosidad_m": 2.1},
+      "gemelos": [
+        {"lugar": "Desierto de Atacama, Chile", "coord": [-24.5, -69.2], "score": 0.42, "ficha": {"pendiente_media": 12.8, "frac_llana": 0.35, "rugosidad_m": 2.4}},
+        {"lugar": "Isla Devon (Haughton), Canadá", "coord": [75.4, -89.7], "score": 0.55, "ficha": {"pendiente_media": 11.9, "frac_llana": 0.38, "rugosidad_m": 1.9}},
+        {"lugar": "Valle de la Muerte, EE. UU.", "coord": [36.5, -117.1], "score": 0.71, "ficha": {"pendiente_media": 16.3, "frac_llana": 0.27, "rugosidad_m": 3.0}}
+      ]
+    },
+    {
+      "id": "malapert", "nombre": "Macizo Malapert", "luna": [-86.0, 0.1],
+      "ficha": {"pendiente_media": 18.5, "frac_llana": 0.22, "rugosidad_m": 3.2},
+      "gemelos": [
+        {"lugar": "Altiplano, Bolivia", "coord": [-19.8, -67.5], "score": 0.48, "ficha": {"pendiente_media": 17.1, "frac_llana": 0.25, "rugosidad_m": 3.5}},
+        {"lugar": "Tibesti, Chad", "coord": [21.0, 17.5], "score": 0.63, "ficha": {"pendiente_media": 19.6, "frac_llana": 0.2, "rugosidad_m": 3.8}}
+      ]
+    }
+  ]
+}
