@@ -1,0 +1,15 @@
+:root { --bg:#0e1117; --panel:#161b24; --txt:#e6e9ef; --mut:#8b93a3; --acc:#f0b429; --warn:#c0392b; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--txt); }
+#aviso { background:var(--warn); color:#fff; text-align:center; padding:6px 12px; font-size:14px; }
+header { padding:12px 16px; }
+h1 { margin:0; font-size:20px; } p.sub { margin:4px 0 0; color:var(--mut); font-size:14px; }
+main { display:grid; grid-template-columns: 340px 1fr; height: calc(100vh - 110px); }
+aside { background:var(--panel); padding:16px; overflow:auto; }
+#mapa { height:100%; }
+select { width:100%; padding:8px; background:var(--bg); color:var(--txt); border:1px solid #2a3140; border-radius:6px; }
+table { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+td,th { padding:4px 6px; text-align:left; border-bottom:1px solid #2a3140; }
+.gem { margin-top:14px; padding:10px; border:1px solid #2a3140; border-radius:8px; cursor:pointer; }
+.gem:hover { border-color: var(--acc); } .score { color:var(--acc); font-weight:600; }
+@media (max-width:800px){ main{grid-template-columns:1fr; height:auto;} #mapa{height:60vh;} }

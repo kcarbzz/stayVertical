@@ -3,25 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' https://unpkg.com; img-src 'self' data: https://unpkg.com https://tile.openstreetmap.org; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <title>Stay Vertical</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-<style>
-  :root { --bg:#0e1117; --panel:#161b24; --txt:#e6e9ef; --mut:#8b93a3; --acc:#f0b429; --warn:#c0392b; }
-  * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, sans-serif; background:var(--bg); color:var(--txt); }
-  #aviso { background:var(--warn); color:#fff; text-align:center; padding:6px 12px; font-size:14px; }
-  header { padding:12px 16px; }
-  h1 { margin:0; font-size:20px; } p.sub { margin:4px 0 0; color:var(--mut); font-size:14px; }
-  main { display:grid; grid-template-columns: 340px 1fr; height: calc(100vh - 110px); }
-  aside { background:var(--panel); padding:16px; overflow:auto; }
-  #mapa { height:100%; }
-  select { width:100%; padding:8px; background:var(--bg); color:var(--txt); border:1px solid #2a3140; border-radius:6px; }
-  table { width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
-  td,th { padding:4px 6px; text-align:left; border-bottom:1px solid #2a3140; }
-  .gem { margin-top:14px; padding:10px; border:1px solid #2a3140; border-radius:8px; cursor:pointer; }
-  .gem:hover { border-color: var(--acc); } .score { color:var(--acc); font-weight:600; }
-  @media (max-width:800px){ main{grid-template-columns:1fr; height:auto;} #mapa{height:60vh;} }
-</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div id="aviso" hidden>DATOS DE MUESTRA: los resultados mostrados son de ejemplo y no son reales.</div>
@@ -38,42 +24,8 @@
   </aside>
   <div id="mapa"></div>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>
-const mapa = L.map('mapa').setView([20, 0], 2);
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; OpenStreetMap'}).addTo(mapa);
-let capa = L.layerGroup().addTo(mapa), datos;
-
-const tabla = f => `<table>
-  <tr><td>Pendiente media</td><td>${f.pendiente_media}°</td></tr>
-  <tr><td>Fracción llana (&lt;5°)</td><td>${Math.round(f.frac_llana*100)}%</td></tr>
-  <tr><td>Rugosidad</td><td>${f.rugosidad_m} m</td></tr></table>`;
-
-function mostrar(id) {
-  const s = datos.sitios.find(x => x.id === id);
-  capa.clearLayers();
-  document.getElementById('ficha').innerHTML = `<h3>${s.nombre}</h3>` + tabla(s.ficha);
-  const cont = document.getElementById('gemelos');
-  cont.innerHTML = '<h3>Gemelos en la Tierra</h3>';
-  s.gemelos.forEach((g, i) => {
-    const m = L.marker(g.coord).addTo(capa).bindPopup(`<b>${g.lugar}</b><br>Score: ${g.score}`);
-    const d = document.createElement('div');
-    d.className = 'gem';
-    d.innerHTML = `<b>${i+1}. ${g.lugar}</b><br><span class="score">score ${g.score}</span> (menor = más parecido)` + tabla(g.ficha);
-    d.onclick = () => { mapa.setView(g.coord, 5); m.openPopup(); };
-    cont.appendChild(d);
-  });
-  mapa.setView([20, 0], 2);
-}
-
-fetch('resultados.json').then(r => r.json()).then(d => {
-  datos = d;
-  document.getElementById('aviso').hidden = !d.muestra;
-  const sel = document.getElementById('sitio');
-  d.sitios.forEach(s => sel.add(new Option(s.nombre, s.id)));
-  sel.onchange = () => mostrar(sel.value);
-  mostrar(d.sitios[0].id);
-});
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="app.js"></script>
 </body>
 </html>
