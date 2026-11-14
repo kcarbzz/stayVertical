@@ -19,6 +19,7 @@ th { color:var(--mut); font-weight:500; font-size:12px; }
 td.u { color:var(--mut); font-size:12px; white-space:nowrap; }
 .mut { color:var(--mut); font-size:12px; line-height:1.45; margin:6px 0; }
 .score { color:var(--acc); font-weight:600; }
+.cat { color:var(--mut); font-size:11px; border:1px solid var(--linea); border-radius:4px; padding:0 4px; white-space:nowrap; }
 .par { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 figure { margin:0; text-align:center; }
 figure img { width:100%; aspect-ratio:1; border-radius:6px; display:block; }
