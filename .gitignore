@@ -3,3 +3,7 @@ __pycache__/
 .DS_Store
 .ipynb_checkpoints/
 *.tif
+.env
+data/raw/
+*.img
+*.pyc
