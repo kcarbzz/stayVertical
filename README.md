@@ -18,7 +18,7 @@ Web: https://stay-vertical.wiki
 - **Vertikal Bot:** una red neuronal pequeña que corre en el navegador y explica los resultados mostrados.
 - Selector de idioma ES/EN.
 
-Los resultados son exploratorios: comparan relieve dentro de un catálogo de 50 zonas, no validan geología. Los límites están en `AUDITORIA_RESULTADOS.md`.
+Los resultados son exploratorios: el catálogo compara 50 zonas elegidas a mano y el barrido automático explora 11 franjas geográficas, no toda la Tierra. Ninguno certifica viabilidad de construcción ni identidad geológica. Los límites están en `AUDITORIA_RESULTADOS.md`.
 
 ## Estructura
 
@@ -91,3 +91,18 @@ Límites: compara solo relieve; los cuadros que cruzan el borde entre dos tesela
 ## Seguridad de la web
 
 `docs/index.html` lleva una Content Security Policy y carga Leaflet 1.9.4 desde cdnjs con `integrity` (SRI). Si se añade otra librería o un servidor de mapas, hay que sumar su dominio a la CSP; si se cambia la versión de Leaflet, hay que recalcular los dos hashes.
+
+## Clima para candidatos del barrido automático
+
+El modo automático **no reutiliza** el clima de las 50 zonas escogidas a mano: cada candidato tiene una coordenada distinta. Para generar `docs/clima_barrido.json` desde NASA POWER (2021–2025):
+
+```bash
+python3 scripts/construir_clima_barrido.py --hilos 4
+python3 scripts/subir_version.py
+```
+
+El programa lee todas las coordenadas de `docs/barrido.json`, descarga datos diarios con caché reanudable en `data/clima_barrido_cache/`, calcula los mismos **13 indicadores** climáticos que el catálogo y genera el JSON que consume la web. Una llamada fallida deja un dato **pendiente**; nunca se sustituye por valores de otras zonas. Si falla NASA, vuelve a correr el mismo comando: los JSON correctos se conservan. Deja el equipo despierto durante la ejecución porque hay múltiples solicitudes.
+
+En **Barrido automático**, el selector «Capa de clima» colorea solo candidatos automáticos con datos verificados y sus tarjetas añaden el botón «Clima y viabilidad». Sin el archivo generado, aparece el aviso de datos pendientes. Los valores son **de cuadrícula**, no meteorología medida en un parche de 3 km; los umbrales son provisionales. Las coordenadas de polos y desiertos pueden presentar diferencias importantes respecto al microclima real.
+
+En Marte el visor de teselas ahora vuelve a solicitar capas si falla la carga; si hay una caída del servicio de NASA Trek puede seguir mostrando fondo oscuro. No altera ni falsifica la imagen planetaria.

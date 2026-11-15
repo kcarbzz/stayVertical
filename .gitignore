@@ -9,3 +9,6 @@ data/raw/
 *.pyc
 # Los recortes exportados por el notebook son pequeños y se guardan con sus resultados
 !data/resultados/*.tif
+
+# Cache local de respuestas NASA POWER para el barrido
+data/clima_barrido_cache/

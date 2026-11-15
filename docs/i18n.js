@@ -2,7 +2,8 @@
 const I18N = (() => {
   const D = {
     es: {
-      aviso: 'Resultados exploratorios', avisoTitulo: 'Tierra: 49 zonas elegidas por el equipo (~13 km cada una), no un barrido global. Los sitios de la Luna y Marte son ventanas de ~3 km, no polígonos completos. El puntaje no es un porcentaje de identidad geológica.',
+      aviso: 'Resultados exploratorios', avisoTitulo: 'Abre la explicación de alcances y limitaciones del proyecto',
+      avisoLargo: 'Stay Vertical es una herramienta de exploración, NO una certificación de sitios para bases. El catálogo compara 50 zonas terrestres seleccionadas por el equipo. El barrido automático es distinto: analiza 11 franjas geográficas, no toda la Tierra, mediante millones de cuadros. Las 8 referencias lunares y 10 marcianas son recortes de aproximadamente 3 km. El parecido mide relieve y forma; no implica identidad geológica ni seguridad de aterrizaje. Los datos de NASA POWER describen celdas climáticas grandes y los umbrales de viabilidad son provisionales. No evaluamos permisos, riesgos, ingeniería ni accesibilidad local.',
       cargando: 'Cargando…', cargandoDatos: 'Cargando datos…', preparando: 'Preparando los mapas…', listo: 'Listo',
       errorDatos: 'No se pudieron cargar los datos. Recarga la página.',
       hRef: 'Terreno de referencia', hDest: 'Dónde buscar parecidos',
@@ -44,6 +45,8 @@ const I18N = (() => {
       barridoNota: (n, tt) => `El algoritmo evaluó ${n} cuadros de ${tt} teselas de 1°, sin lista previa de zonas.`,
       barridoFranjas: n => `${n} franjas barridas (pasa el cursor para verlas). El puntaje suma la diferencia real en pendiente, curvatura y rugosidad y la diferencia de forma.`,
       fueraRango: 'Fuera de rango: ningún cuadro barrido se acerca a los rasgos de este sitio. Estos son los menos lejanos.',
+      climaBarridoPendiente: 'Clima de candidatos del barrido aún no generado: ejecuta scripts/construir_clima_barrido.py.',
+      climaBarridoSinDato: 'Sin datos climáticos verificados en este punto',
       verRelieve: 'Ver relieve', relieveTitulo: (s, f) => `${s} frente a ${f}`, desnivel: d => `Desnivel: ${d} m`,
       relAltura: 'Altura real', relForma: 'Lo que compara el algoritmo', relFormaSub: 'Sin la inclinación general',
       relievePie: (km, rot, c) => `Cada cuadro mide ${km} km de lado. El candidato está girado ${rot}°, la orientación que mejor coincide. La correlación (${c}) se calcula sobre la fila de abajo: el relieve sin su inclinación general, por eso dos cuadros pueden parecerse aunque sus laderas miren a lados distintos. El color va de la cota más baja a la más alta de cada cuadro.`,
@@ -69,7 +72,8 @@ const I18N = (() => {
       notaConocidos: '«Análogo ya usado» es una clasificación provisional del equipo: marca zonas con uso documentado por NASA o ESA como análogo planetario o en entrenamiento de astronautas.',
     },
     en: {
-      aviso: 'Exploratory results', avisoTitulo: 'Earth: 49 zones chosen by the team (~13 km each), not a global sweep. Moon and Mars sites are ~3 km windows, not full polygons. The score is not a percentage of geological identity.',
+      aviso: 'Exploratory results', avisoTitulo: 'Open an explanation of the scope and limitations of this project',
+      avisoLargo: 'Stay Vertical is an exploratory tool, NOT a certification of base locations. The catalog compares 50 Earth zones selected by the team. The automatic sweep is different: it searches 11 geographic bands, not the entire Earth, through millions of patches. The 8 lunar and 10 Martian references are approximately 3 km windows. Similarity measures relief and shape; it does not imply geological equivalence or safe landings. NASA POWER describes large climate grid cells, and suitability thresholds are provisional. Permits, hazards, engineering and local accessibility were not evaluated.',
       cargando: 'Loading…', cargandoDatos: 'Loading data…', preparando: 'Preparing the maps…', listo: 'Ready',
       errorDatos: 'Could not load the data. Reload the page.',
       hRef: 'Reference terrain', hDest: 'Where to look for matches',
@@ -111,6 +115,8 @@ const I18N = (() => {
       barridoNota: (n, tt) => `The algorithm evaluated ${n} patches from ${tt} one-degree tiles, with no prior list of zones.`,
       barridoFranjas: n => `${n} bands swept (hover to see them). The score adds the real difference in slope, curvature and roughness and the difference in shape.`,
       fueraRango: 'Out of range: no swept patch comes close to this site’s features. These are the least distant.',
+      climaBarridoPendiente: 'Sweep candidate climate has not been generated yet: run scripts/construir_clima_barrido.py.',
+      climaBarridoSinDato: 'No verified climate data at this point',
       verRelieve: 'View relief', relieveTitulo: (s, f) => `${s} versus ${f}`, desnivel: d => `Relief: ${d} m`,
       relAltura: 'Actual elevation', relForma: 'What the algorithm compares', relFormaSub: 'Overall tilt removed',
       relievePie: (km, rot, c) => `Each patch is ${km} km on a side. The candidate is rotated ${rot}°, the orientation that matches best. The correlation (${c}) is computed on the bottom row: the relief with its overall tilt removed, which is why two patches can match even if their slopes face different ways. Color runs from the lowest to the highest elevation of each patch.`,

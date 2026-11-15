@@ -23,7 +23,7 @@ const pos = (cuerpo, c) => (cuerpo === 'luna' ? Polar.aPolar(c) : c);       // [
 const COLOR = { acc: '#5ec8ff', sol: '#ffd166' };
 const CUERPOS = ['tierra', 'luna', 'marte'];
 
-let datos, TIERRA, CLIMA = null, ANA = null, BARRIDO = null;              // TIERRA: continentes con sus países (hijas)
+let datos, TIERRA, CLIMA = null, CLIMA_BARRIDO = null, ANA = null, BARRIDO = null;              // TIERRA: continentes con sus países (hijas)
 const estado = { fuente: 'catalogo', modo: 'region', gemelo: null, capa: 'ninguna', soloViables: false, candidatos: [],
   ref: { cuerpo: 'luna', zona: null, pais: null }, dest: { cuerpo: 'tierra', zona: null, pais: null } };
 const M = { ref: null, dest: null };   // { mapa, cuerpo, capa, zonas }
@@ -90,7 +90,14 @@ function nuevoMapa(div, cuerpo, previo) {
     mapa = L.map(div, { crs: L.CRS.Simple, minZoom: 1, maxZoom: 9, zoomSnap: 0.25, maxBounds: [[-60, -60], [60, 60]] });
   } else {
     mapa = L.map(div, { crs: L.CRS.EPSG4326, minZoom: 0, maxZoom: 8, zoomSnap: 0.25, maxBounds: [[-95, -190], [95, 190]] });
-    L.tileLayer(TILES[cuerpo].url, { maxNativeZoom: 7, noWrap: true, attribution: TILES[cuerpo].cred }).addTo(mapa);
+    const teselasMarte = L.tileLayer(TILES[cuerpo].url, { maxNativeZoom: 7, maxZoom: 8, noWrap: true, attribution: TILES[cuerpo].cred }).addTo(mapa);
+    let intentos = 0, pendiente = false;
+    teselasMarte.on('tileerror', () => {
+      if (intentos >= 2 || pendiente) return;
+      pendiente = true;
+      setTimeout(() => { pendiente = false; intentos++; if (mapa._loaded) teselasMarte.redraw(); }, 1000 * (intentos + 1));
+    });
+    teselasMarte.on('load', () => { intentos = 0; });
   }
   const m = { mapa, cuerpo, capa: L.layerGroup().addTo(mapa), zonas: L.layerGroup().addTo(mapa), clima: L.layerGroup().addTo(mapa) };
   if (cuerpo === 'luna') {
@@ -235,6 +242,13 @@ const VAR = id => CLIMA.variables.find(v => v.id === id);
 const nombreVar = v => (I18N.lang === 'en' && v.nombre_en) || v.nombre;
 const descVar = v => (I18N.lang === 'en' && v.desc_en) || v.desc;
 const climaDe = reg => (CLIMA && CLIMA.regiones[reg]) || null;
+const claveClimaBarrido = coord => `${Number(coord[0]).toFixed(5)},${Number(coord[1]).toFixed(5)}`;
+const climaBarridoDe = g => (CLIMA_BARRIDO && g && g.coord && CLIMA_BARRIDO.puntos[claveClimaBarrido(g.coord)]) || null;
+function evaluarFichaClima(r) {
+  if (!r || !CLIMA || !r.v) return null;
+  const f = Clima.evaluar(r, CLIMA.variables), res = Clima.resumen(f);
+  return { f, res, sem: Clima.semaforo(res) };
+}
 const _cacheEval = new Map();
 function evalDe(reg) {
   const r = climaDe(reg); if (!r) return null;
@@ -257,6 +271,31 @@ function dibujarClima() {
   ctl.hidden = !hay;
   if (!hay || estado.capa === 'ninguna') { ley.hidden = true; return; }
   const viab = estado.capa === 'viab', v = viab ? null : VAR(estado.capa);
+  if (estado.fuente === 'barrido') {
+    const B = barridoDe(estado.ref.cuerpo), z = zSel('ref');
+    const cs = B && z && B.sitios[z.id] ? B.sitios[z.id].candidatos.filter(g => enZonaDestino(g.coord)) : [];
+    const regs = cs.map(g => [g, climaBarridoDe(g)]).filter(pair => !!pair[1]);
+    if (!CLIMA_BARRIDO || !regs.length) {
+      ley.hidden = false;
+      ley.textContent = t('climaBarridoPendiente');
+      return;
+    }
+    const valores = regs.map(([, r]) => Number(r.v[v && v.id])).filter(Number.isFinite);
+    const mn = viab ? 0 : Math.min(...valores), mx = viab ? 1 : Math.max(...valores);
+    for (const [g, r] of regs) {
+      const e = evaluarFichaClima(r);
+      const valor = v && r.v[v.id];
+      const relleno = viab ? SEMCOLOR[e.sem] : Clima.color(valor, mn, mx);
+      const texto = viab ? `${r.nombre} · ${t('sem.' + e.sem)}` : `${r.nombre}: ${I18N.num(valor)} ${v.unidad}`;
+      L.circleMarker(g.coord, { radius: 11, color: '#0b1020', weight: 2, fillColor: relleno, fillOpacity: 0.9 })
+        .addTo(m.clima).bindTooltip(esc(texto)).on('click', () => abrirClima(null, r));
+    }
+    ley.hidden = false;
+    ley.innerHTML = viab
+      ? `<b>${esc(t('leyViab'))}</b>` + [['verde', 'leyVerde'], ['ambar', 'leyAmbar'], ['rojo', 'leyRojo']].map(([c, k]) => `<div class="sw"><span class="punto ${c}"></span>${esc(t(k))}</div>`).join('')
+      : `<b>${esc(nombreVar(v))} (${esc(v.unidad)})</b><div class="barra-g"></div><div class="extremos"><span>${I18N.num(mn)}</span><span>${I18N.num(mx)}</span></div>`;
+    return;
+  }
   const [mn, mx] = viab ? [0, 1] : Clima.rango(CLIMA.regiones, v.id);
   for (const [id, r] of Object.entries(CLIMA.regiones)) {
     const e = evalDe(id);
@@ -289,13 +328,13 @@ function grafBarras(vals, color) {
     + `<text x="4" y="14" font-size="10" fill="#8f9bb8">${I18N.num(Math.round(mx))}</text><text x="4" y="${H - 24}" font-size="10" fill="#8f9bb8">0</text></svg>`;
 }
 
-function abrirClima(id) {
-  const r = climaDe(id), e = evalDe(id); if (!r || !e) return;
+function abrirClima(id, directo = null) {
+  const r = directo || climaDe(id), e = directo ? evaluarFichaClima(directo) : evalDe(id); if (!r || !e) return;
   const filas = e.f.map(f => { const v = VAR(f.id); return `<tr title="${esc(descVar(v))}"><td>${esc(nombreVar(v))}</td><td>${I18N.num(f.valor)} ${esc(v.unidad)}</td><td><span class="punto ${f.estado}"></span> ${esc(t('est.' + f.estado))}</td></tr>`; }).join('');
   $('clima-cuerpo').innerHTML = `<h3>${esc(nm(r))}</h3><p class="mut">${esc((I18N.lang === 'en' && r.categoria_en) || r.categoria)} · ${I18N.num(r.lat)}°, ${I18N.num(r.lon)}°</p>`
     + `<div class="chip-sem"><span class="punto ${e.sem}"></span><b>${esc(t('sem.' + e.sem))}</b> · ${esc(t('resumenFactores', e.res.ok, e.res.atencion, e.res.dificil))}</div>`
     + `<h4>${esc(t('factores'))}</h4><table class="fact">${filas}</table>`
-    + `<h4>${esc(t('mesAMes'))}</h4><div class="graf"><div><p class="mut peq">${esc(t('tempMensual'))}</p>${grafLinea(r.mensual.map(m => m.t), '#ffd166')}</div><div><p class="mut peq">${esc(t('lluviaMensual'))}</p>${grafBarras(r.mensual.map(m => m.lluvia), '#5ec8ff')}</div></div>`
+    + (Array.isArray(r.mensual) && r.mensual.length === 12 ? `<h4>${esc(t('mesAMes'))}</h4><div class="graf"><div><p class="mut peq">${esc(t('tempMensual'))}</p>${grafLinea(r.mensual.map(m => m.t), '#ffd166')}</div><div><p class="mut peq">${esc(t('lluviaMensual'))}</p>${grafBarras(r.mensual.map(m => m.lluvia), '#5ec8ff')}</div></div>` : '')
     + `<p class="pie">${esc(t('pieClima', CLIMA.fuente, CLIMA.periodo, CLIMA.resolucion))}<br>${esc(t('avisoUmbrales'))}</p>`;
   $('clima-panel').showModal();
 }
@@ -392,7 +431,11 @@ function pintarBarrido() {
   const s = B && z && B.sitios[z.id];
   if (!s || !e) { tira.innerHTML = `<p class="vacio">${esc(t('sinBarrido'))}</p>`; return; }
   const meta = B.meta, lado = meta.tam_px * meta.res_m / 1000;
-  const cand = s.candidatos.filter(g => enZonaDestino(g.coord));
+  const cand = s.candidatos.filter(g => enZonaDestino(g.coord)).filter(g => {
+    if (!estado.soloViables || !CLIMA_BARRIDO) return true;
+    const c = climaBarridoDe(g), e = evaluarFichaClima(c);
+    return !e || e.res.dificil === 0; // dato ausente NO equivale a viable
+  });
   const franjas = meta.franjas.map(f => (I18N.lang === 'en' && f.nombre_en) || f.nombre).join(', ');
   let html = `<div class="tarj ref"><span class="tag">${esc(t('referencia', nombre(estado.ref.cuerpo)))}</span><h4>${esc(nm(e))}</h4>${nums(s.ficha)}`
     + `<p class="nota">${esc(t('barridoNota', I18N.num(meta.cuadros), meta.teselas))}</p>`
@@ -400,11 +443,14 @@ function pintarBarrido() {
     + (s.fuera_de_rango ? `<p class="nota dif">${esc(t('fueraRango'))}</p>` : '') + '</div>';
   if (!cand.length) html += `<p class="vacio">${esc(t('ningun'))}</p>`;
   cand.forEach((g, k) => {
+    const c = climaBarridoDe(g), ev = evaluarFichaClima(c);
     html += `<div class="tarjw"><button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.puesto}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
       + `<h4>${esc(franjaDe(g))}</h4><p class="cat">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''}</p>`
       + `<dl><dt>${t('correlacion')}</dt><dd>${fmt2(g.corr)}</dd></dl>${nums(g.ficha)}`
-      + (g.cobertura === 'sin dato' ? `<p class="nota dif">${esc(t('sinCobertura'))}</p>` : `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p>`) + '</button>'
-      + (g.relieve ? `<button type="button" class="clima-btn" data-rel="${k}">${esc(t('verRelieve'))}</button>` : '') + '</div>';
+      + (g.cobertura === 'sin dato' ? `<p class="nota dif">${esc(t('sinCobertura'))}</p>` : `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p>`)
+      + (c ? `<p class="cl"><span class="punto ${ev.sem}"></span>${esc(t('climaTarj', num1(c.v.t_media_c), Math.round(c.v.lluvia_anual_mm)))}</p>` : `<p class="nota">${esc(t('climaBarridoSinDato'))}</p>`) + '</button>'
+      + (g.relieve ? `<button type="button" class="clima-btn" data-rel="${k}">${esc(t('verRelieve'))}</button>` : '')
+      + (c ? `<button type="button" class="clima-btn" data-clima-barrido="${k}">${esc(t('verClima'))}</button>` : '') + '</div>';
   });
   tira.innerHTML = html;
   const marcas = cand.map(g => L.marker(g.coord).addTo(m.capa).bindPopup(`<b>${esc(franjaDe(g))} #${g.puesto}</b><br>${esc(coordTxt(g.coord))}<br>${esc(t('puntaje'))}: ${fmt3(g.score)} · ${esc(t('correlacion'))}: ${fmt2(g.corr)}`));
@@ -414,6 +460,10 @@ function pintarBarrido() {
     m.mapa.setView(cand[k].coord, 9); marcas[k].openPopup();
   });
   tira.querySelectorAll('button[data-rel]').forEach(b => b.onclick = () => abrirRelieve(cand[+b.dataset.rel], s, e, lado));
+  tira.querySelectorAll('button[data-clima-barrido]').forEach(b => b.onclick = () => {
+    const r = climaBarridoDe(cand[+b.dataset.climaBarrido]);
+    if (r) abrirClima(null, r);
+  });
   if (cand.length && !zSel('dest')) m.mapa.fitBounds(L.latLngBounds(cand.map(g => g.coord)).pad(0.15), { maxZoom: 5 });   // los candidatos pueden estar en cualquier franja: se encuadran todos
 }
 
@@ -466,12 +516,17 @@ function cambiar() {
   for (const l of ['ref', 'dest'])
     if (!M[l] || M[l].cuerpo !== estado[l].cuerpo) M[l] = nuevoMapa('mapa-' + SUF[l], estado[l].cuerpo, M[l]);
   controles(); dibujarLado('ref'); dibujarLado('dest'); dibujarClima(); pintar();
+  // Leaflet necesita recalcular tamaño tras cambiar de cuerpo, idioma o controles.
+  requestAnimationFrame(() => requestAnimationFrame(() => [M.ref, M.dest].forEach(x => {
+    if (x && x.mapa && x.mapa._loaded) x.mapa.invalidateSize({ pan: false });
+  })));
 }
 
 /* ---------- idioma ---------- */
 function aplicarIdioma() {
   I18N.aplicar();
   $('idioma').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.l === I18N.lang));
+  $('aviso-contenido').textContent = I18N.t('avisoLargo');
   $('sobre-ref').innerHTML = `<p><b>${esc(I18N.t('subirTitulo'))}</b> <span class="etiqueta">${esc(I18N.t('proximamente'))}</span></p><p>${esc(I18N.t('subirTexto'))}</p>`;
   $('rapidas').innerHTML = Asistente.rapidas().map(t => `<button type="button">${esc(t)}</button>`).join('');
   $('rapidas').querySelectorAll('button').forEach(b => b.onclick = () => preguntar(b.textContent));
@@ -548,14 +603,17 @@ function abrirChat(v) { $('asistente').hidden = !v; $('abrir-chat').setAttribute
 
 async function iniciar() {
   progreso(15, I18N.t('cargandoDatos'));
-  const [d, paises, clima, ana, barrido] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null), traer('analogia.json').catch(() => null), traer('barrido.json').catch(() => null)]);
-  datos = d; CLIMA = clima; ANA = ana; BARRIDO = barrido;
+  const [d, paises, clima, ana, barrido, climaBarrido] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null), traer('analogia.json').catch(() => null), traer('barrido.json').catch(() => null), traer('clima_barrido.json').catch(() => null)]);
+  datos = d; CLIMA = clima; ANA = ana; BARRIDO = barrido; CLIMA_BARRIDO = climaBarrido;
   progreso(55, I18N.t('preparando'));
   TIERRA = datos.continentes.map(c => ({ ...c, hijas: paises.features.filter(f => f.properties.cont === c.id)
     .map(f => ({ id: f.properties.id, nombre: f.properties.nombre, nombre_en: f.properties.en, feat: f, bbox: mayorPoligono(f.geometry) }))
     .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')) }));
   estado.ref.zona = primero('luna');
   $('aviso').hidden = !(datos.muestra || datos.exploratorio);
+  $('aviso').onclick = () => $('aviso-panel').showModal();
+  $('cerrar-aviso').onclick = () => $('aviso-panel').close();
+  $('aviso-panel').onclick = e => { if (e.target === $('aviso-panel')) $('aviso-panel').close(); };
   $('cerrar-visor').onclick = () => $('visor').close();
   $('cerrar-clima').onclick = () => $('clima-panel').close();
   $('abrir-hallazgos').onclick = abrirHallazgos; $('abrir-hallazgos').hidden = !ANA;
