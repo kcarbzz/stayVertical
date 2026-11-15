@@ -24,8 +24,8 @@ Los resultados son exploratorios: comparan relieve dentro de un catálogo de 50 
 | Carpeta | Qué contiene |
 |---|---|
 | `docs/` | Web estática (GitHub Pages desde `main`): `resultados.json`, `clima.json`, `analogia.json` (valores de referencia de la Luna y Marte y lista de análogos ya usados), modelo del bot e imágenes de comparación |
-| `stayvertical/` | Motor en Python: características de relieve, búsqueda grueso→fino, agrupación en regiones y algoritmo genético |
-| `scripts/` | `construir_datos.py` y `construir_clima.py` generan los JSON de la web; `subir_version.py` renueva la caché; `auditoria/` reproduce la auditoría |
+| `stayvertical/` | Motor en Python: características de relieve, barrido de franjas, búsqueda grueso→fino, agrupación en regiones y algoritmo genético |
+| `scripts/` | `barrido.py` recorre franjas enteras de la Tierra y busca análogos sin lista previa (ver abajo); `construir_datos.py` y `construir_clima.py` generan los JSON de la web; `subir_version.py` renueva la caché; `auditoria/` reproduce la auditoría |
 | `entrenamiento/` | Ejemplos y entrenamiento del clasificador de Vertikal Bot |
 | `tests/` | Pruebas del motor (pytest) y del bot, el clima, la proyección polar y la ficha de analogía (Node) |
 | `notebooks/`, `data/resultados/` | Corrida anterior del análisis (16 parches de referencia); ya no alimenta la web |
@@ -48,12 +48,34 @@ python3 scripts/subir_version.py
 Pruebas:
 
 ```bash
-pip install -r requirements.txt pytest && python3 -m pytest tests/test_motor.py
+pip install -r requirements.txt pytest && python3 -m pytest tests/test_motor.py tests/test_barrido.py
 ```
 
 ```bash
 node tests/test_bot.js && node tests/test_clima.js && node tests/test_polar.js && node tests/test_analogia.js
 ```
+
+## Barrido de franjas de la Tierra
+
+`scripts/barrido.py` sustituye la lista de 50 zonas elegidas a mano: recorre franjas de cientos de kilómetros y deja que el algoritmo encuentre los cuadros que más se parecen a cada sitio de la Luna o de Marte. Usa Copernicus DEM para el relieve y ESA WorldCover para descartar bosque, cultivos, ciudades y agua; los dos se descargan solos desde Microsoft Planetary Computer.
+
+En Google Colab:
+
+```bash
+pip install -q rasterio pystac-client planetary-computer
+```
+
+```bash
+python scripts/barrido.py --listar
+```
+
+```bash
+python scripts/barrido.py --cuerpo marte --sitios "marte_geotiffs/*.tif" --franjas puna_altiplano,islandia --salida barrido_marte
+```
+
+Los sitios son los GeoTIFF que produce el cuaderno del equipo (uno por sitio, en metros, a 80 m para la Luna y a 200 m para Marte). El resultado queda en `candidatos_<cuerpo>.csv`, `sitios_<cuerpo>.csv`, `recortes_<cuerpo>.npz` y `meta_<cuerpo>.json`. Si se interrumpe, al relanzarlo continúa donde iba.
+
+Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada.
 
 ## Seguridad de la web
 
