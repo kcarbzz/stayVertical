@@ -1,251 +1,251 @@
-sitio,puesto,lat,lon,franja,score,fisica_01,dist_fisica,corr,rot,pendiente_media,rugosidad_m,frac_llana,cuadros_region,cobertura,tesela
-jezero,1,75.40104,-87.17858,artico_canada,0.04406,0.000535,0.004089,0.8248,270,2.09,5.01,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N75_00_W088_00
-jezero,2,-19.29991,-69.94227,puna_altiplano,0.054592,0.000105,0.002475,0.7818,0,1.8,4.13,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S20_00_W070_00
-jezero,3,19.41535,46.26928,arabia,0.056183,0.000995,0.005085,0.7773,180,1.95,5.08,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E046_00
-jezero,4,18.57447,49.79546,arabia,0.056431,0.000287,0.00334,0.7748,0,1.84,4.85,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
-jezero,5,-26.79319,15.14345,namib,0.061845,0.000769,0.004636,0.7542,90,1.84,5.07,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_E015_00
-jezero,6,18.95109,46.08951,arabia,0.062254,0.000262,0.003247,0.7515,180,1.73,4.8,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E046_00
-jezero,7,19.33642,45.97349,arabia,0.063745,0.000733,0.004551,0.7465,180,1.79,4.17,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
-jezero,8,19.64099,45.77694,arabia,0.064467,0.00023,0.003113,0.7426,180,1.96,4.2,1.0,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
-jezero,9,19.28633,46.1008,arabia,0.064851,0.00027,0.003284,0.7411,180,1.98,4.53,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E046_00
-jezero,10,17.81697,47.76606,arabia,0.065042,0.000271,0.003288,0.7404,0,1.73,3.97,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E047_00
-jezero,11,19.25213,15.21178,sahara_central,0.066244,0.000129,0.002612,0.7353,180,1.87,4.06,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
-jezero,12,19.51086,45.77631,arabia,0.066801,0.00055,0.00413,0.7339,180,1.9,4.54,1.0,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
-jezero,13,35.93137,87.69022,tibet_qaidam,0.068609,2.7e-05,0.001491,0.7256,180,1.95,4.66,1.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E087_00
-jezero,14,18.47074,49.44771,arabia,0.069115,0.00019,0.002955,0.7239,180,1.88,4.18,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
-jezero,15,19.23727,15.44011,sahara_central,0.071083,0.000717,0.004522,0.7171,180,1.9,5.25,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
-jezero,16,17.31121,46.58193,arabia,0.071426,0.000313,0.003425,0.7149,180,1.77,4.24,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
-jezero,17,22.06176,17.14014,sahara_central,0.071694,0.000775,0.004648,0.7148,270,1.87,4.87,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E017_00
-jezero,18,22.55182,53.2254,arabia,0.072132,0.000709,0.004509,0.7129,180,1.91,4.54,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E053_00
-jezero,19,17.07827,46.77537,arabia,0.072211,0.000279,0.003316,0.7117,0,1.82,3.43,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
-jezero,20,17.32468,46.70246,arabia,0.073224,0.000759,0.004615,0.7086,0,1.65,3.84,1.0,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
-jezero,21,18.60225,49.62847,arabia,0.074884,0.00044,0.003825,0.7013,180,1.72,4.51,1.0,27,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
-jezero,22,24.99167,13.39493,sahara_central,0.074945,0.000576,0.004199,0.7014,270,1.9,4.79,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E013_00
-jezero,23,-25.04122,15.49028,namib,0.07546,2.6e-05,0.001486,0.6982,90,1.79,4.36,1.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_E015_00
-jezero,24,18.39571,45.60455,arabia,0.075963,0.000704,0.004497,0.6976,180,1.94,4.81,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E045_00
-jezero,25,22.55627,8.78828,sahara_central,0.076023,0.000263,0.00325,0.6964,180,1.82,4.6,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E008_00
-gale,1,-24.16365,-67.11041,puna_altiplano,0.018654,0.000976,5.784775,0.9273,90,14.33,11.2,0.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
-gale,2,37.50203,-118.65287,mojave_gran_cuenca,0.026225,2.9e-05,2.860549,0.8952,0,21.67,23.99,0.005,16,pastizal,Copernicus_DSM_COG_30_N37_00_W119_00
-gale,3,-18.09986,-68.86526,puna_altiplano,0.026692,0.000243,4.494995,0.8937,180,17.89,27.52,0.009,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S19_00_W069_00
-gale,4,-19.40282,-65.04938,puna_altiplano,0.029495,0.000178,4.213569,0.8824,0,21.33,29.65,0.015,4,pastizal,Copernicus_DSM_COG_30_S20_00_W066_00
-gale,5,-25.2875,-68.77891,puna_altiplano,0.031269,0.000154,4.111351,0.8752,0,16.65,11.41,0.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
-gale,6,-26.63171,-68.13342,puna_altiplano,0.03134,7.3e-05,3.488402,0.8748,0,17.82,15.83,0.004,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W069_00
-gale,7,-27.27783,-67.07049,puna_altiplano,0.031997,0.000568,5.259749,0.8731,270,15.56,18.34,0.129,4,pastizal,Copernicus_DSM_COG_30_S28_00_W068_00
-gale,8,-25.76433,-68.79399,puna_altiplano,0.032138,0.000909,5.715843,0.8733,0,13.9,17.41,0.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
-gale,9,-21.87904,-68.30446,puna_altiplano,0.032282,0.000982,5.78951,0.8728,180,13.87,11.36,0.0,28,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
-gale,10,-77.95202,162.10474,valles_secos,0.032553,0.000508,5.152346,0.8708,0,15.93,19.57,0.04,8,sin dato,Copernicus_DSM_COG_30_S78_00_E162_00
-gale,11,-21.20067,14.62929,namib,0.033401,0.00073,5.490027,0.8679,270,17.26,27.29,0.018,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_E014_00
-gale,12,-24.18401,-68.11924,puna_altiplano,0.033454,0.000165,4.159823,0.8665,270,17.71,22.73,0.0,31,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
-gale,13,33.18278,86.92323,tibet_qaidam,0.034077,0.000327,4.730593,0.8643,0,16.12,20.77,0.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N33_00_E086_00
-gale,14,-23.35744,-67.66193,puna_altiplano,0.03521,0.000906,5.713541,0.861,180,14.54,10.46,0.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W068_00
-gale,15,-77.75769,162.82656,valles_secos,0.035781,0.000971,5.780089,0.8588,90,16.7,18.2,0.28,34,sin dato,Copernicus_DSM_COG_30_S78_00_E162_00
-gale,16,-25.17815,-66.45955,puna_altiplano,0.035932,0.000248,4.514175,0.8568,180,17.19,26.34,0.04,34,pastizal,Copernicus_DSM_COG_30_S26_00_W067_00
-gale,17,-21.37397,-67.9131,puna_altiplano,0.035988,0.00084,5.637229,0.8577,90,14.51,15.55,0.0,2,pastizal,Copernicus_DSM_COG_30_S22_00_W068_00
-gale,18,-21.30223,-68.87797,puna_altiplano,0.036896,0.000749,5.522614,0.8539,0,14.52,19.23,0.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
-gale,19,-25.86523,-68.66606,puna_altiplano,0.037905,0.000479,5.094575,0.8493,270,15.53,15.55,0.191,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
-gale,20,-26.62262,-65.6963,puna_altiplano,0.038658,0.000801,5.5925,0.847,180,18.81,28.14,0.013,8,pastizal,Copernicus_DSM_COG_30_S27_00_W066_00
-gale,21,-26.69189,-69.26761,puna_altiplano,0.038804,0.000408,4.944324,0.8456,270,15.26,19.86,0.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W070_00
-gale,22,-21.56189,-68.55323,puna_altiplano,0.038945,0.000263,4.552535,0.8447,0,15.73,16.59,0.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
-gale,23,-24.79412,-66.16624,puna_altiplano,0.038963,0.000393,4.920179,0.8449,0,16.34,18.96,0.04,29,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W067_00
-gale,24,-25.59051,-67.92518,puna_altiplano,0.039347,0.000117,3.843435,0.8428,0,16.86,18.24,0.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W068_00
-gale,25,-25.24344,-67.8806,puna_altiplano,0.040575,0.000984,5.792705,0.8397,0,14.46,20.88,0.044,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W068_00
-oxia,1,-19.05115,-66.55708,puna_altiplano,0.020812,0.000374,0.000232,0.9175,270,0.43,0.27,1.0,1,pastizal,Copernicus_DSM_COG_30_S20_00_W067_00
-oxia,2,26.79923,9.98053,sahara_central,0.02203,0.000505,0.000265,0.9129,180,0.47,0.55,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N26_00_E009_00
-oxia,3,-18.67521,-67.53302,puna_altiplano,0.022229,0.000636,0.000293,0.9124,180,0.37,0.47,1.0,2,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
-oxia,4,34.34925,91.91218,tibet_qaidam,0.022829,0.000512,0.000267,0.9097,0,0.38,0.42,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E091_00
-oxia,5,-19.63565,17.97005,namib,0.023712,0.000522,0.000269,0.9062,0,0.49,0.4,1.0,3,matorral,Copernicus_DSM_COG_30_S20_00_E017_00
-oxia,6,18.10697,44.57267,arabia,0.024535,0.000905,0.000345,0.9037,180,0.54,0.47,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E044_00
-oxia,7,-20.33957,-66.53508,puna_altiplano,0.024873,0.000323,0.000217,0.9012,270,0.54,0.28,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S21_00_W067_00
-oxia,8,35.70954,91.84751,tibet_qaidam,0.025433,0.000752,0.000316,0.8998,0,0.43,0.45,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E091_00
-oxia,9,-27.27153,16.20211,namib,0.025496,0.000669,0.000298,0.8994,180,0.43,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
-oxia,10,24.32681,18.21156,sahara_central,0.026515,0.000785,0.000323,0.8955,90,0.37,0.37,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E018_00
-oxia,11,39.83462,-115.40565,mojave_gran_cuenca,0.026605,3e-05,8.5e-05,0.8936,270,0.49,0.36,1.0,1,matorral,Copernicus_DSM_COG_30_N39_00_W116_00
-oxia,12,23.194,44.37238,arabia,0.026808,0.000203,0.000179,0.8932,180,0.42,0.39,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E044_00
-oxia,13,35.77187,89.94835,tibet_qaidam,0.027924,0.000495,0.000262,0.8893,180,0.53,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E089_00
-oxia,14,37.26399,95.46593,tibet_qaidam,0.028491,3.9e-05,9.3e-05,0.8861,180,0.46,0.33,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
-oxia,15,-78.31368,159.48962,valles_secos,0.029201,0.000652,0.000295,0.8845,270,0.52,0.4,1.0,2,sin dato,Copernicus_DSM_COG_30_S79_00_E159_00
-oxia,16,38.90407,96.14521,tibet_qaidam,0.029289,0.000689,0.000303,0.8842,180,0.59,0.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E096_00
-oxia,17,34.50267,84.25934,tibet_qaidam,0.029478,1.4e-05,7e-05,0.8821,90,0.49,0.32,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E084_00
-oxia,18,39.12795,103.38351,gobi,0.029517,0.000741,0.000314,0.8834,90,0.53,0.32,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E103_00
-oxia,19,23.85174,16.0603,sahara_central,0.029917,0.000444,0.00025,0.8812,270,0.41,0.47,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E016_00
-oxia,20,24.38512,6.24181,sahara_central,0.030707,1.9e-05,7.7e-05,0.8772,0,0.48,0.38,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E006_00
-oxia,21,32.86174,84.94419,tibet_qaidam,0.030862,0.000428,0.000246,0.8774,180,0.56,0.23,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E084_00
-oxia,22,33.64319,86.40521,tibet_qaidam,0.03105,0.000745,0.000315,0.8773,90,0.55,0.33,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N33_00_E086_00
-oxia,23,35.8523,-115.70217,mojave_gran_cuenca,0.031104,0.000671,0.000299,0.8769,0,0.43,0.26,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_W116_00
-oxia,24,-18.42945,-67.53511,puna_altiplano,0.031449,0.000277,0.000206,0.8748,0,0.53,0.31,1.0,6,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
-oxia,25,21.2805,45.60015,arabia,0.031553,0.000707,0.000307,0.8752,90,0.54,0.42,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E045_00
-mawrth,1,-20.60481,17.07016,namib,0.025176,0.000487,0.001538,0.9003,270,1.06,1.56,1.0,2,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
-mawrth,2,40.51557,105.05506,gobi,0.032414,0.00011,0.000899,0.8706,270,1.17,1.37,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E105_00
-mawrth,3,19.10727,44.62163,arabia,0.035268,0.000305,0.001287,0.8595,90,1.25,1.09,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E044_00
-mawrth,4,44.81024,103.7394,gobi,0.035412,0.000937,0.001955,0.8602,90,1.0,1.3,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E103_00
-mawrth,5,-24.32918,133.75027,australia_central,0.035429,0.000723,0.001771,0.8597,0,0.93,1.74,1.0,1,pastizal,Copernicus_DSM_COG_30_S25_00_E133_00
-mawrth,6,41.25205,98.01366,gobi,0.035544,0.000223,0.001146,0.8583,270,1.11,1.04,1.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
-mawrth,7,65.25753,-20.59186,islandia,0.03606,8.7e-05,0.000819,0.8559,0,1.13,1.19,1.0,23,pastizal,Copernicus_DSM_COG_30_N65_00_W021_00
-mawrth,8,39.73165,105.12911,gobi,0.038125,0.000468,0.001518,0.8484,0,1.06,1.49,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E105_00
-mawrth,9,41.65976,99.09447,gobi,0.038317,0.000872,0.001902,0.8485,180,1.2,1.15,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E099_00
-mawrth,10,44.05266,106.88109,gobi,0.038654,0.000221,0.001144,0.8458,90,1.05,1.19,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E106_00
-mawrth,11,-76.07907,160.9433,valles_secos,0.04034,0.000654,0.001703,0.84,270,1.08,1.03,1.0,1,sin dato,Copernicus_DSM_COG_30_S77_00_E160_00
-mawrth,12,41.54252,102.08852,gobi,0.040429,3.3e-05,0.000565,0.8384,0,1.07,1.6,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E102_00
-mawrth,13,44.56191,102.97695,gobi,0.041118,6.8e-05,0.000753,0.8357,90,1.03,1.25,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E102_00
-mawrth,14,44.41574,106.69172,gobi,0.04152,0.000531,0.001587,0.835,270,0.98,1.29,1.0,11,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E106_00
-mawrth,15,40.39051,103.60898,gobi,0.04186,0.000648,0.001699,0.8339,90,1.09,1.79,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E103_00
-mawrth,16,44.46937,107.34218,gobi,0.042034,0.000601,0.001661,0.8331,90,1.08,1.57,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E107_00
-mawrth,17,-26.56199,135.19135,australia_central,0.042662,8.5e-05,0.000818,0.8295,90,1.02,1.28,1.0,2,pastizal,Copernicus_DSM_COG_30_S27_00_E135_00
-mawrth,18,19.03824,12.30176,sahara_central,0.043129,0.000864,0.001895,0.8292,90,0.9,1.19,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E012_00
-mawrth,19,43.87283,106.93215,gobi,0.043643,9.9e-05,0.000861,0.8256,270,0.99,1.34,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N43_00_E106_00
-mawrth,20,44.70287,105.28107,gobi,0.043762,0.000471,0.001523,0.8259,90,1.05,1.57,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E105_00
-mawrth,21,39.53505,100.34545,gobi,0.044013,0.000172,0.001045,0.8243,270,1.08,1.76,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E100_00
-mawrth,22,41.32664,98.3758,gobi,0.044115,0.000623,0.001678,0.8248,90,1.3,1.03,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
-mawrth,23,41.67982,103.68871,gobi,0.0449,0.000983,0.001991,0.8224,0,1.21,1.38,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E103_00
-mawrth,24,44.35927,107.07678,gobi,0.045999,1e-05,0.00037,0.816,180,1.15,1.37,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E107_00
-mawrth,25,39.96164,107.8589,gobi,0.046915,0.000361,0.001359,0.8131,270,1.07,1.16,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E107_00
-meridiani,1,-23.57491,15.76689,namib,0.032207,0.000249,0.001483,0.8717,180,0.65,0.93,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_E015_00
-meridiani,2,17.08552,47.33431,arabia,0.038468,0.000449,0.001749,0.847,180,0.54,1.08,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E047_00
-meridiani,3,25.17088,18.35933,sahara_central,0.041084,0.000871,0.002142,0.8374,180,0.64,1.09,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N25_00_E018_00
-meridiani,4,-19.6039,-69.86774,puna_altiplano,0.044237,0.000101,0.001178,0.8233,90,0.75,1.14,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S20_00_W070_00
-meridiani,5,32.03535,89.28219,tibet_qaidam,0.045412,0.000604,0.001912,0.8196,180,0.73,1.21,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E089_00
-meridiani,6,-19.92031,16.51782,namib,0.047485,5.7e-05,0.000999,0.8102,0,0.57,1.06,1.0,1,matorral,Copernicus_DSM_COG_30_S20_00_E016_00
-meridiani,7,-20.19618,17.38613,namib,0.048235,0.000743,0.002034,0.8085,180,0.68,1.28,1.0,4,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
-meridiani,8,26.42972,10.50702,sahara_central,0.048834,3.9e-05,0.000904,0.8047,0,0.71,1.18,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N26_00_E010_00
-meridiani,9,36.49904,-114.76443,mojave_gran_cuenca,0.050125,0.000677,0.001983,0.8009,180,0.71,1.33,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N36_00_W115_00
-meridiani,10,-26.3597,-69.21873,puna_altiplano,0.050529,0.000413,0.0017,0.7987,0,0.83,1.19,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W070_00
-meridiani,11,-21.14302,134.72189,australia_central,0.050577,0.000893,0.002162,0.7995,90,0.75,1.23,1.0,3,matorral,Copernicus_DSM_COG_30_S22_00_E134_00
-meridiani,12,21.65727,45.23057,arabia,0.050596,0.000267,0.00151,0.7981,180,0.44,0.77,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E045_00
-meridiani,13,39.37651,103.65642,gobi,0.051368,0.000626,0.001931,0.7958,270,0.74,1.12,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E103_00
-meridiani,14,17.98773,51.81471,arabia,0.051706,0.000762,0.002055,0.7947,90,0.68,1.17,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E051_00
-meridiani,15,22.1653,14.4785,sahara_central,0.052025,0.000788,0.002076,0.7935,270,0.72,1.2,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E014_00
-meridiani,16,23.36837,14.68467,sahara_central,0.052292,0.000444,0.001741,0.7917,180,0.53,1.05,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E014_00
-meridiani,17,17.43959,48.11195,arabia,0.052578,0.000582,0.001894,0.7909,0,0.54,0.64,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E048_00
-meridiani,18,22.68453,45.793,arabia,0.054004,0.000659,0.001965,0.7853,0,0.6,1.33,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E045_00
-meridiani,19,41.57314,105.20949,gobi,0.054267,8.1e-05,0.00111,0.7831,0,0.6,1.09,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E105_00
-meridiani,20,22.53369,19.97102,sahara_central,0.054275,0.00022,0.001435,0.7833,270,0.52,0.64,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E019_00
-meridiani,21,32.97418,86.24451,tibet_qaidam,0.055301,0.000435,0.001729,0.7797,0,0.57,1.46,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E086_00
-meridiani,22,34.15589,94.61325,tibet_qaidam,0.056659,0.000588,0.001897,0.7745,180,0.73,0.99,1.0,1,pastizal,Copernicus_DSM_COG_30_N34_00_E094_00
-meridiani,23,19.79155,12.44193,sahara_central,0.056721,0.000204,0.001405,0.7735,0,0.53,1.05,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E012_00
-meridiani,24,20.64944,48.58458,arabia,0.056934,0.000298,0.001553,0.7729,180,0.38,0.75,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E048_00
-meridiani,25,21.11158,7.6132,sahara_central,0.056962,0.000842,0.002118,0.7738,90,0.45,0.82,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E007_00
-eberswalde,1,-23.18629,-69.29928,puna_altiplano,0.0279,0.000348,0.00233,0.8891,180,1.85,3.74,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W070_00
-eberswalde,2,24.15799,12.46706,sahara_central,0.036492,0.000116,0.001541,0.8543,270,1.69,4.3,1.0,28,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E012_00
-eberswalde,3,-24.12356,-67.39434,puna_altiplano,0.036768,0.000476,0.002595,0.8539,0,1.51,4.26,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
-eberswalde,4,34.95019,85.44873,tibet_qaidam,0.038784,0.000168,0.00178,0.8452,180,1.74,4.23,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E085_00
-eberswalde,5,33.79434,91.70604,tibet_qaidam,0.041838,0.000187,0.001858,0.833,180,1.84,3.74,1.0,1,pastizal,Copernicus_DSM_COG_30_N33_00_E091_00
-eberswalde,6,23.9473,12.19704,sahara_central,0.046692,0.000682,0.002967,0.8146,270,1.45,3.88,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E012_00
-eberswalde,7,75.61804,-91.56912,artico_canada,0.048181,0.000843,0.003201,0.809,180,1.45,4.5,1.0,1,musgo y liquen,Copernicus_DSM_COG_30_N75_00_W092_00
-eberswalde,8,40.15649,103.35076,gobi,0.04911,0.000889,0.003278,0.8053,90,1.43,4.41,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E103_00
-eberswalde,9,-22.8747,-67.33172,puna_altiplano,0.04958,0.000393,0.002431,0.8025,180,1.69,4.37,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W068_00
-eberswalde,10,32.59995,89.17708,tibet_qaidam,0.05007,0.000326,0.002277,0.8004,270,1.77,3.99,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E089_00
-eberswalde,11,75.25635,-94.86967,artico_canada,0.051891,0.000352,0.002336,0.7931,90,1.76,3.84,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N75_00_W095_00
-eberswalde,12,32.90136,86.14248,tibet_qaidam,0.052245,0.000303,0.002229,0.7916,270,1.69,4.26,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E086_00
-eberswalde,13,23.67724,19.7885,sahara_central,0.053603,0.000362,0.002356,0.7863,90,1.64,4.48,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E019_00
-eberswalde,14,74.98905,-86.78342,artico_canada,0.054478,0.000671,0.002948,0.7834,0,1.88,3.5,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N74_00_W087_00
-eberswalde,15,34.36842,92.27255,tibet_qaidam,0.054543,0.000346,0.002324,0.7825,0,1.68,3.92,0.978,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E092_00
-eberswalde,16,42.22528,101.92365,gobi,0.055234,0.000847,0.003203,0.7808,180,1.58,4.48,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E101_00
-eberswalde,17,41.05338,98.49263,gobi,0.056296,0.000369,0.002373,0.7756,90,1.96,4.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
-eberswalde,18,20.23947,13.39372,sahara_central,0.056399,0.000636,0.002885,0.7757,270,1.6,3.9,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E013_00
-eberswalde,19,32.84552,87.51145,tibet_qaidam,0.056643,9.7e-05,0.001446,0.7736,180,1.85,4.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E087_00
-eberswalde,20,44.95296,102.37502,gobi,0.056663,0.000238,0.002033,0.7738,0,1.57,4.43,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E102_00
-eberswalde,21,19.07873,15.02905,sahara_central,0.057342,0.000363,0.002357,0.7714,90,1.64,3.81,1.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
-eberswalde,22,17.6169,48.39542,arabia,0.05883,0.000972,0.003397,0.7666,270,1.73,4.91,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E048_00
-eberswalde,23,44.23505,103.83189,gobi,0.059854,0.000981,0.003409,0.7625,90,1.72,4.21,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E103_00
-eberswalde,24,44.66751,100.13387,gobi,0.060779,0.000502,0.00264,0.7579,270,1.66,4.24,0.996,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E100_00
-eberswalde,25,18.36727,49.19125,arabia,0.06098,0.000843,0.003202,0.7578,270,1.65,3.98,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
-utopia,1,21.36675,15.72396,sahara_central,0.030664,0.000137,0.000183,0.8776,90,0.53,0.5,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E015_00
-utopia,2,19.57987,12.82642,sahara_central,0.031158,0.000724,0.000402,0.8768,0,0.31,0.46,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E012_00
-utopia,3,34.87294,-117.80189,mojave_gran_cuenca,0.031846,0.000938,0.000457,0.8745,270,0.54,0.59,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_W118_00
-utopia,4,21.58459,45.43138,arabia,0.036253,0.00074,0.000406,0.8565,0,0.44,0.54,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E045_00
-utopia,5,18.12652,52.15991,arabia,0.038241,0.000446,0.000317,0.8479,180,0.44,0.57,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E052_00
-utopia,6,-76.15555,159.65391,valles_secos,0.039318,6.8e-05,0.000138,0.8429,90,0.48,0.3,1.0,4,sin dato,Copernicus_DSM_COG_30_S77_00_E159_00
-utopia,7,22.87909,16.23167,sahara_central,0.039702,0.000227,0.000226,0.8416,0,0.41,0.6,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E016_00
-utopia,8,-77.29917,158.42784,valles_secos,0.04012,0.000274,0.000249,0.8401,270,0.39,0.31,1.0,3,sin dato,Copernicus_DSM_COG_30_S78_00_E158_00
-utopia,9,19.66227,19.90608,sahara_central,0.040229,0.000723,0.000402,0.8405,90,0.47,0.53,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E019_00
-utopia,10,-20.05391,17.21577,namib,0.04152,0.000846,0.000434,0.8356,0,0.31,0.48,1.0,2,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
-utopia,11,40.32659,98.38912,gobi,0.04323,0.000626,0.000376,0.8283,180,0.55,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E098_00
-utopia,12,-27.77739,16.15891,namib,0.043492,0.000604,0.000369,0.8272,90,0.37,0.66,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
-utopia,13,20.34416,19.83709,sahara_central,0.043981,0.000501,0.000336,0.8251,90,0.37,0.53,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E019_00
-utopia,14,-18.67521,-67.53302,puna_altiplano,0.04538,0.000583,0.000364,0.8196,0,0.37,0.47,1.0,3,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
-utopia,15,-76.44318,159.05603,valles_secos,0.048829,0.000553,0.000353,0.8058,270,0.48,0.42,1.0,20,sin dato,Copernicus_DSM_COG_30_S77_00_E159_00
-utopia,16,25.05044,14.53747,sahara_central,0.049068,0.000288,0.000255,0.8043,0,0.33,0.48,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N25_00_E014_00
-utopia,17,21.77209,9.57122,sahara_central,0.050281,0.000569,0.000359,0.8,90,0.4,0.44,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E009_00
-utopia,18,22.12647,11.65278,sahara_central,0.050482,2.5e-05,0.000102,0.7981,90,0.42,0.57,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E011_00
-utopia,19,38.64444,93.40292,tibet_qaidam,0.050637,0.000932,0.000455,0.7993,180,0.36,0.48,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E093_00
-utopia,20,21.51283,9.1222,sahara_central,0.052708,0.000594,0.000367,0.7904,270,0.49,0.55,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E009_00
-utopia,21,22.65562,45.79283,arabia,0.05283,0.000572,0.00036,0.7898,180,0.43,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E045_00
-utopia,22,37.16893,92.78921,tibet_qaidam,0.052966,0.000825,0.00043,0.7898,270,0.39,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E092_00
-utopia,23,-77.17067,159.18835,valles_secos,0.053294,0.000426,0.000312,0.7877,270,0.49,0.47,1.0,5,sin dato,Copernicus_DSM_COG_30_S78_00_E159_00
-utopia,24,-76.07035,158.88321,valles_secos,0.054047,0.000459,0.000321,0.7847,270,0.32,0.36,1.0,1,sin dato,Copernicus_DSM_COG_30_S77_00_E158_00
-utopia,25,19.2404,11.7043,sahara_central,0.054594,0.000267,0.000246,0.7822,0,0.43,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E011_00
-olimpo,1,42.34286,104.94474,gobi,0.024626,0.00012,0.001123,0.9017,180,1.05,0.32,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E104_00
-olimpo,2,-27.87519,16.50124,namib,0.026037,0.000567,0.001828,0.897,180,1.0,0.83,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
-olimpo,3,-20.89501,15.15246,namib,0.027771,9.2e-05,0.001034,0.8891,90,0.87,0.67,1.0,2,pastizal,Copernicus_DSM_COG_30_S21_00_E015_00
-olimpo,4,-27.11918,-66.42029,puna_altiplano,0.029861,0.000825,0.002063,0.8822,270,0.97,0.25,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W067_00
-olimpo,5,40.33937,105.86494,gobi,0.030513,0.00092,0.002139,0.8798,180,0.89,0.96,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E105_00
-olimpo,6,22.40147,7.67669,sahara_central,0.035126,0.000536,0.001796,0.8606,0,0.8,0.74,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E007_00
-olimpo,7,37.61552,95.18749,tibet_qaidam,0.036013,0.000924,0.002143,0.8578,270,0.89,1.0,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
-olimpo,8,37.22039,88.0602,tibet_qaidam,0.036909,4.9e-05,0.000839,0.8525,90,1.03,0.49,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E088_00
-olimpo,9,40.8433,104.06175,gobi,0.037639,0.000779,0.002018,0.851,90,0.97,0.91,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E104_00
-olimpo,10,32.03758,84.84424,tibet_qaidam,0.037661,3.3e-05,0.000746,0.8494,90,0.98,0.4,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E084_00
-olimpo,11,23.41711,10.2134,sahara_central,0.039886,0.000576,0.00184,0.8416,0,0.94,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E010_00
-olimpo,12,39.13083,101.6399,gobi,0.040462,0.00017,0.001253,0.8385,0,1.05,0.44,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E101_00
-olimpo,13,20.06682,5.73583,sahara_central,0.040528,0.000818,0.002056,0.8395,90,0.93,0.69,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E005_00
-olimpo,14,34.31099,-116.32332,mojave_gran_cuenca,0.040541,0.000429,0.001668,0.8387,0,0.98,0.67,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_W117_00
-olimpo,15,-27.14684,-66.3551,puna_altiplano,0.043494,0.000902,0.002127,0.8278,270,0.81,0.77,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W067_00
-olimpo,16,-22.61787,15.87045,namib,0.04488,0.000697,0.001947,0.8219,90,1.05,0.58,1.0,1,pastizal,Copernicus_DSM_COG_30_S23_00_E015_00
-olimpo,17,41.44125,104.25978,gobi,0.046324,0.000772,0.002013,0.8162,270,0.94,0.74,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E104_00
-olimpo,18,41.49947,98.35497,gobi,0.047041,6e-06,0.000377,0.8118,180,1.01,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
-olimpo,19,41.74474,97.16785,gobi,0.047102,0.000295,0.001484,0.8122,180,1.12,0.79,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E097_00
-olimpo,20,42.27078,105.09538,gobi,0.047259,0.000819,0.002057,0.8126,180,0.95,0.39,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E105_00
-olimpo,21,40.47232,98.9163,gobi,0.047926,0.000623,0.001877,0.8095,270,0.99,0.88,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E098_00
-olimpo,22,41.0815,99.64603,gobi,0.048574,0.000641,0.00189,0.807,270,0.99,0.82,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E099_00
-olimpo,23,42.44688,107.70049,gobi,0.048685,0.000519,0.001776,0.8063,90,0.97,0.87,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E107_00
-olimpo,24,-22.85139,15.18575,namib,0.048979,0.000115,0.001107,0.8043,180,0.87,0.6,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_E015_00
-olimpo,25,37.32142,91.94699,tibet_qaidam,0.04911,0.000195,0.001313,0.804,270,1.15,0.53,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E091_00
-valles,1,64.75996,-14.56579,islandia,0.013048,0.000753,0.641713,0.9493,90,11.27,15.85,0.267,12,pastizal,Copernicus_DSM_COG_30_N64_00_W015_00
-valles,2,-23.58849,-67.64392,puna_altiplano,0.017645,0.000322,0.457418,0.9301,270,13.03,14.72,0.151,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W068_00
-valles,3,36.81438,89.97998,tibet_qaidam,0.018073,0.00044,0.518482,0.9286,270,13.11,17.82,0.089,1,pastizal,Copernicus_DSM_COG_30_N36_00_E089_00
-valles,4,-25.02796,-65.85948,puna_altiplano,0.01864,0.000694,0.623618,0.9268,180,13.25,18.87,0.049,3,pastizal,Copernicus_DSM_COG_30_S26_00_W066_00
-valles,5,-26.66157,-68.31005,puna_altiplano,0.020566,4.6e-05,0.212637,0.9178,180,14.15,16.0,0.0,27,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W069_00
-valles,6,-26.7737,-66.68364,puna_altiplano,0.02102,0.000112,0.295613,0.9161,270,13.82,16.14,0.031,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W067_00
-valles,7,65.14237,-14.4913,islandia,0.021487,0.000603,0.59022,0.9153,0,12.35,9.65,0.195,5,pastizal,Copernicus_DSM_COG_30_N65_00_W015_00
-valles,8,-27.58456,-67.34066,puna_altiplano,0.021672,0.000691,0.623011,0.9147,180,11.06,18.16,0.12,1,pastizal,Copernicus_DSM_COG_30_S28_00_W068_00
-valles,9,65.81605,-17.92265,islandia,0.021894,0.00069,0.622877,0.9138,0,11.01,11.25,0.179,7,pastizal,Copernicus_DSM_COG_30_N65_00_W018_00
-valles,10,-22.73393,-67.73847,puna_altiplano,0.0219,0.000606,0.591772,0.9136,90,11.96,18.7,0.196,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W068_00
-valles,11,-23.58928,-67.73798,puna_altiplano,0.022628,0.000817,0.660066,0.9111,180,10.59,15.65,0.169,15,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W068_00
-valles,12,33.70795,95.57859,tibet_qaidam,0.023128,0.000748,0.640731,0.909,270,12.12,18.01,0.187,2,pastizal,Copernicus_DSM_COG_30_N33_00_E095_00
-valles,13,-27.31458,-69.72934,puna_altiplano,0.023167,0.000886,0.683293,0.9091,0,12.05,20.01,0.022,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W070_00
-valles,14,-24.2571,-67.77089,puna_altiplano,0.023681,0.000577,0.580575,0.9064,270,13.0,8.12,0.0,30,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
-valles,15,37.41316,86.48116,tibet_qaidam,0.0245,0.000628,0.600637,0.9033,270,12.74,18.09,0.053,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E086_00
-valles,16,65.08279,-14.04996,islandia,0.024528,0.00053,0.561341,0.9029,90,15.87,18.32,0.1,4,pastizal,Copernicus_DSM_COG_30_N65_00_W015_00
-valles,17,-26.65469,-67.15249,puna_altiplano,0.024906,0.000622,0.598177,0.9016,0,11.22,18.61,0.018,15,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W068_00
-valles,18,64.58821,-14.83586,islandia,0.024981,0.000345,0.467037,0.9008,90,13.68,18.56,0.083,2,pastizal,Copernicus_DSM_COG_30_N64_00_W015_00
-valles,19,-19.04154,-69.43904,puna_altiplano,0.025174,0.00081,0.658326,0.9009,0,10.13,13.16,0.08,3,pastizal,Copernicus_DSM_COG_30_S20_00_W070_00
-valles,20,-26.64457,-66.73446,puna_altiplano,0.025188,0.000165,0.348261,0.8996,270,13.09,13.29,0.005,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W067_00
-valles,21,-25.1272,-66.04823,puna_altiplano,0.025254,0.000235,0.404892,0.8995,180,12.21,13.94,0.0,3,pastizal,Copernicus_DSM_COG_30_S26_00_W067_00
-valles,22,-27.74966,-67.98749,puna_altiplano,0.025643,0.00017,0.349267,0.8978,180,13.47,17.05,0.067,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W068_00
-valles,23,-24.87966,-68.6054,puna_altiplano,0.025897,0.000166,0.348399,0.8967,0,12.5,15.43,0.116,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
-valles,24,65.98598,-18.79267,islandia,0.026143,0.000544,0.566937,0.8965,180,13.5,16.76,0.129,5,pastizal,Copernicus_DSM_COG_30_N65_00_W019_00
-valles,25,64.61672,-14.70188,islandia,0.026523,0.000643,0.604794,0.8952,90,12.2,15.41,0.218,14,pastizal,Copernicus_DSM_COG_30_N64_00_W015_00
-hellas,1,-78.52912,164.88565,valles_secos,0.02397,0.000784,0.001852,0.9057,0,1.25,0.73,1.0,3,sin dato,Copernicus_DSM_COG_30_S79_00_E164_00
-hellas,2,-26.2139,15.65526,namib,0.026302,0.000172,0.000876,0.8951,270,1.42,0.5,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_E015_00
-hellas,3,-77.71442,164.20673,valles_secos,0.027131,0.000801,0.001866,0.8931,90,1.55,0.67,1.0,4,sin dato,Copernicus_DSM_COG_30_S78_00_E164_00
-hellas,4,-23.29605,-66.57417,puna_altiplano,0.028027,0.000648,0.001675,0.8892,180,1.6,0.84,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W067_00
-hellas,5,38.76776,88.14251,tibet_qaidam,0.028281,0.000503,0.001471,0.8879,180,1.53,0.74,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E088_00
-hellas,6,-27.60524,16.01118,namib,0.029235,0.000474,0.001419,0.884,0,1.49,0.61,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
-hellas,7,21.09515,16.60852,sahara_central,0.029713,0.000592,0.001596,0.8823,0,1.65,0.86,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E016_00
-hellas,8,-21.08532,14.81442,namib,0.030399,0.000329,0.001177,0.8791,0,1.26,0.94,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_E014_00
-hellas,9,-26.34129,-67.52618,puna_altiplano,0.033436,0.000324,0.001171,0.8669,0,1.47,0.6,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W068_00
-hellas,10,-78.32746,158.25001,valles_secos,0.033969,0.000189,0.000915,0.8645,270,1.3,0.87,1.0,1,sin dato,Copernicus_DSM_COG_30_S79_00_E158_00
-hellas,11,-21.54801,14.922,namib,0.034586,0.000719,0.001761,0.8631,270,1.2,0.92,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_E014_00
-hellas,12,37.23844,95.30278,tibet_qaidam,0.039045,0.000495,0.001459,0.8448,0,1.35,0.84,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
-hellas,13,-77.33912,163.26903,valles_secos,0.039296,0.000684,0.001716,0.8442,270,1.37,0.69,1.0,3,sin dato,Copernicus_DSM_COG_30_S78_00_E163_00
-hellas,14,42.09075,106.15809,gobi,0.03969,0.000704,0.001745,0.8426,0,1.49,0.81,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E106_00
-hellas,15,37.30942,95.3591,tibet_qaidam,0.040542,0.00094,0.002021,0.8397,90,1.52,0.5,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
-hellas,16,-22.45864,15.91611,namib,0.041793,0.000706,0.001746,0.8342,0,1.45,0.66,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_E015_00
-hellas,17,-25.22987,-69.01842,puna_altiplano,0.041981,0.000731,0.001774,0.8335,0,1.61,0.71,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W070_00
-hellas,18,-77.44101,163.51897,valles_secos,0.042279,0.00097,0.002056,0.8328,270,1.45,0.71,1.0,5,sin dato,Copernicus_DSM_COG_30_S78_00_E163_00
-hellas,19,-22.66351,-68.83008,puna_altiplano,0.043849,0.000949,0.002031,0.8265,180,1.38,0.65,1.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W069_00
-hellas,20,-24.97536,17.37848,namib,0.044309,0.000633,0.001653,0.824,270,1.31,0.82,1.0,2,matorral,Copernicus_DSM_COG_30_S25_00_E017_00
-hellas,21,37.06534,88.92185,tibet_qaidam,0.045255,0.000979,0.002065,0.8209,270,1.38,0.56,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E088_00
-hellas,22,38.93202,-116.41086,mojave_gran_cuenca,0.045649,0.000514,0.001488,0.8184,0,1.4,0.62,1.0,1,matorral,Copernicus_DSM_COG_30_N38_00_W117_00
-hellas,23,38.26853,-115.15207,mojave_gran_cuenca,0.046877,0.000196,0.000929,0.8129,180,1.41,0.85,1.0,1,matorral,Copernicus_DSM_COG_30_N38_00_W116_00
-hellas,24,-27.83474,16.20826,namib,0.047812,0.000937,0.002017,0.8106,0,1.17,0.86,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
-hellas,25,43.6159,98.56324,gobi,0.048054,0.000997,0.002082,0.8098,0,1.48,0.93,1.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N43_00_E098_00
+sitio,puesto,lat,lon,franja,score,fisica_rms,fisica_01,dist_fisica,corr,rot,pendiente_media,rugosidad_m,frac_llana,cuadros_region,cobertura,tesela
+jezero,1,75.40104,-87.17858,artico_canada,0.075766,0.063949,0.000535,0.004089,0.8248,270,2.09,5.01,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N75_00_W088_00
+jezero,2,-19.29991,-69.94227,puna_altiplano,0.079415,0.049753,0.000105,0.002475,0.7818,0,1.8,4.13,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S20_00_W070_00
+jezero,3,18.57447,49.79546,arabia,0.085182,0.057789,0.000287,0.00334,0.7748,0,1.84,4.85,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
+jezero,4,35.93137,87.69022,tibet_qaidam,0.087904,0.038617,2.7e-05,0.001491,0.7256,180,1.95,4.66,1.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E087_00
+jezero,5,18.95109,46.08951,arabia,0.090614,0.056981,0.000262,0.003247,0.7515,180,1.73,4.8,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E046_00
+jezero,6,19.46755,45.76086,arabia,0.090771,0.046606,7e-05,0.002172,0.7301,180,2.01,3.58,1.0,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
+jezero,7,19.41535,46.26928,arabia,0.091342,0.071312,0.000995,0.005085,0.7773,180,1.95,5.08,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E046_00
+jezero,8,19.25213,15.21178,sahara_central,0.091735,0.051111,0.000129,0.002612,0.7353,180,1.87,4.06,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
+jezero,9,19.64099,45.77694,arabia,0.092251,0.055798,0.00023,0.003113,0.7426,180,1.96,4.2,1.0,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
+jezero,10,19.27168,46.13115,arabia,0.092641,0.049391,0.0001,0.002439,0.7282,180,1.72,4.78,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E046_00
+jezero,11,19.27858,45.97315,arabia,0.093235,0.047886,8.2e-05,0.002293,0.7228,180,1.89,4.24,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
+jezero,12,17.81697,47.76606,arabia,0.093578,0.057344,0.000271,0.003288,0.7404,0,1.73,3.97,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E047_00
+jezero,13,-25.04122,15.49028,namib,0.094722,0.038551,2.6e-05,0.001486,0.6982,90,1.79,4.36,1.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_E015_00
+jezero,14,-26.79319,15.14345,namib,0.095506,0.068091,0.000769,0.004636,0.7542,90,1.84,5.07,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_E015_00
+jezero,15,18.47074,49.44771,arabia,0.096201,0.054362,0.00019,0.002955,0.7239,180,1.88,4.18,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
+jezero,16,17.31121,46.58193,arabia,0.100531,0.058523,0.000313,0.003425,0.7149,180,1.77,4.24,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
+jezero,17,17.07827,46.77537,arabia,0.100862,0.057581,0.000279,0.003316,0.7117,0,1.82,3.43,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
+jezero,18,19.23727,15.44011,sahara_central,0.104346,0.067244,0.000717,0.004522,0.7171,180,1.9,5.25,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
+jezero,19,22.55627,8.78828,sahara_central,0.104397,0.05701,0.000263,0.00325,0.6964,180,1.82,4.6,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E008_00
+jezero,20,22.55182,53.2254,arabia,0.105353,0.06715,0.000709,0.004509,0.7129,180,1.91,4.54,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E053_00
+jezero,21,22.06176,17.14014,sahara_central,0.105396,0.068178,0.000775,0.004648,0.7148,270,1.87,4.87,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E017_00
+jezero,22,18.60225,49.62847,arabia,0.105585,0.061843,0.00044,0.003825,0.7013,180,1.72,4.51,1.0,27,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E049_00
+jezero,23,19.8588,45.51821,arabia,0.106508,0.050979,0.000126,0.002599,0.6759,180,1.85,3.86,1.0,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E045_00
+jezero,24,17.32468,46.70246,arabia,0.106812,0.067935,0.000759,0.004615,0.7086,0,1.65,3.84,1.0,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E046_00
+jezero,25,24.99167,13.39493,sahara_central,0.107058,0.064802,0.000576,0.004199,0.7014,270,1.9,4.79,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E013_00
+gale,1,-21.89398,-68.42829,puna_altiplano,0.657202,1.211819,0.0,1.468505,0.7948,0,22.78,19.63,0.0,28,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+gale,2,-22.04029,-68.24165,puna_altiplano,0.697455,1.289161,2e-06,1.661936,0.7885,90,21.76,15.97,0.0,15,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W069_00
+gale,3,-22.8507,-67.89333,puna_altiplano,0.755099,1.247218,1e-06,1.555553,0.474,180,23.54,17.68,0.0,17,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W068_00
+gale,4,-26.60273,-68.11757,puna_altiplano,0.762522,1.330695,3e-06,1.77075,0.6113,90,20.91,15.53,0.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W069_00
+gale,5,-77.54981,161.92151,valles_secos,0.769399,1.45157,7e-06,2.107056,0.8255,90,20.54,13.8,0.0,68,sin dato,Copernicus_DSM_COG_30_S78_00_E161_00
+gale,6,-27.01135,-68.2918,puna_altiplano,0.770298,1.250647,1e-06,1.564118,0.4201,90,22.35,19.67,0.0,14,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W069_00
+gale,7,-78.57096,164.16192,valles_secos,0.804428,1.383355,3e-06,1.913671,0.549,180,22.82,18.09,0.0,11,sin dato,Copernicus_DSM_COG_30_S79_00_E164_00
+gale,8,-24.6928,-66.15274,puna_altiplano,0.805535,1.487091,8e-06,2.211439,0.752,180,20.69,14.26,0.0,29,pastizal,Copernicus_DSM_COG_30_S25_00_W067_00
+gale,9,-21.28584,-68.18389,puna_altiplano,0.808718,1.391757,4e-06,1.936989,0.5486,90,23.31,19.66,0.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+gale,10,-24.41588,-68.24388,puna_altiplano,0.828101,1.535927,1.2e-05,2.359072,0.7595,270,20.77,19.5,0.0,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+gale,11,-24.76325,-68.36839,puna_altiplano,0.829825,1.43962,6e-06,2.072506,0.5599,180,21.38,16.32,0.0,30,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+gale,12,-24.27155,-67.77075,puna_altiplano,0.852477,1.499962,9e-06,2.249886,0.59,0,20.07,15.68,0.0,18,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
+gale,13,-25.35577,-67.51388,puna_altiplano,0.854087,1.585158,1.6e-05,2.512725,0.754,90,21.88,23.95,0.0,18,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W068_00
+gale,14,-24.16918,-68.05634,puna_altiplano,0.854088,1.523421,1.1e-05,2.32081,0.6305,90,20.05,19.74,0.0,31,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+gale,15,-77.75224,162.21893,valles_secos,0.865762,1.623667,2.2e-05,2.636295,0.7843,270,21.95,23.82,0.031,34,sin dato,Copernicus_DSM_COG_30_S78_00_E162_00
+gale,16,-21.53293,-68.53787,puna_altiplano,0.868603,1.41233,4e-06,1.994677,0.3502,270,23.66,24.6,0.013,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+gale,17,37.37253,-118.63195,mojave_gran_cuenca,0.870261,1.494747,9e-06,2.234269,0.5085,0,24.78,28.74,0.0,16,pastizal,Copernicus_DSM_COG_30_N37_00_W119_00
+gale,18,-23.83503,-67.75132,puna_altiplano,0.877952,1.612348,2e-05,2.599665,0.7129,270,19.32,14.46,0.0,14,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W068_00
+gale,19,-27.25826,-67.94349,puna_altiplano,0.879924,1.576895,1.4e-05,2.486598,0.6341,180,23.59,29.64,0.0,4,pastizal,Copernicus_DSM_COG_30_S28_00_W068_00
+gale,20,-21.17173,-68.61606,puna_altiplano,0.889225,1.591859,1.7e-05,2.534016,0.6268,90,20.05,15.47,0.0,9,pastizal,Copernicus_DSM_COG_30_S22_00_W069_00
+gale,21,-21.76314,-68.24312,puna_altiplano,0.909065,1.670678,2.7e-05,2.791165,0.7051,90,19.37,20.15,0.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+gale,22,-24.72062,-68.57427,puna_altiplano,0.912357,1.742378,3.7e-05,3.035879,0.8353,0,18.71,20.57,0.0,15,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+gale,23,-27.28743,-68.79125,puna_altiplano,0.916651,1.676311,2.7e-05,2.810019,0.686,0,19.41,15.0,0.0,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W069_00
+gale,24,-19.13748,-65.47183,puna_altiplano,0.939831,1.58075,1.5e-05,2.49877,0.4022,90,21.17,18.09,0.014,3,pastizal,Copernicus_DSM_COG_30_S20_00_W066_00
+gale,25,-25.35987,-68.8901,puna_altiplano,0.942461,1.731291,3.5e-05,2.997368,0.6927,90,18.67,14.5,0.0,11,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+oxia,1,-19.05115,-66.55708,puna_altiplano,0.028237,0.015223,0.000374,0.000232,0.9175,270,0.43,0.27,1.0,1,pastizal,Copernicus_DSM_COG_30_S20_00_W067_00
+oxia,2,26.79923,9.98053,sahara_central,0.02991,0.016265,0.000505,0.000265,0.9129,180,0.47,0.55,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N26_00_E009_00
+oxia,3,-18.67521,-67.53302,puna_altiplano,0.030464,0.017106,0.000636,0.000293,0.9124,180,0.37,0.47,1.0,2,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
+oxia,4,34.34925,91.91218,tibet_qaidam,0.030743,0.01634,0.000512,0.000267,0.9097,0,0.38,0.42,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E091_00
+oxia,5,39.83462,-115.40565,mojave_gran_cuenca,0.031197,0.009214,3e-05,8.5e-05,0.8936,270,0.49,0.36,1.0,1,matorral,Copernicus_DSM_COG_30_N39_00_W116_00
+oxia,6,-19.63565,17.97005,namib,0.031649,0.016394,0.000522,0.000269,0.9062,0,0.49,0.4,1.0,3,matorral,Copernicus_DSM_COG_30_S20_00_E017_00
+oxia,7,-20.33957,-66.53508,puna_altiplano,0.032083,0.014744,0.000323,0.000217,0.9012,270,0.54,0.28,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S21_00_W067_00
+oxia,8,37.26399,95.46593,tibet_qaidam,0.033306,0.009669,3.9e-05,9.3e-05,0.8861,180,0.46,0.33,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
+oxia,9,18.10697,44.57267,arabia,0.033365,0.018564,0.000905,0.000345,0.9037,180,0.54,0.47,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E044_00
+oxia,10,23.194,44.37238,arabia,0.033395,0.013376,0.000203,0.000179,0.8932,180,0.42,0.39,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E044_00
+oxia,11,34.50267,84.25934,tibet_qaidam,0.033649,0.008355,1.4e-05,7e-05,0.8821,90,0.49,0.32,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E084_00
+oxia,12,-27.27153,16.20211,namib,0.033796,0.01727,0.000669,0.000298,0.8994,180,0.43,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
+oxia,13,35.70954,91.84751,tibet_qaidam,0.033949,0.017785,0.000752,0.000316,0.8998,0,0.43,0.45,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E091_00
+oxia,14,24.38512,6.24181,sahara_central,0.035073,0.008752,1.9e-05,7.7e-05,0.8772,0,0.48,0.38,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E006_00
+oxia,15,24.32681,18.21156,sahara_central,0.035106,0.017968,0.000785,0.000323,0.8955,90,0.37,0.37,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E018_00
+oxia,16,35.77187,89.94835,tibet_qaidam,0.035767,0.01618,0.000495,0.000262,0.8893,180,0.53,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N35_00_E089_00
+oxia,17,-78.31368,159.48962,valles_secos,0.037458,0.017167,0.000652,0.000295,0.8845,270,0.52,0.4,1.0,2,sin dato,Copernicus_DSM_COG_30_S79_00_E159_00
+oxia,18,34.91534,96.68343,tibet_qaidam,0.037501,0.008788,2.1e-05,7.7e-05,0.8676,270,0.52,0.28,1.0,1,pastizal,Copernicus_DSM_COG_30_N34_00_E096_00
+oxia,19,23.85174,16.0603,sahara_central,0.037604,0.015817,0.000444,0.00025,0.8812,270,0.41,0.47,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E016_00
+oxia,20,38.90407,96.14521,tibet_qaidam,0.03765,0.017409,0.000689,0.000303,0.8842,180,0.59,0.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E096_00
+oxia,21,-20.09744,17.20108,namib,0.037834,0.009564,3.7e-05,9.1e-05,0.8678,0,0.44,0.46,1.0,5,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
+oxia,22,39.12795,103.38351,gobi,0.038012,0.017731,0.000741,0.000314,0.8834,90,0.53,0.32,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E103_00
+oxia,23,-18.42945,-67.53511,puna_altiplano,0.038487,0.014352,0.000277,0.000206,0.8748,0,0.53,0.31,1.0,6,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
+oxia,24,32.86174,84.94419,tibet_qaidam,0.038494,0.015692,0.000428,0.000246,0.8774,180,0.56,0.23,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E084_00
+oxia,25,24.58455,6.97977,sahara_central,0.039183,0.015541,0.00041,0.000242,0.8743,180,0.4,0.34,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E006_00
+mawrth,1,-20.60481,17.07016,namib,0.044542,0.039219,0.000487,0.001538,0.9003,270,1.06,1.56,1.0,2,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
+mawrth,2,40.51557,105.05506,gobi,0.04735,0.029982,0.00011,0.000899,0.8706,270,1.17,1.37,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E105_00
+mawrth,3,65.25753,-20.59186,islandia,0.05033,0.028626,8.7e-05,0.000819,0.8559,0,1.13,1.19,1.0,23,pastizal,Copernicus_DSM_COG_30_N65_00_W021_00
+mawrth,4,41.54252,102.08852,gobi,0.052298,0.023773,3.3e-05,0.000565,0.8384,0,1.07,1.6,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E102_00
+mawrth,5,41.25205,98.01366,gobi,0.052359,0.033852,0.000223,0.001146,0.8583,270,1.11,1.04,1.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
+mawrth,6,19.10727,44.62163,arabia,0.053054,0.035877,0.000305,0.001287,0.8595,90,1.25,1.09,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E044_00
+mawrth,7,44.56191,102.97695,gobi,0.054804,0.027442,6.8e-05,0.000753,0.8357,90,1.03,1.25,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E102_00
+mawrth,8,44.05266,106.88109,gobi,0.055453,0.03382,0.000221,0.001144,0.8458,90,1.05,1.19,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E106_00
+mawrth,9,44.35927,107.07678,gobi,0.055615,0.019242,1e-05,0.00037,0.816,180,1.15,1.37,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E107_00
+mawrth,10,-24.32918,133.75027,australia_central,0.056107,0.042078,0.000723,0.001771,0.8597,0,0.93,1.74,1.0,1,pastizal,Copernicus_DSM_COG_30_S25_00_E133_00
+mawrth,11,-26.56199,135.19135,australia_central,0.056916,0.028593,8.5e-05,0.000818,0.8295,90,1.02,1.28,1.0,2,pastizal,Copernicus_DSM_COG_30_S27_00_E135_00
+mawrth,12,44.81024,103.7394,gobi,0.057052,0.044217,0.000937,0.001955,0.8602,90,1.0,1.3,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E103_00
+mawrth,13,39.73165,105.12911,gobi,0.057372,0.038961,0.000468,0.001518,0.8484,0,1.06,1.49,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E105_00
+mawrth,14,43.87283,106.93215,gobi,0.058265,0.029343,9.9e-05,0.000861,0.8256,270,0.99,1.34,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N43_00_E106_00
+mawrth,15,41.65976,99.09447,gobi,0.059689,0.043615,0.000872,0.001902,0.8485,180,1.2,1.15,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E099_00
+mawrth,16,39.53505,100.34545,gobi,0.060092,0.032328,0.000172,0.001045,0.8243,270,1.08,1.76,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E100_00
+mawrth,17,-76.07907,160.9433,valles_secos,0.060646,0.041268,0.000654,0.001703,0.84,270,1.08,1.03,1.0,1,sin dato,Copernicus_DSM_COG_30_S77_00_E160_00
+mawrth,18,44.41574,106.69172,gobi,0.061172,0.039834,0.000531,0.001587,0.835,270,0.98,1.29,1.0,11,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E106_00
+mawrth,19,44.46937,107.34218,gobi,0.062111,0.040754,0.000601,0.001661,0.8331,90,1.08,1.57,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E107_00
+mawrth,20,40.39051,103.60898,gobi,0.062143,0.041214,0.000648,0.001699,0.8339,90,1.09,1.79,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E103_00
+mawrth,21,41.24137,98.66302,gobi,0.062494,0.020087,1.4e-05,0.000403,0.7902,90,1.13,1.27,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
+mawrth,22,-24.96684,-68.89045,puna_altiplano,0.063007,0.017688,5e-06,0.000313,0.7833,0,1.12,1.39,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+mawrth,23,44.70287,105.28107,gobi,0.063039,0.039027,0.000471,0.001523,0.8259,90,1.05,1.57,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E105_00
+mawrth,24,41.32664,98.3758,gobi,0.064287,0.040966,0.000623,0.001678,0.8248,90,1.3,1.03,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
+mawrth,25,74.07109,-93.32981,artico_canada,0.06434,0.026435,5.7e-05,0.000699,0.7955,90,1.06,1.33,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N74_00_W094_00
+meridiani,1,-23.57491,15.76689,namib,0.051338,0.038512,0.000249,0.001483,0.8717,180,0.65,0.93,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_E015_00
+meridiani,2,17.08552,47.33431,arabia,0.059153,0.041819,0.000449,0.001749,0.847,180,0.54,1.08,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E047_00
+meridiani,3,-19.6039,-69.86774,puna_altiplano,0.061348,0.034325,0.000101,0.001178,0.8233,90,0.75,1.14,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S20_00_W070_00
+meridiani,4,-19.92031,16.51782,namib,0.063261,0.031608,5.7e-05,0.000999,0.8102,0,0.57,1.06,1.0,1,matorral,Copernicus_DSM_COG_30_S20_00_E016_00
+meridiani,5,25.17088,18.35933,sahara_central,0.063788,0.046278,0.000871,0.002142,0.8374,180,0.64,1.09,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N25_00_E018_00
+meridiani,6,26.42972,10.50702,sahara_central,0.063852,0.030075,3.9e-05,0.000904,0.8047,0,0.71,1.18,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N26_00_E010_00
+meridiani,7,32.03535,89.28219,tibet_qaidam,0.066972,0.043722,0.000604,0.001912,0.8196,180,0.73,1.21,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E089_00
+meridiani,8,21.65727,45.23057,arabia,0.069891,0.038858,0.000267,0.00151,0.7981,180,0.44,0.77,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E045_00
+meridiani,9,-20.19618,17.38613,namib,0.070413,0.0451,0.000743,0.002034,0.8085,180,0.68,1.28,1.0,4,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
+meridiani,10,41.57314,105.20949,gobi,0.070888,0.033322,8.1e-05,0.00111,0.7831,0,0.6,1.09,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E105_00
+meridiani,11,-26.3597,-69.21873,puna_altiplano,0.070941,0.041237,0.000413,0.0017,0.7987,0,0.83,1.19,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W070_00
+meridiani,12,36.49904,-114.76443,mojave_gran_cuenca,0.07205,0.044526,0.000677,0.001983,0.8009,180,0.71,1.33,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N36_00_W115_00
+meridiani,13,23.36837,14.68467,sahara_central,0.072933,0.041724,0.000444,0.001741,0.7917,180,0.53,1.05,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E014_00
+meridiani,14,39.37651,103.65642,gobi,0.073028,0.043945,0.000626,0.001931,0.7958,270,0.74,1.12,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E103_00
+meridiani,15,22.53369,19.97102,sahara_central,0.073106,0.037883,0.00022,0.001435,0.7833,270,0.52,0.64,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E019_00
+meridiani,16,-21.14302,134.72189,australia_central,0.073377,0.046494,0.000893,0.002162,0.7995,90,0.75,1.23,1.0,3,matorral,Copernicus_DSM_COG_30_S22_00_E134_00
+meridiani,17,-21.38752,127.78036,australia_central,0.073447,0.028279,2.4e-05,0.0008,0.7628,270,0.6,0.78,1.0,2,pastizal,Copernicus_DSM_COG_30_S22_00_E127_00
+meridiani,18,17.98773,51.81471,arabia,0.073988,0.045327,0.000762,0.002055,0.7947,90,0.68,1.17,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E051_00
+meridiani,19,17.43959,48.11195,arabia,0.074046,0.043518,0.000582,0.001894,0.7909,0,0.54,0.64,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E048_00
+meridiani,20,35.19905,96.21959,tibet_qaidam,0.074158,0.027356,1.7e-05,0.000748,0.7581,90,0.69,0.89,1.0,1,pastizal,Copernicus_DSM_COG_30_N35_00_E096_00
+meridiani,21,22.1653,14.4785,sahara_central,0.074414,0.045566,0.000788,0.002076,0.7935,270,0.72,1.2,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E014_00
+meridiani,22,25.82905,10.92289,sahara_central,0.075218,0.031976,6e-05,0.001022,0.7631,90,0.56,0.62,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N25_00_E010_00
+meridiani,23,19.79155,12.44193,sahara_central,0.07536,0.037481,0.000204,0.001405,0.7735,0,0.53,1.05,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E012_00
+meridiani,24,26.41869,16.1379,sahara_central,0.075765,0.031894,5.9e-05,0.001017,0.7607,0,0.55,0.77,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N26_00_E016_00
+meridiani,25,22.68453,45.793,arabia,0.075837,0.044323,0.000659,0.001965,0.7853,0,0.6,1.33,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E045_00
+eberswalde,1,-23.18629,-69.29928,puna_altiplano,0.05186,0.048267,0.000348,0.00233,0.8891,180,1.85,3.74,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W070_00
+eberswalde,2,24.15799,12.46706,sahara_central,0.056065,0.039261,0.000116,0.001541,0.8543,270,1.69,4.3,1.0,28,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N24_00_E012_00
+eberswalde,3,34.95019,85.44873,tibet_qaidam,0.059797,0.042195,0.000168,0.00178,0.8452,180,1.74,4.23,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E085_00
+eberswalde,4,-24.12356,-67.39434,puna_altiplano,0.062001,0.050941,0.000476,0.002595,0.8539,0,1.51,4.26,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
+eberswalde,5,33.79434,91.70604,tibet_qaidam,0.063295,0.043102,0.000187,0.001858,0.833,180,1.84,3.74,1.0,1,pastizal,Copernicus_DSM_COG_30_N33_00_E091_00
+eberswalde,6,23.9473,12.19704,sahara_central,0.073586,0.054469,0.000682,0.002967,0.8146,270,1.45,3.88,1.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E012_00
+eberswalde,7,32.59995,89.17708,tibet_qaidam,0.073767,0.04772,0.000326,0.002277,0.8004,270,1.77,3.99,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E089_00
+eberswalde,8,-22.8747,-67.33172,puna_altiplano,0.074035,0.049302,0.000393,0.002431,0.8025,180,1.69,4.37,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W068_00
+eberswalde,9,32.84552,87.51145,tibet_qaidam,0.075606,0.038023,9.7e-05,0.001446,0.7736,180,1.85,4.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E087_00
+eberswalde,10,32.90136,86.14248,tibet_qaidam,0.0757,0.047212,0.000303,0.002229,0.7916,270,1.69,4.26,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E086_00
+eberswalde,11,75.25635,-94.86967,artico_canada,0.07588,0.048329,0.000352,0.002336,0.7931,90,1.76,3.84,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N75_00_W095_00
+eberswalde,12,75.61804,-91.56912,artico_canada,0.07605,0.056581,0.000843,0.003201,0.809,180,1.45,4.5,1.0,1,musgo y liquen,Copernicus_DSM_COG_30_N75_00_W092_00
+eberswalde,13,40.15649,103.35076,gobi,0.077291,0.057252,0.000889,0.003278,0.8053,90,1.43,4.41,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E103_00
+eberswalde,14,23.67724,19.7885,sahara_central,0.077689,0.048535,0.000362,0.002356,0.7863,90,1.64,4.48,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E019_00
+eberswalde,15,34.36842,92.27255,tibet_qaidam,0.078474,0.048208,0.000346,0.002324,0.7825,0,1.68,3.92,0.978,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_E092_00
+eberswalde,16,44.95296,102.37502,gobi,0.079089,0.045091,0.000238,0.002033,0.7738,0,1.57,4.43,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N44_00_E102_00
+eberswalde,17,41.05338,98.49263,gobi,0.080471,0.048718,0.000369,0.002373,0.7756,90,1.96,4.35,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
+eberswalde,18,19.01985,9.62198,sahara_central,0.080923,0.037675,8.9e-05,0.001419,0.7517,270,1.62,3.64,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E009_00
+eberswalde,19,74.98905,-86.78342,artico_canada,0.08129,0.054295,0.000671,0.002948,0.7834,0,1.88,3.5,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N74_00_W087_00
+eberswalde,20,19.07873,15.02905,sahara_central,0.081432,0.048544,0.000363,0.002357,0.7714,90,1.64,3.81,1.0,9,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
+eberswalde,21,17.6171,48.41049,arabia,0.082441,0.030019,2.1e-05,0.000901,0.7303,90,1.77,4.08,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N17_00_E048_00
+eberswalde,22,20.23947,13.39372,sahara_central,0.082935,0.053708,0.000636,0.002885,0.7757,270,1.6,3.9,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E013_00
+eberswalde,23,42.22528,101.92365,gobi,0.08311,0.056599,0.000847,0.003203,0.7808,180,1.58,4.48,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E101_00
+eberswalde,24,19.15095,15.18122,sahara_central,0.083354,0.044529,0.000226,0.001983,0.7556,90,1.84,3.96,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E015_00
+eberswalde,25,40.0685,105.22357,gobi,0.084182,0.045803,0.000258,0.002098,0.7549,0,1.62,4.31,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E105_00
+utopia,1,21.36675,15.72396,sahara_central,0.037363,0.013534,0.000137,0.000183,0.8776,90,0.53,0.5,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E015_00
+utopia,2,19.57987,12.82642,sahara_central,0.04082,0.020048,0.000724,0.000402,0.8768,0,0.31,0.46,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E012_00
+utopia,3,34.87294,-117.80189,mojave_gran_cuenca,0.042067,0.021381,0.000938,0.000457,0.8745,270,0.54,0.59,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_W118_00
+utopia,4,-76.15555,159.65391,valles_secos,0.045153,0.011738,6.8e-05,0.000138,0.8429,90,0.48,0.3,1.0,4,sin dato,Copernicus_DSM_COG_30_S77_00_E159_00
+utopia,5,21.58459,45.43138,arabia,0.045959,0.020152,0.00074,0.000406,0.8565,0,0.44,0.54,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E045_00
+utopia,6,18.12652,52.15991,arabia,0.04692,0.017805,0.000446,0.000317,0.8479,180,0.44,0.57,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N18_00_E052_00
+utopia,7,22.87909,16.23167,sahara_central,0.047101,0.015026,0.000227,0.000226,0.8416,0,0.41,0.6,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E016_00
+utopia,8,-77.29917,158.42784,valles_secos,0.047868,0.01577,0.000274,0.000249,0.8401,270,0.39,0.31,1.0,3,sin dato,Copernicus_DSM_COG_30_S78_00_E158_00
+utopia,9,19.66227,19.90608,sahara_central,0.049886,0.020038,0.000723,0.000402,0.8405,90,0.47,0.53,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E019_00
+utopia,10,-20.05391,17.21577,namib,0.051513,0.020833,0.000846,0.000434,0.8356,0,0.31,0.48,1.0,2,matorral,Copernicus_DSM_COG_30_S21_00_E017_00
+utopia,11,40.32659,98.38912,gobi,0.052613,0.019392,0.000626,0.000376,0.8283,180,0.55,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E098_00
+utopia,12,-27.77739,16.15891,namib,0.05279,0.019199,0.000604,0.000369,0.8272,90,0.37,0.66,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
+utopia,13,20.34416,19.83709,sahara_central,0.052893,0.018327,0.000501,0.000336,0.8251,90,0.37,0.53,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E019_00
+utopia,14,-18.67521,-67.53302,puna_altiplano,0.054634,0.019091,0.000583,0.000364,0.8196,0,0.37,0.47,1.0,3,pastizal,Copernicus_DSM_COG_30_S19_00_W068_00
+utopia,15,22.12647,11.65278,sahara_central,0.055508,0.010076,2.5e-05,0.000102,0.7981,90,0.42,0.57,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E011_00
+utopia,16,25.05044,14.53747,sahara_central,0.056913,0.01598,0.000288,0.000255,0.8043,0,0.33,0.48,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N25_00_E014_00
+utopia,17,-76.44318,159.05603,valles_secos,0.057953,0.018801,0.000553,0.000353,0.8058,270,0.48,0.42,1.0,20,sin dato,Copernicus_DSM_COG_30_S77_00_E159_00
+utopia,18,21.77209,9.57122,sahara_central,0.059476,0.018957,0.000569,0.000359,0.8,90,0.4,0.44,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E009_00
+utopia,19,38.64444,93.40292,tibet_qaidam,0.06084,0.021337,0.000932,0.000455,0.7993,180,0.36,0.48,1.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E093_00
+utopia,20,38.67373,-116.76246,mojave_gran_cuenca,0.061811,0.010768,3.8e-05,0.000116,0.7743,90,0.5,0.4,1.0,1,matorral,Copernicus_DSM_COG_30_N38_00_W117_00
+utopia,21,-77.17067,159.18835,valles_secos,0.061907,0.017652,0.000426,0.000312,0.7877,270,0.49,0.47,1.0,5,sin dato,Copernicus_DSM_COG_30_S78_00_E159_00
+utopia,22,21.51283,9.1222,sahara_central,0.061986,0.019149,0.000594,0.000367,0.7904,270,0.49,0.55,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E009_00
+utopia,23,22.65562,45.79283,arabia,0.06203,0.018972,0.000572,0.00036,0.7898,180,0.43,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E045_00
+utopia,24,19.2404,11.7043,sahara_central,0.062297,0.015674,0.000267,0.000246,0.7822,0,0.43,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N19_00_E011_00
+utopia,25,-76.07035,158.88321,valles_secos,0.06278,0.017925,0.000459,0.000321,0.7847,270,0.32,0.36,1.0,1,sin dato,Copernicus_DSM_COG_30_S77_00_E158_00
+olimpo,1,42.34286,104.94474,gobi,0.041324,0.033517,0.00012,0.001123,0.9017,180,1.05,0.32,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E104_00
+olimpo,2,-20.89501,15.15246,namib,0.043804,0.032158,9.2e-05,0.001034,0.8891,90,0.87,0.67,1.0,2,pastizal,Copernicus_DSM_COG_30_S21_00_E015_00
+olimpo,3,-27.87519,16.50124,namib,0.047131,0.042756,0.000567,0.001828,0.897,180,1.0,0.83,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
+olimpo,4,32.03758,84.84424,tibet_qaidam,0.051306,0.027322,3.3e-05,0.000746,0.8494,90,0.98,0.4,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E084_00
+olimpo,5,37.22039,88.0602,tibet_qaidam,0.051364,0.028958,4.9e-05,0.000839,0.8525,90,1.03,0.49,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E088_00
+olimpo,6,-27.11918,-66.42029,puna_altiplano,0.052156,0.045416,0.000825,0.002063,0.8822,270,0.97,0.25,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W067_00
+olimpo,7,40.33937,105.86494,gobi,0.053176,0.046244,0.00092,0.002139,0.8798,180,0.89,0.96,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E105_00
+olimpo,8,22.40147,7.67669,sahara_central,0.056049,0.042383,0.000536,0.001796,0.8606,0,0.8,0.74,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N22_00_E007_00
+olimpo,9,41.49947,98.35497,gobi,0.05674,0.019404,6e-06,0.000377,0.8118,180,1.01,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E098_00
+olimpo,10,39.13083,101.6399,gobi,0.058074,0.035394,0.00017,0.001253,0.8385,0,1.05,0.44,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N39_00_E101_00
+olimpo,11,37.61552,95.18749,tibet_qaidam,0.058695,0.04629,0.000924,0.002143,0.8578,270,0.89,1.0,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
+olimpo,12,40.8433,104.06175,gobi,0.059711,0.044923,0.000779,0.002018,0.851,90,0.97,0.91,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E104_00
+olimpo,13,34.31099,-116.32332,mojave_gran_cuenca,0.060746,0.040838,0.000429,0.001668,0.8387,0,0.98,0.67,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N34_00_W117_00
+olimpo,14,23.41711,10.2134,sahara_central,0.061047,0.042899,0.000576,0.00184,0.8416,0,0.94,0.36,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N23_00_E010_00
+olimpo,15,20.06682,5.73583,sahara_central,0.062792,0.045345,0.000818,0.002056,0.8395,90,0.93,0.69,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N20_00_E005_00
+olimpo,16,43.08171,104.33118,gobi,0.06397,0.028364,4.4e-05,0.000805,0.8008,0,1.14,0.58,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N43_00_E104_00
+olimpo,17,-22.85139,15.18575,namib,0.065558,0.033272,0.000115,0.001107,0.8043,180,0.87,0.6,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_E015_00
+olimpo,18,-27.14684,-66.3551,puna_altiplano,0.066105,0.046124,0.000902,0.002127,0.8278,270,0.81,0.77,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W067_00
+olimpo,19,41.74474,97.16785,gobi,0.066217,0.038526,0.000295,0.001484,0.8122,180,1.12,0.79,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E097_00
+olimpo,20,-22.61787,15.87045,namib,0.066594,0.044126,0.000697,0.001947,0.8219,90,1.05,0.58,1.0,1,pastizal,Copernicus_DSM_COG_30_S23_00_E015_00
+olimpo,21,37.32142,91.94699,tibet_qaidam,0.06713,0.036235,0.000195,0.001313,0.804,270,1.15,0.53,1.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E091_00
+olimpo,22,41.44125,104.25978,gobi,0.068373,0.044871,0.000772,0.002013,0.8162,270,0.94,0.74,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N41_00_E104_00
+olimpo,23,40.47232,98.9163,gobi,0.069276,0.043325,0.000623,0.001877,0.8095,270,0.99,0.88,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N40_00_E098_00
+olimpo,24,42.44688,107.70049,gobi,0.069498,0.042145,0.000519,0.001776,0.8063,90,0.97,0.87,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E107_00
+olimpo,25,42.27078,105.09538,gobi,0.069528,0.045356,0.000819,0.002057,0.8126,180,0.95,0.39,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E105_00
+valles,1,-77.50945,162.33851,valles_secos,0.201248,0.25582,0.0,0.065444,0.7066,180,16.02,13.18,0.058,13,sin dato,Copernicus_DSM_COG_30_S78_00_E162_00
+valles,2,-25.73544,-68.79404,puna_altiplano,0.21572,0.256187,1e-06,0.065632,0.6495,180,15.6,16.03,0.0,4,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+valles,3,-26.80751,-68.75994,puna_altiplano,0.221352,0.337015,7e-06,0.113579,0.7886,180,14.39,17.1,0.027,30,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W069_00
+valles,4,-24.16928,-68.07209,puna_altiplano,0.226303,0.375742,1.5e-05,0.141182,0.8463,0,17.03,15.37,0.0,25,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+valles,5,-25.41722,-68.61958,puna_altiplano,0.23439,0.310184,4e-06,0.096214,0.6828,270,15.96,15.84,0.0,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+valles,6,-24.31514,-67.80186,puna_altiplano,0.239468,0.383801,1.9e-05,0.147303,0.8097,90,17.43,14.87,0.0,30,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
+valles,7,-24.26883,-67.47132,puna_altiplano,0.239501,0.340771,8e-06,0.116125,0.7235,0,15.29,15.29,0.0,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W068_00
+valles,8,-25.42947,-68.11039,puna_altiplano,0.24016,0.260166,1e-06,0.067686,0.5597,0,15.9,14.24,0.0,24,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+valles,9,-78.57103,163.69155,valles_secos,0.242643,0.246825,0.0,0.060923,0.5231,270,14.82,14.26,0.0,11,sin dato,Copernicus_DSM_COG_30_S79_00_E163_00
+valles,10,-25.24413,-68.7631,puna_altiplano,0.249483,0.418155,2.6e-05,0.174853,0.8384,180,13.71,14.57,0.036,13,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+valles,11,-26.66157,-68.31005,puna_altiplano,0.251105,0.461126,4.6e-05,0.212637,0.9178,180,14.15,16.0,0.0,27,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W069_00
+valles,12,-25.57397,-67.67048,puna_altiplano,0.25162,0.302861,4e-06,0.091725,0.5992,180,15.38,15.85,0.04,10,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W068_00
+valles,13,-27.25781,-68.50036,puna_altiplano,0.254036,0.443051,3.6e-05,0.196294,0.87,270,13.54,14.95,0.088,7,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W069_00
+valles,14,-19.60335,-68.02491,puna_altiplano,0.255673,0.356104,1e-05,0.12681,0.6895,270,14.41,17.48,0.027,6,pastizal,Copernicus_DSM_COG_30_S20_00_W069_00
+valles,15,-26.55278,-66.43123,puna_altiplano,0.257562,0.399244,2.3e-05,0.159395,0.7682,180,15.94,16.32,0.0,21,pastizal,Copernicus_DSM_COG_30_S27_00_W067_00
+valles,16,-24.04279,-65.8609,puna_altiplano,0.259865,0.433716,3.2e-05,0.18811,0.828,180,14.43,17.26,0.013,7,pastizal,Copernicus_DSM_COG_30_S25_00_W066_00
+valles,17,-25.51733,-68.33265,puna_altiplano,0.26611,0.449153,4.1e-05,0.201738,0.8339,90,17.04,14.31,0.0,16,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W069_00
+valles,18,64.77497,-23.81934,islandia,0.266913,0.333087,7e-06,0.110947,0.5985,270,14.83,13.21,0.0,5,pastizal,Copernicus_DSM_COG_30_N64_00_W024_00
+valles,19,-24.50281,-68.29074,puna_altiplano,0.267343,0.450616,4.2e-05,0.203055,0.8319,0,15.15,11.14,0.0,6,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S25_00_W069_00
+valles,20,-27.02595,-68.32396,puna_altiplano,0.26931,0.32296,5e-06,0.104303,0.5687,180,14.87,17.52,0.0,15,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_W069_00
+valles,21,-26.67318,-66.71782,puna_altiplano,0.270309,0.385253,2.1e-05,0.14842,0.6893,180,16.29,17.6,0.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W067_00
+valles,22,-21.45898,-68.12117,puna_altiplano,0.272821,0.389234,2.2e-05,0.151503,0.6872,0,14.59,18.22,0.0,58,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+valles,23,-21.30044,-68.21466,puna_altiplano,0.273244,0.350801,9e-06,0.123062,0.6086,180,14.28,14.71,0.0,12,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_W069_00
+valles,24,-26.55167,-67.00962,puna_altiplano,0.274257,0.364184,1.3e-05,0.13263,0.6313,180,14.32,17.17,0.01,6,pastizal,Copernicus_DSM_COG_30_S27_00_W068_00
+valles,25,-18.11359,-69.54833,puna_altiplano,0.277485,0.468885,5.2e-05,0.219853,0.8278,180,13.36,16.04,0.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S19_00_W070_00
+hellas,1,-26.2139,15.65526,namib,0.041014,0.029597,0.000172,0.000876,0.8951,270,1.42,0.5,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_E015_00
+hellas,2,-78.52912,164.88565,valles_secos,0.045098,0.04304,0.000784,0.001852,0.9057,0,1.25,0.73,1.0,3,sin dato,Copernicus_DSM_COG_30_S79_00_E164_00
+hellas,3,38.76776,88.14251,tibet_qaidam,0.047209,0.038359,0.000503,0.001471,0.8879,180,1.53,0.74,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N38_00_E088_00
+hellas,4,-21.08532,14.81442,namib,0.047388,0.034307,0.000329,0.001177,0.8791,0,1.26,0.94,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_E014_00
+hellas,5,-27.60524,16.01118,namib,0.047835,0.037673,0.000474,0.001419,0.884,0,1.49,0.61,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S28_00_E016_00
+hellas,6,-23.29605,-66.57417,puna_altiplano,0.048167,0.040927,0.000648,0.001675,0.8892,180,1.6,0.84,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S24_00_W067_00
+hellas,7,-77.71442,164.20673,valles_secos,0.048331,0.043203,0.000801,0.001866,0.8931,90,1.55,0.67,1.0,4,sin dato,Copernicus_DSM_COG_30_S78_00_E164_00
+hellas,8,-78.32746,158.25001,valles_secos,0.048995,0.030242,0.000189,0.000915,0.8645,270,1.3,0.87,1.0,1,sin dato,Copernicus_DSM_COG_30_S79_00_E158_00
+hellas,9,21.09515,16.60852,sahara_central,0.049394,0.039953,0.000592,0.001596,0.8823,0,1.65,0.86,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N21_00_E016_00
+hellas,10,-26.34129,-67.52618,puna_altiplano,0.050382,0.034215,0.000324,0.001171,0.8669,0,1.47,0.6,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S27_00_W068_00
+hellas,11,-21.54801,14.922,namib,0.055209,0.041966,0.000719,0.001761,0.8631,270,1.2,0.92,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S22_00_E014_00
+hellas,12,37.23844,95.30278,tibet_qaidam,0.0579,0.038203,0.000495,0.001459,0.8448,0,1.35,0.84,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
+hellas,13,-77.33912,163.26903,valles_secos,0.059668,0.041427,0.000684,0.001716,0.8442,270,1.37,0.69,1.0,3,sin dato,Copernicus_DSM_COG_30_S78_00_E163_00
+hellas,14,42.09075,106.15809,gobi,0.060224,0.041772,0.000704,0.001745,0.8426,0,1.49,0.81,1.0,3,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N42_00_E106_00
+hellas,15,38.26853,-115.15207,mojave_gran_cuenca,0.062018,0.030476,0.000196,0.000929,0.8129,180,1.41,0.85,1.0,1,matorral,Copernicus_DSM_COG_30_N38_00_W116_00
+hellas,16,-22.45864,15.91611,namib,0.062333,0.041786,0.000706,0.001746,0.8342,0,1.45,0.66,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_E015_00
+hellas,17,37.30942,95.3591,tibet_qaidam,0.062547,0.04495,0.00094,0.002021,0.8397,90,1.52,0.5,1.0,1,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N37_00_E095_00
+hellas,18,-25.22987,-69.01842,puna_altiplano,0.062674,0.042116,0.000731,0.001774,0.8335,0,1.61,0.71,1.0,2,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S26_00_W070_00
+hellas,19,-24.97536,17.37848,namib,0.064322,0.040659,0.000633,0.001653,0.824,270,1.31,0.82,1.0,2,matorral,Copernicus_DSM_COG_30_S25_00_E017_00
+hellas,20,-77.44101,163.51897,valles_secos,0.064468,0.045348,0.00097,0.002056,0.8328,270,1.45,0.71,1.0,5,sin dato,Copernicus_DSM_COG_30_S78_00_E163_00
+hellas,21,38.93202,-116.41086,mojave_gran_cuenca,0.064679,0.038573,0.000514,0.001488,0.8184,0,1.4,0.62,1.0,1,matorral,Copernicus_DSM_COG_30_N38_00_W117_00
+hellas,22,-22.66351,-68.83008,puna_altiplano,0.065909,0.04507,0.000949,0.002031,0.8265,180,1.38,0.65,1.0,8,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_S23_00_W069_00
+hellas,23,32.3126,85.26358,tibet_qaidam,0.066127,0.030354,0.000192,0.000921,0.7962,180,1.56,0.62,1.0,5,suelo desnudo o vegetación escasa,Copernicus_DSM_COG_30_N32_00_E085_00
+hellas,24,36.7944,89.60272,tibet_qaidam,0.066603,0.034389,0.000331,0.001183,0.8024,270,1.31,0.72,1.0,1,pastizal,Copernicus_DSM_COG_30_N36_00_E089_00
+hellas,25,-78.02331,160.81221,valles_secos,0.066983,0.025257,8.5e-05,0.000638,0.7826,0,1.36,0.76,1.0,1,sin dato,Copernicus_DSM_COG_30_S79_00_E160_00

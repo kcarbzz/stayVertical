@@ -246,6 +246,7 @@ def main():
     ap.add_argument("--solape", type=float, default=0.5, help="solape entre cuadros vecinos (0 a 0,9)")
     ap.add_argument("--candidatos", type=int, default=500, help="mínimo de cuadros que pasan de la etapa física a la de forma, por sitio")
     ap.add_argument("--fraccion", type=float, default=0.001, help="parte de la base que pasa a la etapa de forma (0,001 = el 0,1 %% más parecido); así barrer más área no deja fuera a los buenos candidatos")
+    ap.add_argument("--fisica", choices=["distancia", "percentil"], default="distancia", help="término físico del puntaje: la diferencia real en los 8 rasgos (por defecto) o la posición en la base, como en el catálogo de 50 zonas")
     ap.add_argument("--top", type=int, default=25, help="regiones que se guardan por sitio")
     ap.add_argument("--radio-km", type=float, dest="radio_km", help="cuadros a esta distancia o menos son la misma región (por defecto, 2 cuadros)")
     ap.add_argument("--excluir", default=",".join(str(c) for c in CLASES_EXCLUIDAS), help="códigos de ESA WorldCover que se descartan (por defecto incluye 70, nieve y hielo)")
@@ -334,7 +335,7 @@ def main():
     for sid, s in sitios.items():
         cerca = np.argsort(base.distancias(s["vector"]), kind="stable")[:n_cand]
         ventanas = {int(i): relieve_de(int(i)).copy() for i in sorted(cerca, key=lambda i: tes[i])}      # se leen tesela a tesela, no saltando entre ellas
-        r = regiones(puntuar_sitio(base, s, ventanas.__getitem__, candidatos=n_cand), lat, lon, a.radio_km)[: a.top]
+        r = regiones(puntuar_sitio(base, s, ventanas.__getitem__, candidatos=n_cand, fisica=a.fisica), lat, lon, a.radio_km)[: a.top]
         dmin = float(base.distancias(s["vector"]).min())
         resumen.append({"sitio": sid, **{c: round(float(v), 6) for c, v in zip(CARACTERISTICAS, s["vector"])},
                         "dist_fisica_min": round(dmin, 6), "veces_la_tipica": round(dmin / tipica, 2) if tipica > 0 else "", "fuera_de_rango": dmin > limite})
@@ -342,7 +343,7 @@ def main():
         for puesto, f in enumerate(r, start=1):
             i = f["indice"]
             filas.append({"sitio": sid, "puesto": puesto, "lat": round(float(lat[i]), 5), "lon": round(float(lon[i]), 5), "franja": franja[i],
-                          "score": round(f["score"], 6), "fisica_01": round(f["fisica_01"], 6), "dist_fisica": round(f["dist_fisica"], 6),
+                          "score": round(f["score"], 6), "fisica_rms": round(f["fisica_rms"], 6), "fisica_01": round(f["fisica_01"], 6), "dist_fisica": round(f["dist_fisica"], 6),
                           "corr": round(f["corr"], 4), "rot": f["rot"], "pendiente_media": round(float(pend[i]), 2), "rugosidad_m": round(float(rug[i]), 2),
                           "frac_llana": round(float(llana[i]), 3), "cuadros_region": f["cuadros"], "cobertura": CLASES.get(int(dom[i]), str(int(dom[i]))),
                           "tesela": os.path.basename(archivos[int(tes[i])]).split("_DEM")[0]})
@@ -365,7 +366,9 @@ def main():
             "clases_excluidas": [CLASES.get(c, str(c)) for c in a.excluir] if a.cobertura else [],
             "franjas": {n: list(c) for n, c in cajas.items()}, "teselas": len(archivos), "teselas_fallidas": fallos, "teselas_sin_cobertura": int(sin_cob),
             "cuadros": int(len(X)), "distancia_tipica": tipica, "limite_fuera_de_rango": limite, "sitios": list(sitios),
-            "puntaje": "0,5 × percentil físico + 0,5 × (1 − correlación de forma) / 2; menor es mejor"}
+            "fisica": a.fisica,
+            "puntaje": ("0,5 × diferencia en los 8 rasgos (raíz de la distancia física) + 0,5 × (1 − correlación de forma) / 2; menor es mejor" if a.fisica == "distancia"
+                        else "0,5 × percentil físico + 0,5 × (1 − correlación de forma) / 2; menor es mejor")}
     json.dump(meta, open(os.path.join(a.salida, f"meta_{a.cuerpo}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     decir(f"Listo en {time.time() - t0:.0f} s. Archivos en {a.salida}/: candidatos_{a.cuerpo}.csv, sitios_{a.cuerpo}.csv, recortes_{a.cuerpo}.npz, meta_{a.cuerpo}.json")
 

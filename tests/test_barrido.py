@@ -83,8 +83,23 @@ class PruebasBarrido(unittest.TestCase):
         np.testing.assert_array_equal(self.cen[m["indice"]], [self.fi + TAM // 2, self.fj + TAM // 2])
         self.assertGreater(m["corr"], 0.999)
         self.assertEqual(m["fisica_01"], 0.0)                    # también es el más cercano en los 8 rasgos
+        self.assertLess(m["fisica_rms"], 0.001)                    # el giro cambia los rasgos solo en el redondeo
         self.assertLess(m["score"], r[1]["score"])
         self.assertTrue(all(x["score"] <= y["score"] for x, y in zip(r, r[1:])))
+
+    def test_con_distancia_un_cuadro_muy_distinto_no_gana_solo_por_la_forma(self):
+        # Sitio = el cuadro escondido con el relieve multiplicado por 3: mismo dibujo, el triple de pendiente.
+        sitio = sitio_desde_dem(self.joya * 3.0, RES, TAM)
+        por_forma = puntuar_sitio(self.base, sitio, self.relieve_de, candidatos=len(self.base.X), fisica="percentil")
+        por_dist = puntuar_sitio(self.base, sitio, self.relieve_de, candidatos=len(self.base.X), fisica="distancia")
+        self.assertEqual(len(por_forma), len(por_dist))
+        # Con la distancia real, el puntaje del ganador incluye cuánto difiere del sitio; con el percentil, no.
+        g = por_dist[0]
+        self.assertAlmostEqual(g["score"], 0.5 * g["fisica_rms"] + 0.5 * (1 - g["corr"]) / 2, 9)
+        self.assertGreater(g["fisica_rms"], 0.0)
+        self.assertLessEqual(g["fisica_rms"], min(r["fisica_rms"] for r in por_forma[:1]) + 1e-12)
+        with self.assertRaises(ValueError):
+            puntuar_sitio(self.base, sitio, self.relieve_de, fisica="otra")
 
     def test_un_sitio_que_no_se_parece_a_nada_queda_fuera_de_rango(self):
         raro = sitio_desde_dem(terreno(TAM + 10, 3000, 2, 7), RES, TAM)

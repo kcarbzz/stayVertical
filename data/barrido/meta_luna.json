@@ -101,5 +101,6 @@
   "faustini",
   "shoemaker"
  ],
- "puntaje": "0,5 × percentil físico + 0,5 × (1 − correlación de forma) / 2; menor es mejor"
+ "fisica": "distancia",
+ "puntaje": "0,5 × diferencia en los 8 rasgos (raíz de la distancia física) + 0,5 × (1 − correlación de forma) / 2; menor es mejor"
 }

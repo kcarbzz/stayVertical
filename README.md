@@ -84,7 +84,9 @@ python3 -I scripts/construir_barrido.py --marte barrido_marte --luna barrido_lun
 
 Eso escribe `docs/barrido.json`, que la web muestra en la pestaña «Barrido automático». La salida del barrido publicado (once franjas, 745 teselas por cuerpo) está guardada en `data/barrido/`.
 
-Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada y un candidato puede estar sobre hielo.
+El puntaje del barrido es 0,5 × la diferencia real en los 8 rasgos + 0,5 × (1 − correlación de forma) / 2. Se diferencia del catálogo de 50 zonas en el primer término: allí es la posición del cuadro en la lista, que con millones de cuadros vale casi cero y dejaba ganar a candidatos mucho menos empinados que el sitio. Con `--fisica percentil` se recupera la fórmula anterior.
+
+Límites: compara solo relieve; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada y un candidato puede estar sobre hielo.
 
 ## Seguridad de la web
 

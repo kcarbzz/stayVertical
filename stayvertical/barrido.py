@@ -6,7 +6,7 @@ Este módulo no descarga nada. Recibe teselas ya leídas (un DEM en metros sobre
 2. `Base`               junta los cuadros de todas las teselas y los normaliza (mediana e IQR terrestres).
 3. `puntuar_sitio`      etapa física (distancia a los 8 rasgos) + etapa de forma (correlación con rotaciones)
                         sobre los `candidatos` más cercanos, con el mismo puntaje que usa el equipo:
-                        0,5 × percentil físico + 0,5 × (1 − correlación) / 2. Menor es mejor.
+                        0,5 × término físico + 0,5 × (1 − correlación) / 2. Menor es mejor.
 4. `regiones`           agrupa cuadros vecinos para no contar el mismo paisaje varias veces.
 
 La descarga (Copernicus DEM y ESA WorldCover) está en scripts/barrido.py.
@@ -147,12 +147,20 @@ class Base:
         return float(np.median(d[:, 1] ** 2)), float(np.percentile(d[:, 1] ** 2, 99))
 
 
-def puntuar_sitio(base, sitio, relieve_de, candidatos=500, peso_fisico=0.5):
+def puntuar_sitio(base, sitio, relieve_de, candidatos=500, peso_fisico=0.5, fisica="distancia"):
     """Etapa física + etapa de forma para un sitio.
 
     `relieve_de(i)` devuelve el relieve (tam × tam) del cuadro `i` de la base.
-    Devuelve una lista de dicts ordenada por puntaje: indice, dist_fisica, fisica_01, corr, rot, score.
+    Puntaje = peso_fisico × término físico + (1 − peso_fisico) × (1 − correlación) / 2. Menor es mejor.
+    El término físico depende de `fisica`:
+      - "distancia" (por defecto): la raíz de la distancia a los 8 rasgos, es decir, cuánto difiere el cuadro del sitio
+        en unidades de la dispersión terrestre. Un cuadro la mitad de empinado que el sitio queda penalizado de verdad.
+      - "percentil": su posición entre todos los cuadros de la base (la fórmula del catálogo de 50 zonas). Con bases
+        grandes vale casi cero para todos los candidatos y el puntaje lo decide solo la forma.
+    Devuelve una lista de dicts ordenada por puntaje: indice, dist_fisica, fisica_rms, fisica_01, corr, rot, score.
     """
+    if fisica not in ("distancia", "percentil"):
+        raise ValueError(f"fisica desconocida: {fisica}")
     d = base.distancias(sitio["vector"])
     orden = np.argsort(d, kind="stable")
     salida = []
@@ -160,8 +168,9 @@ def puntuar_sitio(base, sitio, relieve_de, candidatos=500, peso_fisico=0.5):
         corr, rot = correlacion_forma(sitio["relieve"], relieve_de(int(i)))
         if not np.isfinite(corr):                               # relieve plano o con huecos: no se puede comparar la forma
             continue
-        fis = puesto / len(d)                                   # percentil dentro de TODA la base
-        salida.append({"indice": int(i), "dist_fisica": float(d[i]), "fisica_01": float(fis), "corr": corr, "rot": rot,
+        pct, rms = puesto / len(d), float(np.sqrt(d[i]))       # percentil dentro de TODA la base y diferencia real
+        fis = rms if fisica == "distancia" else pct
+        salida.append({"indice": int(i), "dist_fisica": float(d[i]), "fisica_rms": rms, "fisica_01": float(pct), "corr": corr, "rot": rot,
                        "score": float(peso_fisico * fis + (1 - peso_fisico) * (1 - corr) / 2)})
     return sorted(salida, key=lambda r: r["score"])
 
