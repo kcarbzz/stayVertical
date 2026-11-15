@@ -137,3 +137,11 @@ h2 b { width:22px; height:22px; border-radius:50%; background:var(--acc); color:
 .graf svg { width:100%; height:auto; background:var(--bg); border-radius:8px; }
 .pie { color:var(--mut); font-size:12px; line-height:1.45; margin-top:12px; }
 @media (max-width:600px) { .graf { grid-template-columns:1fr; } }
+
+/* Chat: nada puede ensanchar el panel (palabras largas, URLs, respuestas largas) */
+#asistente { overflow:hidden; max-height:min(70vh,560px); }
+#chat { min-height:0; min-width:0; }
+.msg { max-width:100%; min-width:0; overflow-wrap:anywhere; word-break:break-word; }
+.msg.yo { max-width:88%; }
+.sug button, #rapidas button { max-width:100%; white-space:normal; overflow-wrap:anywhere; text-align:left; }
+#pregunta { min-width:0; }
