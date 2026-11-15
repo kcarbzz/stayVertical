@@ -244,7 +244,8 @@ def main():
     ap.add_argument("--res", type=float, help="metros por píxel de la comparación (Luna 80, Marte 200)")
     ap.add_argument("--tam-px", type=int, dest="tam_px", help="lado del cuadro en píxeles (Luna 38, Marte 15)")
     ap.add_argument("--solape", type=float, default=0.5, help="solape entre cuadros vecinos (0 a 0,9)")
-    ap.add_argument("--candidatos", type=int, default=500, help="cuadros que pasan de la etapa física a la de forma, por sitio")
+    ap.add_argument("--candidatos", type=int, default=500, help="mínimo de cuadros que pasan de la etapa física a la de forma, por sitio")
+    ap.add_argument("--fraccion", type=float, default=0.001, help="parte de la base que pasa a la etapa de forma (0,001 = el 0,1 %% más parecido); así barrer más área no deja fuera a los buenos candidatos")
     ap.add_argument("--top", type=int, default=25, help="regiones que se guardan por sitio")
     ap.add_argument("--radio-km", type=float, dest="radio_km", help="cuadros a esta distancia o menos son la misma región (por defecto, 2 cuadros)")
     ap.add_argument("--excluir", default=",".join(str(c) for c in CLASES_EXCLUIDAS), help="códigos de ESA WorldCover que se descartan (por defecto incluye 70, nieve y hielo)")
@@ -316,6 +317,8 @@ def main():
         dom.append(z["dominante"]); cen.append(z["centros"]); tes.append(np.full(n, k)); franja += [str(z["franja"])] * n
     X, lat, lon, pend, rug, llana, dom, tes, cen = (np.concatenate(v) for v in (X, lat, lon, pend, rug, llana, dom, tes, cen))
     base = Base(X); tipica, limite = base.vecindad()
+    n_cand = max(a.candidatos, int(round(a.fraccion * len(X))))
+    decir(f"Pasan a la etapa de forma los {n_cand} cuadros más parecidos de cada sitio.")
     decir(f"Base terrestre: {len(X)} cuadros de {len(archivos)} teselas ({sin_cob} sin mapa de cobertura). Distancia típica entre vecinos: {tipica:.4f}")
 
     abierta = {}
@@ -329,7 +332,9 @@ def main():
 
     filas, resumen, recortes = [], [], {}
     for sid, s in sitios.items():
-        r = regiones(puntuar_sitio(base, s, relieve_de, candidatos=a.candidatos), lat, lon, a.radio_km)[: a.top]
+        cerca = np.argsort(base.distancias(s["vector"]), kind="stable")[:n_cand]
+        ventanas = {int(i): relieve_de(int(i)).copy() for i in sorted(cerca, key=lambda i: tes[i])}      # se leen tesela a tesela, no saltando entre ellas
+        r = regiones(puntuar_sitio(base, s, ventanas.__getitem__, candidatos=n_cand), lat, lon, a.radio_km)[: a.top]
         dmin = float(base.distancias(s["vector"]).min())
         resumen.append({"sitio": sid, **{c: round(float(v), 6) for c, v in zip(CARACTERISTICAS, s["vector"])},
                         "dist_fisica_min": round(dmin, 6), "veces_la_tipica": round(dmin / tipica, 2) if tipica > 0 else "", "fuera_de_rango": dmin > limite})
@@ -341,7 +346,7 @@ def main():
                           "corr": round(f["corr"], 4), "rot": f["rot"], "pendiente_media": round(float(pend[i]), 2), "rugosidad_m": round(float(rug[i]), 2),
                           "frac_llana": round(float(llana[i]), 3), "cuadros_region": f["cuadros"], "cobertura": CLASES.get(int(dom[i]), str(int(dom[i]))),
                           "tesela": os.path.basename(archivos[int(tes[i])]).split("_DEM")[0]})
-            if puesto <= 5: recortes[f"cand__{sid}__{puesto}"] = relieve_de(i).astype("float32")
+            if puesto <= 5: recortes[f"cand__{sid}__{puesto}"] = ventanas[i].astype("float32")
         m = r[0] if r else None
         decir(f"  {sid:<12} mejor: " + (f"{lat[m['indice']]:.3f}, {lon[m['indice']]:.3f} · score {m['score']:.3f} · corr {m['corr']:.2f}" if m else "sin candidatos")
               + (" · FUERA DE RANGO: ningún cuadro barrido se le acerca" if dmin > limite else ""))
@@ -353,7 +358,7 @@ def main():
     guardar_csv(f"candidatos_{a.cuerpo}.csv", filas)
     guardar_csv(f"sitios_{a.cuerpo}.csv", resumen)
     np.savez_compressed(os.path.join(a.salida, f"recortes_{a.cuerpo}.npz"), **recortes)
-    meta = {"cuerpo": a.cuerpo, "res_m": a.res, "tam_px": a.tam_px, "solape": a.solape, "candidatos": a.candidatos, "radio_km": a.radio_km,
+    meta = {"cuerpo": a.cuerpo, "res_m": a.res, "tam_px": a.tam_px, "solape": a.solape, "candidatos": n_cand, "radio_km": a.radio_km,
             "fuente_sitios": "GeoTIFF propios" if a.sitios else FUENTE_SITIOS[a.cuerpo]["nombre"],
             "fuente_relieve": f"Copernicus DEM ({a.dem}) vía Microsoft Planetary Computer",
             "fuente_cobertura": "ESA WorldCover 2021 vía Microsoft Planetary Computer" if a.cobertura else None,
