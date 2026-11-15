@@ -9,6 +9,7 @@ Web: https://stay-vertical.wiki
 
 - **18 sitios de referencia:** 8 del polo sur lunar (LOLA, 80 m) y 10 de Marte (mezcla HRSC/MOLA de USGS, 200 m).
 - **50 zonas terrestres** candidatas (Copernicus DEM GLO-30), ordenadas por parecido de relieve.
+- **Mapa lunar en proyección polar sur** con capas de NASA Trek (relieve LOLA e imagen LRO WAC); Marte usa el mosaico Viking.
 - **Clima y viabilidad** de cada zona (NASA POWER, 2021-2025) con un semáforo de umbrales provisionales.
 - **Vertikal Bot:** una red neuronal pequeña que corre en el navegador y explica los resultados mostrados.
 - Selector de idioma ES/EN.
@@ -23,7 +24,7 @@ Los resultados son exploratorios: comparan relieve dentro de un catálogo de 50 
 | `stayvertical/` | Motor en Python: características de relieve, búsqueda grueso→fino, agrupación en regiones y algoritmo genético |
 | `scripts/` | `construir_datos.py` y `construir_clima.py` generan los JSON de la web; `subir_version.py` renueva la caché; `auditoria/` reproduce la auditoría |
 | `entrenamiento/` | Ejemplos y entrenamiento del clasificador de Vertikal Bot |
-| `tests/` | Pruebas del motor (pytest) y del bot y el clima (Node) |
+| `tests/` | Pruebas del motor (pytest) y del bot, el clima y la proyección polar (Node) |
 | `notebooks/`, `data/resultados/` | Corrida anterior del análisis (16 parches de referencia); ya no alimenta la web |
 | `backend/` | API opcional en FastAPI, aún sin uso |
 
@@ -48,5 +49,9 @@ pip install -r requirements.txt pytest && python3 -m pytest tests/test_motor.py
 ```
 
 ```bash
-node tests/test_bot.js && node tests/test_clima.js
+node tests/test_bot.js && node tests/test_clima.js && node tests/test_polar.js
 ```
+
+## Seguridad de la web
+
+`docs/index.html` lleva una Content Security Policy y carga Leaflet 1.9.4 desde cdnjs con `integrity` (SRI). Si se añade otra librería o un servidor de mapas, hay que sumar su dominio a la CSP; si se cambia la versión de Leaflet, hay que recalcular los dos hashes.
