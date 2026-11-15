@@ -116,5 +116,32 @@ class PruebasBarrido(unittest.TestCase):
         self.assertEqual(regiones([], lat, lon, 6), [])
 
 
+class PruebasConversor(unittest.TestCase):
+    """scripts/construir_barrido.py: lo que convierte la salida del barrido en datos para la web."""
+
+    def setUp(self):
+        import os, sys
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts"))
+        import construir_barrido
+        self.c = construir_barrido
+
+    def test_codificar_va_de_1_a_255_y_marca_los_huecos_con_0(self):
+        import base64
+        Z = np.array([[0.0, 50.0], [100.0, np.nan]])
+        r = self.c.codificar(Z)
+        self.assertEqual((r["n"], r["min"], r["max"]), (2, 0.0, 100.0))
+        self.assertEqual(list(base64.b64decode(r["datos"])), [1, 128, 255, 0])
+        self.assertIsNone(self.c.codificar(np.full((2, 2), np.nan)))
+        self.assertEqual(set(base64.b64decode(self.c.codificar(np.ones((2, 2)))["datos"])), {128})      # cuadro plano
+
+    def test_pais_de(self):
+        cuadrado = [[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]                                     # [lon, lat]
+        hueco = [[4, 4], [6, 4], [6, 6], [4, 6], [4, 4]]
+        paises = [{"properties": {"nombre": "Uno", "en": "One"}, "geometry": {"type": "Polygon", "coordinates": [cuadrado, hueco]}}]
+        self.assertEqual(self.c.pais_de(2, 2, paises), ("Uno", "One"))
+        self.assertIsNone(self.c.pais_de(5, 5, paises))             # dentro del hueco
+        self.assertIsNone(self.c.pais_de(20, 20, paises))
+
+
 if __name__ == "__main__":
     unittest.main()
