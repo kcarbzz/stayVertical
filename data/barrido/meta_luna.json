@@ -3,7 +3,7 @@
  "res_m": 80.0,
  "tam_px": 38,
  "solape": 0.5,
- "candidatos": 500,
+ "candidatos": 2456,
  "radio_km": 6.08,
  "fuente_sitios": "NASA LOLA LDEM_80S_80MPP_ADJ",
  "fuente_relieve": "Copernicus DEM (cop-dem-glo-30) vía Microsoft Planetary Computer",
@@ -53,14 +53,44 @@
    158,
    -76,
    166
+  ],
+  "sahara_central": [
+   19,
+   5,
+   27,
+   20
+  ],
+  "arabia": [
+   17,
+   44,
+   24,
+   56
+  ],
+  "tibet_qaidam": [
+   32,
+   84,
+   39,
+   97
+  ],
+  "gobi": [
+   39,
+   97,
+   45,
+   108
+  ],
+  "mojave_gran_cuenca": [
+   34,
+   -119,
+   40,
+   -112
   ]
  },
- "teselas": 342,
+ "teselas": 745,
  "teselas_fallidas": [],
  "teselas_sin_cobertura": 22,
- "cuadros": 770586,
- "distancia_tipica": 0.00010574476530521419,
- "limite_fuera_de_rango": 0.010603694097474525,
+ "cuadros": 2455713,
+ "distancia_tipica": 0.00010742391274575673,
+ "limite_fuera_de_rango": 0.013152847259916785,
  "sitios": [
   "haworth",
   "malapert",

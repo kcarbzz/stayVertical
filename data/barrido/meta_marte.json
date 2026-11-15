@@ -3,7 +3,7 @@
  "res_m": 200.0,
  "tam_px": 15,
  "solape": 0.5,
- "candidatos": 500,
+ "candidatos": 2229,
  "radio_km": 6.0,
  "fuente_sitios": "USGS HRSC/MOLA blend DEM v2 (NASA MOLA + ESA HRSC)",
  "fuente_relieve": "Copernicus DEM (cop-dem-glo-90) vía Microsoft Planetary Computer",
@@ -53,14 +53,44 @@
    158,
    -76,
    166
+  ],
+  "sahara_central": [
+   19,
+   5,
+   27,
+   20
+  ],
+  "arabia": [
+   17,
+   44,
+   24,
+   56
+  ],
+  "tibet_qaidam": [
+   32,
+   84,
+   39,
+   97
+  ],
+  "gobi": [
+   39,
+   97,
+   45,
+   108
+  ],
+  "mojave_gran_cuenca": [
+   34,
+   -119,
+   40,
+   -112
   ]
  },
- "teselas": 342,
+ "teselas": 745,
  "teselas_fallidas": [],
  "teselas_sin_cobertura": 22,
- "cuadros": 701090,
- "distancia_tipica": 0.00010527202490663565,
- "limite_fuera_de_rango": 0.02307147381452172,
+ "cuadros": 2229494,
+ "distancia_tipica": 0.00012256675135395795,
+ "limite_fuera_de_rango": 0.028344874952010487,
  "sitios": [
   "jezero",
   "gale",
