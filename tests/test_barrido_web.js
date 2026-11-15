@@ -35,5 +35,17 @@ for (const [par, c] of Object.entries(barrido.cruces)) {
     assert.ok(c.meta.cuadros > 100000, 'cuadros ' + c.meta.cuadros); assert.ok(usadas.size > 1, [...usadas].join());
   });
 }
+/* Clima de los candidatos del barrido (scripts/construir_clima_barrido.py): un punto de NASA POWER por coordenada publicada. */
+const climaB = leer('clima_barrido.json'), clima = leer('clima.json');
+prueba('clima del barrido: todos los candidatos tienen sus 13 factores y 12 meses, sin pendientes', () => {
+  assert.strictEqual(Object.keys(climaB.pendientes).length, 0);
+  for (const c of Object.values(barrido.cruces)) for (const [id, s] of Object.entries(c.sitios)) for (const g of s.candidatos) {
+    const p = climaB.puntos[`${g.coord[0].toFixed(5)},${g.coord[1].toFixed(5)}`];
+    assert.ok(p, `${id} #${g.puesto} sin clima`);
+    for (const v of clima.variables) assert.ok(Number.isFinite(p.v[v.id]), `${id} #${g.puesto} ${v.id}`);
+    assert.strictEqual(p.mensual.length, 12, id);
+    assert.ok(Math.abs(p.lat - g.coord[0]) < 1e-4 && Math.abs(p.lon - g.coord[1]) < 1e-4, id);
+  }
+});
 console.log(`${bien} bien, ${mal} con falla`);
 process.exit(mal ? 1 : 0);
