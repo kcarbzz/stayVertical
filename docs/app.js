@@ -403,7 +403,7 @@ function pintarBarrido() {
     html += `<div class="tarjw"><button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.puesto}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
       + `<h4>${esc(franjaDe(g))}</h4><p class="cat">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''}</p>`
       + `<dl><dt>${t('correlacion')}</dt><dd>${fmt2(g.corr)}</dd></dl>${nums(g.ficha)}`
-      + `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p></button>`
+      + (g.cobertura === 'sin dato' ? `<p class="nota dif">${esc(t('sinCobertura'))}</p>` : `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p>`) + '</button>'
       + (g.relieve ? `<button type="button" class="clima-btn" data-rel="${k}">${esc(t('verRelieve'))}</button>` : '') + '</div>';
   });
   tira.innerHTML = html;

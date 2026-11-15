@@ -58,7 +58,7 @@ node tests/test_bot.js && node tests/test_clima.js && node tests/test_polar.js &
 
 ## Barrido de franjas de la Tierra
 
-`scripts/barrido.py` sustituye la lista de 50 zonas elegidas a mano: recorre franjas de cientos de kilómetros y deja que el algoritmo encuentre los cuadros que más se parecen a cada sitio de la Luna o de Marte. Usa Copernicus DEM para el relieve y ESA WorldCover para descartar bosque, cultivos, ciudades y agua; los dos se descargan solos desde Microsoft Planetary Computer.
+`scripts/barrido.py` sustituye la lista de 50 zonas elegidas a mano: recorre franjas de cientos de kilómetros y deja que el algoritmo encuentre los cuadros que más se parecen a cada sitio de la Luna o de Marte. Usa Copernicus DEM para el relieve y ESA WorldCover para descartar bosque, cultivos, ciudades, agua, nieve y hielo; los dos se descargan solos desde Microsoft Planetary Computer.
 
 En Google Colab:
 
@@ -84,7 +84,7 @@ python3 -I scripts/construir_barrido.py --marte barrido_marte --luna barrido_lun
 
 Eso escribe `docs/barrido.json`, que la web muestra en la pestaña «Barrido automático».
 
-Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada.
+Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada y un candidato puede estar sobre hielo.
 
 ## Seguridad de la web
 

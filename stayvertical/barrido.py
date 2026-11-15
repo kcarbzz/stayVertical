@@ -20,9 +20,10 @@ from .features import mapas_pixel, vector_8, ficha, tabla_cuadros
 from .regions import agrupar
 from .search import Normalizador
 
-# Clases de ESA WorldCover que no pueden ser análogo de la Luna ni de Marte:
-# bosque (10), cultivos (40), construido (50), agua (80), humedal (90) y manglar (95).
-CLASES_EXCLUIDAS = (10, 40, 50, 80, 90, 95)
+# Clases de ESA WorldCover que no se comparan: bosque (10), cultivos (40), construido (50), nieve y hielo (70),
+# agua (80), humedal (90) y manglar (95). El hielo se descarta porque su superficie lisa no es terreno:
+# un casquete glaciar saldría como «análogo» de una llanura marciana.
+CLASES_EXCLUIDAS = (10, 40, 50, 70, 80, 90, 95)
 CLASES = {0: "sin dato", 10: "bosque", 20: "matorral", 30: "pastizal", 40: "cultivos", 50: "construido",
           60: "suelo desnudo o vegetación escasa", 70: "nieve y hielo", 80: "agua", 90: "humedal",
           95: "manglar", 100: "musgo y liquen"}

@@ -5,7 +5,7 @@ algoritmo encuentre los cuadros que más se parecen a cada sitio. Pensado para G
 
 Datos (se descargan solos desde Microsoft Planetary Computer, sin cuenta):
   - Relieve:   Copernicus DEM GLO-30 (30 m) o GLO-90 (90 m), programa Copernicus de la UE con la ESA.
-  - Cobertura: ESA WorldCover 2021 (10 m), para descartar bosque, cultivos, ciudades y agua.
+  - Cobertura: ESA WorldCover 2021 (10 m), para descartar bosque, cultivos, ciudades, agua, nieve y hielo.
 
 Instalación en Colab:
   !pip install -q rasterio pystac-client planetary-computer
@@ -247,7 +247,7 @@ def main():
     ap.add_argument("--candidatos", type=int, default=500, help="cuadros que pasan de la etapa física a la de forma, por sitio")
     ap.add_argument("--top", type=int, default=25, help="regiones que se guardan por sitio")
     ap.add_argument("--radio-km", type=float, dest="radio_km", help="cuadros a esta distancia o menos son la misma región (por defecto, 2 cuadros)")
-    ap.add_argument("--excluir", default=",".join(str(c) for c in CLASES_EXCLUIDAS), help="códigos de ESA WorldCover que se descartan; añade 70 para quitar también nieve y hielo")
+    ap.add_argument("--excluir", default=",".join(str(c) for c in CLASES_EXCLUIDAS), help="códigos de ESA WorldCover que se descartan (por defecto incluye 70, nieve y hielo)")
     ap.add_argument("--sin-cobertura", action="store_false", dest="cobertura", help="no descartar bosque, cultivos, ciudades ni agua")
     ap.add_argument("--dem", choices=["cop-dem-glo-30", "cop-dem-glo-90"], help="por defecto, 30 m para la Luna y 90 m para Marte")
     ap.add_argument("--hilos", type=int, default=4)
