@@ -1,0 +1,111 @@
+{
+  "nota": "Valores de referencia aproximados, tomados de páginas públicas de NASA. Sirven para dar contexto, no para calcular un puntaje.",
+  "provisional": true,
+  "tierra": {
+    "gravedad_ms2": 9.81,
+    "presion_nivel_mar_kpa": 101.3
+  },
+  "cuerpos": {
+    "luna": {
+      "t_ref_c": -249,
+      "t_nota": "mínimo medido por LRO Diviner en cráteres en sombra permanente del polo sur; las zonas iluminadas son menos frías",
+      "t_nota_en": "lowest value measured by LRO Diviner in permanently shadowed craters at the south pole; sunlit areas are less cold",
+      "presion_kpa": 0,
+      "lluvia_mm": 0,
+      "gravedad_ms2": 1.62,
+      "fuentes": [
+        {
+          "nombre": "NASA SSERVI · LRO Diviner",
+          "url": "https://sservi.nasa.gov/articles/lro-finds-coldest-place-on-the-moon/"
+        },
+        {
+          "nombre": "NASA NSSDCA · Moon Fact Sheet",
+          "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/moonfact.html"
+        }
+      ]
+    },
+    "marte": {
+      "t_ref_c": -59,
+      "t_nota": "temperatura media según la ficha de NASA",
+      "t_nota_en": "average temperature per NASA’s fact sheet",
+      "presion_kpa": 0.64,
+      "lluvia_mm": 0,
+      "gravedad_ms2": 3.73,
+      "fuentes": [
+        {
+          "nombre": "NASA NSSDCA · Mars Fact Sheet",
+          "url": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html"
+        }
+      ]
+    }
+  },
+  "conocidos_nota": "Clasificación provisional del equipo: marca las zonas con un uso documentado por NASA o ESA como análogo planetario o en entrenamiento de astronautas. Cada una enlaza su fuente. Que una zona no esté marcada no significa que nunca se haya estudiado.",
+  "conocidos": {
+    "Atacama": {
+      "motivo": "NASA probó ahí un rover con taladro e instrumentos de detección de vida para Marte (proyecto ARADS).",
+      "motivo_en": "NASA tested a rover with a drill and life-detection instruments for Mars there (ARADS project).",
+      "fuente": "NASA",
+      "url": "https://www.nasa.gov/universe/atacama-rover-astrobiology-drilling-studies-arads/"
+    },
+    "DeathValley": {
+      "motivo": "NASA ha probado ahí drones para Marte, y un rover de pruebas de Curiosity en dunas cercanas.",
+      "motivo_en": "NASA has tested Mars drones there, and a Curiosity test rover on nearby dunes.",
+      "fuente": "NASA",
+      "url": "https://www.nasa.gov/solar-system/planets/mars/nasa-tests-drones-in-death-valley-preps-for-martian-sands-and-skies/"
+    },
+    "MaunaLoa": {
+      "motivo": "Sede del hábitat de simulación HI-SEAS, financiado por NASA.",
+      "motivo_en": "Home of the NASA-funded HI-SEAS simulation habitat.",
+      "fuente": "NASA",
+      "url": "https://www.earthobservatory.nasa.gov/images/92630/living-the-mars-life-on-mauna-loa"
+    },
+    "MeteorCrater": {
+      "motivo": "Entrenamiento geológico de los astronautas del Apollo.",
+      "motivo_en": "Geology training for the Apollo astronauts.",
+      "fuente": "NASA",
+      "url": "https://www.nasa.gov/history/50-years-ago-apollo-14-and-15-preparations-2/"
+    },
+    "RiesCrater": {
+      "motivo": "Entrenamiento de las tripulaciones del Apollo 14 y 17 y del curso PANGAEA de la ESA.",
+      "motivo_en": "Training of the Apollo 14 and 17 crews and of ESA’s PANGAEA course.",
+      "fuente": "ESA",
+      "url": "https://www.esa.int/ESA_Multimedia/Images/2024/09/A_geological_puzzle"
+    },
+    "Etna": {
+      "motivo": "Campaña de robótica lunar ARCHES / Analog-1 (DLR y ESA, 2022).",
+      "motivo_en": "ARCHES / Analog-1 lunar robotics campaign (DLR and ESA, 2022).",
+      "fuente": "ESA",
+      "url": "https://www.esa.int/Newsroom/Press_Releases/Call_for_Media_ARCHES_robotic_demonstration_of_Mount_Etna_in_Sicily"
+    },
+    "Teide": {
+      "motivo": "Pruebas de rovers de la ESA en el Parque Nacional del Teide (2017), simulando la luz rasante de los polos lunares.",
+      "motivo_en": "ESA rover tests in Teide National Park (2017), simulating the low Sun of the lunar poles.",
+      "fuente": "ESA",
+      "url": "https://www.esa.int/Enabling_Support/Space_Engineering_Technology/Rovers_drive_through_Tenerife_darkness"
+    },
+    "GrandCanyon": {
+      "motivo": "Entrenamiento geológico de los astronautas del Apollo: para aprender geología de campo, no por su parecido con la Luna.",
+      "motivo_en": "Geology training for the Apollo astronauts: to learn field geology, not because it resembles the Moon.",
+      "fuente": "NASA",
+      "url": "https://www.hq.nasa.gov/office/pao/History/SP-4214/app7.html"
+    },
+    "NewberryCaldera": {
+      "motivo": "La caldera se usó en el entrenamiento geológico de los astronautas del Apollo.",
+      "motivo_en": "The caldera was used for geology field training of the Apollo astronauts.",
+      "fuente": "NASA",
+      "url": "https://science.nasa.gov/earth/earth-observatory/newberry-volcano-147700/"
+    },
+    "Yellowstone": {
+      "motivo": "Sus aguas termales se estudian en astrobiología de NASA y se comparan con rocas de Marte.",
+      "motivo_en": "Its hot springs are studied in NASA astrobiology and compared with rocks from Mars.",
+      "fuente": "NASA",
+      "url": "https://astrobiology.nasa.gov/news/nasa-research-focuses-on-yellowstones-hot-springs-and-compares-findings-to-rocks-from-mars/"
+    },
+    "LonarCrater": {
+      "motivo": "Cráter de impacto en basalto, estudiado como análogo de cráteres de Marte.",
+      "motivo_en": "Impact crater in basalt, studied as an analog of craters on Mars.",
+      "fuente": "NASA",
+      "url": "https://science.nasa.gov/earth/earth-observatory/lonar-crater-india-8654/"
+    }
+  }
+}

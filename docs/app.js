@@ -23,7 +23,7 @@ const pos = (cuerpo, c) => (cuerpo === 'luna' ? Polar.aPolar(c) : c);       // [
 const COLOR = { acc: '#5ec8ff', sol: '#ffd166' };
 const CUERPOS = ['tierra', 'luna', 'marte'];
 
-let datos, TIERRA, CLIMA = null;              // TIERRA: continentes con sus países (hijas)
+let datos, TIERRA, CLIMA = null, ANA = null;              // TIERRA: continentes con sus países (hijas)
 const estado = { modo: 'region', gemelo: null, capa: 'ninguna', soloViables: false, candidatos: [],
   ref: { cuerpo: 'luna', zona: null, pais: null }, dest: { cuerpo: 'tierra', zona: null, pais: null } };
 const M = { ref: null, dest: null };   // { mapa, cuerpo, capa, zonas }
@@ -295,6 +295,40 @@ function abrirClima(id) {
   $('clima-panel').showModal();
 }
 
+/* ---------- ficha de analogía ---------- */
+/* Fidelidad (cuánto se parece, por dimensión) separada de logística (el semáforo). Los cálculos están en analogia.js. */
+const esConocido = reg => (ANA && ANA.conocidos[reg]) || null;
+const sello = reg => !ANA ? '' : esConocido(reg) ? `<span class="sello conocido">${esc(t('conocido'))}</span>` : `<span class="sello nuevo">${esc(t('pocoUsado'))}</span>`;
+const PUNTO = { alta: 'ok', media: 'atencion', baja: 'dificil', similar: 'ok', menor: 'atencion', mayor: 'atencion', cerca: 'ok', medio: 'atencion', lejos: 'dificil' };
+const enlace = (nombreF, url) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(nombreF)}</a>`;
+const signo = x => (x < 0 ? '−' : '') + I18N.num(Math.abs(x));
+function abrirAnalogia(g, e) {
+  const cuerpo = estado.ref.cuerpo, ref = ANA.cuerpos[cuerpo], cl = climaDe(g.region), ev = evalDe(g.region); if (!ref || !cl) return;
+  const p = Analogia.perfil(g, e, CLIMA.regiones), con = esConocido(g.region);
+  const fila = (dim, a, b, estadoId, lectura) => `<tr><td>${esc(dim)}</td><td>${esc(a)}</td><td>${esc(b)}</td><td><span class="punto ${PUNTO[estadoId] || 'sin'}"></span> ${esc(lectura)}</td></tr>`;
+  const refClima = { frio: `≈ ${signo(ref.t_ref_c)} °C`, aridez: `${I18N.num(ref.lluvia_mm)} mm`, aire: ref.presion_kpa ? `≈ ${I18N.num(ref.presion_kpa)} kPa` : t('vacio') };
+  const zonaClima = { frio: v => `${signo(num1v(v))} °C`, aridez: v => `${I18N.num(Math.round(v))} mm`, aire: v => `${I18N.num(Math.round(v))} kPa` };
+  let filas = fila(t('dim.forma'), '—', t('corrTxt', fmt2(g.corr)), p.forma.estado, t('forma.' + p.forma.estado));
+  filas += p.pendiente
+    ? fila(t('dim.pendiente'), `${I18N.num(p.pendiente.ref)}°`, `${I18N.num(p.pendiente.zona)}°`, p.pendiente.estado, t('pend.' + p.pendiente.estado, I18N.num(Math.abs(p.pendiente.dif))))
+    : fila(t('dim.pendiente'), e.ficha ? `${I18N.num(e.ficha.pendiente_media)}°` : '—', t('sinDato'), 'sin', t('sinDato'));
+  p.clima.forEach(c => { filas += fila(t('dim.' + c.id), refClima[c.id], zonaClima[c.id](c.valor), c.estado, t('rk.' + c.id, c.puesto, c.de)); });
+  const rompe = p.pendiente && p.pendiente.estado !== 'similar' ? `<p class="nota dif">${esc(t('usoRompe', I18N.num(p.pendiente.zona), I18N.num(p.pendiente.ref)))}</p>` : '';
+  const veces = ref.presion_kpa ? Math.round(ANA.tierra.presion_nivel_mar_kpa / ref.presion_kpa / 10) * 10 : 0;
+  $('clima-cuerpo').innerHTML = `<h3>${esc(t('anaTitulo', lugarDe(g), nm(e)))}</h3>`
+    + `<p class="mut">${esc(catDe(g))} · ${esc(t('puntaje'))} ${fmt3(g.score)} · #${g.rank}</p>`
+    + `<p>${sello(g.region)} <span class="mut peq">${esc(con ? ((I18N.lang === 'en' && con.motivo_en) || con.motivo) : t('pocoUsadoNota'))}${con ? ` ${esc(t('fuente'))}: ${enlace(con.fuente, con.url)}.` : ''}</span></p>`
+    + `<h4>${esc(t('usoTitulo'))}</h4><p>${esc(t('uso.' + p.uso))}</p>${rompe}`
+    + `<h4>${esc(t('fidelidad'))}</h4><table class="fact ana"><tr><th>${esc(t('colDim'))}</th><th>${esc(nm(e))}</th><th>${esc(lugarDe(g))}</th><th>${esc(t('colLect'))}</th></tr>${filas}</table>`
+    + `<p class="mut peq">${esc(t('notaRef', nombre(cuerpo), (I18N.lang === 'en' && ref.t_nota_en) || ref.t_nota))}</p>`
+    + `<h4>${esc(t('logistica'))}</h4><div class="chip-sem"><span class="punto ${ev.sem}"></span><b>${esc(t('sem.' + ev.sem))}</b> · ${esc(t('resumenFactores', ev.res.ok, ev.res.atencion, ev.res.dificil))}</div>`
+    + `<h4>${esc(t('noRepro'))}</h4><p>${esc(t('noRepro.' + cuerpo, Math.round(100 * ref.gravedad_ms2 / ANA.tierra.gravedad_ms2), veces))}</p>`
+    + `<h4>${esc(t('noEval'))}</h4><p>${esc(t('noEvalLista'))}</p>`
+    + `<p class="pie">${esc(t('pieAna', CLIMA.fuente))} ${ref.fuentes.map(f => enlace(f.nombre, f.url)).join(' · ')}.<br>${esc(t('notaConocidos'))}</p>`;
+  $('clima-panel').showModal();
+}
+const num1v = x => Math.round(x * 10) / 10;
+
 function pintar() {
   const tira = $('tira'), m = M.dest, e = entradaActual();
   m.capa.clearLayers(); estado.gemelo = null; estado.candidatos = [];
@@ -309,6 +343,7 @@ function pintar() {
   const enlaces = [e.img && `<a data-img="${esc(e.img)}">${esc(t('verComparacion'))}</a>`, e.img_top5 && `<a data-img="${esc(e.img_top5)}">${esc(t('verTop5'))}</a>`].filter(Boolean).join('');
   let html = `<div class="tarj ref"><span class="tag">${esc(t('referencia', nombre(estado.ref.cuerpo)))}</span><h4>${esc(nm(e))}</h4>${nums(e.ficha)}`
     + (e.n_evaluados ? `<p class="nota">${esc(t('evaluados', e.n_evaluados, e.resolucion_m))}</p>` : '')
+    + (Analogia.uso(e.ficha) ? `<p class="nota uso">${esc(t('uso.' + Analogia.uso(e.ficha)))}</p>` : '')
     + nota
     + (ocultas ? `<p class="nota dif">${esc(t('ocultas', ocultas))}</p>` : '')
     + (e.revision ? `<span class="rev">${esc(t('revisar'))}</span>` : '')
@@ -318,9 +353,10 @@ function pintar() {
     const ev = evalDe(g.region), cl = climaDe(g.region);
     const lineaClima = cl ? `<p class="cl"><span class="punto ${ev.sem}"></span>${esc(t('climaTarj', num1(cl.v.t_media_c), I18N.num(Math.round(cl.v.lluvia_anual_mm))))}</p>` : '';
     html += `<div class="tarjw"><button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.rank}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
-      + `<h4>${esc(lugarDe(g))}</h4><p class="cat">${esc(catDe(g))}</p>`
+      + `<h4>${esc(lugarDe(g))}</h4><p class="cat">${esc(catDe(g))}</p>${sello(g.region)}`
       + `<dl><dt>${t('correlacion')}</dt><dd>${fmt2(g.corr)}</dd></dl>${nums(g.ficha)}`
       + (g.dif ? `<p class="nota dif">${esc(t('difs', I18N.num(g.dif.pendiente), I18N.num(g.dif.rugosidad)))}</p>` : '') + lineaClima + '</button>'
+      + (cl && ANA ? `<button type="button" class="clima-btn" data-ana="${k}">${esc(t('verAnalogia'))}</button>` : '')
       + (cl ? `<button type="button" class="clima-btn" data-clima="${esc(g.region)}">${esc(t('verClima'))}</button>` : '') + '</div>';
   });
   tira.innerHTML = html;
@@ -331,6 +367,7 @@ function pintar() {
     m.mapa.setView(pos(estado.dest.cuerpo, gem[k].coord), estado.dest.cuerpo === 'tierra' ? 8 : 4); marcas[k].openPopup();
   });
   tira.querySelectorAll('button[data-clima]').forEach(b => b.onclick = () => abrirClima(b.dataset.clima));
+  tira.querySelectorAll('button[data-ana]').forEach(b => b.onclick = () => abrirAnalogia(gem[+b.dataset.ana], e));
   tira.querySelectorAll('a[data-img]').forEach(a => a.onclick = () => { $('visor-img').src = a.dataset.img; $('visor').showModal(); });
 }
 
@@ -420,8 +457,8 @@ function abrirChat(v) { $('asistente').hidden = !v; $('abrir-chat').setAttribute
 
 async function iniciar() {
   progreso(15, I18N.t('cargandoDatos'));
-  const [d, paises, clima] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null)]);
-  datos = d; CLIMA = clima;
+  const [d, paises, clima, ana] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null), traer('analogia.json').catch(() => null)]);
+  datos = d; CLIMA = clima; ANA = ana;
   progreso(55, I18N.t('preparando'));
   TIERRA = datos.continentes.map(c => ({ ...c, hijas: paises.features.filter(f => f.properties.cont === c.id)
     .map(f => ({ id: f.properties.id, nombre: f.properties.nombre, nombre_en: f.properties.en, feat: f, bbox: mayorPoligono(f.geometry) }))

@@ -10,6 +10,7 @@ Web: https://stay-vertical.wiki
 - **18 sitios de referencia:** 8 del polo sur lunar (LOLA, 80 m) y 10 de Marte (mezcla HRSC/MOLA de USGS, 200 m).
 - **50 zonas terrestres** candidatas (Copernicus DEM GLO-30), ordenadas por parecido de relieve.
 - **Mapa lunar en proyección polar sur** con capas de NASA Trek (relieve LOLA e imagen LRO WAC); Marte usa el mosaico Viking.
+- **Ficha de analogía** por candidato: separa la fidelidad (forma del relieve, pendiente, frío, aridez y presión del aire frente al sitio) de la logística, dice para qué serviría la zona, qué no reproduce la Tierra y qué falta por evaluar. Marca además las zonas ya usadas como análogo y las poco usadas.
 - **Clima y viabilidad** de cada zona (NASA POWER, 2021-2025) con un semáforo de umbrales provisionales.
 - **Vertikal Bot:** una red neuronal pequeña que corre en el navegador y explica los resultados mostrados.
 - Selector de idioma ES/EN.
@@ -20,11 +21,11 @@ Los resultados son exploratorios: comparan relieve dentro de un catálogo de 50 
 
 | Carpeta | Qué contiene |
 |---|---|
-| `docs/` | Web estática (GitHub Pages desde `main`): `resultados.json`, `clima.json`, modelo del bot e imágenes de comparación |
+| `docs/` | Web estática (GitHub Pages desde `main`): `resultados.json`, `clima.json`, `analogia.json` (valores de referencia de la Luna y Marte y lista de análogos ya usados), modelo del bot e imágenes de comparación |
 | `stayvertical/` | Motor en Python: características de relieve, búsqueda grueso→fino, agrupación en regiones y algoritmo genético |
 | `scripts/` | `construir_datos.py` y `construir_clima.py` generan los JSON de la web; `subir_version.py` renueva la caché; `auditoria/` reproduce la auditoría |
 | `entrenamiento/` | Ejemplos y entrenamiento del clasificador de Vertikal Bot |
-| `tests/` | Pruebas del motor (pytest) y del bot, el clima y la proyección polar (Node) |
+| `tests/` | Pruebas del motor (pytest) y del bot, el clima, la proyección polar y la ficha de analogía (Node) |
 | `notebooks/`, `data/resultados/` | Corrida anterior del análisis (16 parches de referencia); ya no alimenta la web |
 | `backend/` | API opcional en FastAPI, aún sin uso |
 
@@ -49,7 +50,7 @@ pip install -r requirements.txt pytest && python3 -m pytest tests/test_motor.py
 ```
 
 ```bash
-node tests/test_bot.js && node tests/test_clima.js && node tests/test_polar.js
+node tests/test_bot.js && node tests/test_clima.js && node tests/test_polar.js && node tests/test_analogia.js
 ```
 
 ## Seguridad de la web

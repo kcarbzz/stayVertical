@@ -145,3 +145,13 @@ h2 b { width:22px; height:22px; border-radius:50%; background:var(--acc); color:
 .msg.yo { max-width:88%; }
 .sug button, #rapidas button { max-width:100%; white-space:normal; overflow-wrap:anywhere; text-align:left; }
 #pregunta { min-width:0; }
+
+/* Ficha de analogía */
+.sello { display:inline-block; padding:1px 7px; border-radius:999px; font-size:10.5px; border:1px solid var(--borde); color:var(--mut); }
+.sello.nuevo { border-color:var(--acc); color:var(--acc); }
+.nota.uso { color:var(--txt); }
+.fact.ana th { text-align:left; font-weight:600; font-size:12px; color:var(--mut); padding:5px 6px; border-bottom:1px solid var(--borde); }
+.fact.ana td:last-child { white-space:normal; color:var(--txt); }
+.fact.ana td:nth-child(2), .fact.ana td:nth-child(3) { text-align:right; white-space:nowrap; }
+#clima-cuerpo > p:not([class]) { font-size:14px; margin:4px 0; line-height:1.45; }
+#clima-cuerpo a { color:var(--acc); }
