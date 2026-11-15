@@ -1,0 +1,20 @@
+"""Octava tanda: comparar sitios entre sí ('sitios') y zonas terrestres disponibles ('zonas')."""
+EXTRA8 = {
+ "sitios": {"es": ["cual sitio de la luna se parece mas a la tierra", "que sitio tiene la mejor coincidencia", "cual de los sitios de marte es el mas parecido", "ranking de los sitios",
+                   "ordena los sitios por parecido", "cual es el sitio mas parecido en general", "que region de la luna es mas terrestre", "que crater es el mas parecido a la tierra",
+                   "compara los sitios de marte", "cual sitio tiene mejor puntaje", "que sitio lunar se parece mas a una zona terrestre", "entre todos los sitios cual gana",
+                   "cual es el crater marciano mas parecido a la tierra", "que sitio de marte es el mas terrestre", "dime los sitios mas parecidos a la tierra", "lista de sitios por similitud",
+                   "que crater de marte es mas similar a uno de la tierra"],
+            "en": ["which site on the moon looks most like earth", "which site has the best match", "which of the mars sites is most similar", "ranking of the sites",
+                   "order the sites by similarity", "which site is the most similar overall", "which region of the moon is the most earth-like", "which crater is most similar to earth",
+                   "compare the mars sites", "which site has the best score", "which lunar site is most like an earth zone", "among all the sites which one wins",
+                   "which martian crater is most similar to earth", "which mars site is the most earth-like", "tell me the sites most similar to earth", "list of sites by similarity",
+                   "what mars crater is most similar to one on earth"]},
+ "zonas": {"es": ["que zonas hay en la tierra", "que areas estan disponibles", "que lugares terrestres tienen", "cuantas zonas hay", "que zonas hay en mexico", "areas disponibles en peru",
+                  "que regiones incluye el catalogo", "hay zonas en europa", "que paises incluye", "dime las zonas de asia", "zonas de chile", "que lugares terrestres compararon",
+                  "que areas de africa hay", "tienen zonas en australia", "cuales son las 50 zonas", "que montanas y volcanes incluyen", "que areas en mexico estan disponibles"],
+           "en": ["what zones are there on earth", "which areas are available", "what earth places do you have", "how many zones are there", "what zones are in mexico", "available areas in peru",
+                  "which regions does the catalog include", "are there zones in europe", "which countries are included", "tell me the zones in asia", "zones in chile",
+                  "which earth places did you compare", "what areas in africa are there", "do you have zones in australia", "what are the 50 zones", "which mountains and volcanoes do you include",
+                  "what areas in mexico are available"]},
+}

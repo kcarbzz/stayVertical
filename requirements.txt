@@ -1,9 +1,13 @@
-pystac-client
-planetary-computer
-rasterio
-pyproj
-scipy
+# Núcleo (probado)
 numpy
-pandas
-matplotlib
-pillow
+scipy
+
+# Para el barrido real de la Tierra (aún sin probar; verificar nombres/versiones)
+# pystac-client
+# planetary-computer
+# odc-stac
+# rasterio
+# dask[distributed]
+
+# Solo para scripts/auditoria/auditar.py (recalculo de Marte desde GeoTIFF)
+# tifffile

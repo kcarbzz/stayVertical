@@ -1,0 +1,23 @@
+"""Tercera tanda: vocabulario de los datos reales (puntaje, correlación, revisión, 49 zonas, DEM)."""
+EXTRA3 = {
+ "parecido": {"es": ["que es el puntaje", "como se calcula el puntaje", "que significa menor es mejor", "que es la correlacion",
+                     "que significa correlacion de forma", "por que el puntaje menor es mejor", "el puntaje es un porcentaje",
+                     "que tan bueno es un puntaje de 0.08", "que mide el puntaje", "como interpreto la correlacion",
+                     "que es la correlacion 0.77", "para que sirve la correlacion", "explicame el puntaje y la correlacion"],
+              "en": ["how is the score computed", "what does lower is better mean", "what is correlation",
+                     "what does shape correlation mean", "why is a lower score better", "is the score a percentage",
+                     "how good is a score of 0.08", "what does the score measure", "how do i read the correlation",
+                     "what is correlation 0.77", "what is the correlation for", "explain the score and the correlation"]},
+ "limites": {"es": ["que es revision prioritaria", "por que solo 49 zonas", "es un barrido global", "cuantas zonas de la tierra usan",
+                    "por que algunas coincidencias son malas", "que significa revisar este sitio", "hay coincidencias debiles",
+                    "las zonas de la tierra fueron elegidas a mano", "que es un parche de 3 km", "es el cráter completo"],
+             "en": ["what is priority review", "why only 49 zones", "is it a global sweep", "how many earth zones do you use",
+                    "why are some matches poor", "what does review this site mean", "are there weak matches",
+                    "were the earth zones chosen by hand", "what is a 3 km patch", "is it the whole crater"]},
+ "resumen": {"es": ["cuantos parches se evaluaron", "cuantos parches compararon", "que resolucion usan", "que tan grande es el recorte"],
+             "en": ["how many patches were evaluated", "how many patches did they compare", "what resolution do you use", "how big is the crop"]},
+ "fuentes": {"es": ["que dem usan", "que modelo de elevacion usan", "usan copernicus", "que es lola", "de donde sale la elevacion de marte",
+                    "de donde sale la elevacion de la tierra"],
+             "en": ["what dem do you use", "what elevation model do you use", "do you use copernicus", "what is lola",
+                    "where does the mars elevation come from", "where does the earth elevation come from"]},
+}
