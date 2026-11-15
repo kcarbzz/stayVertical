@@ -300,6 +300,7 @@ function abrirClima(id) {
 const esConocido = reg => (ANA && ANA.conocidos[reg]) || null;
 const sello = reg => !ANA ? '' : esConocido(reg) ? `<span class="sello conocido">${esc(t('conocido'))}</span>` : `<span class="sello nuevo">${esc(t('pocoUsado'))}</span>`;
 const PUNTO = { alta: 'ok', media: 'atencion', baja: 'dificil', similar: 'ok', menor: 'atencion', mayor: 'atencion', cerca: 'ok', medio: 'atencion', lejos: 'dificil' };
+const enlace = (nombreF, url) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(nombreF)}</a>`;
 const signo = x => (x < 0 ? '−' : '') + I18N.num(Math.abs(x));
 function abrirAnalogia(g, e) {
   const cuerpo = estado.ref.cuerpo, ref = ANA.cuerpos[cuerpo], cl = climaDe(g.region), ev = evalDe(g.region); if (!ref || !cl) return;
@@ -316,14 +317,14 @@ function abrirAnalogia(g, e) {
   const veces = ref.presion_kpa ? Math.round(ANA.tierra.presion_nivel_mar_kpa / ref.presion_kpa / 10) * 10 : 0;
   $('clima-cuerpo').innerHTML = `<h3>${esc(t('anaTitulo', lugarDe(g), nm(e)))}</h3>`
     + `<p class="mut">${esc(catDe(g))} · ${esc(t('puntaje'))} ${fmt3(g.score)} · #${g.rank}</p>`
-    + `<p>${sello(g.region)} <span class="mut peq">${esc(con ? ((I18N.lang === 'en' && con.motivo_en) || con.motivo) : t('pocoUsadoNota'))}</span></p>`
+    + `<p>${sello(g.region)} <span class="mut peq">${esc(con ? ((I18N.lang === 'en' && con.motivo_en) || con.motivo) : t('pocoUsadoNota'))}${con ? ` ${esc(t('fuente'))}: ${enlace(con.fuente, con.url)}.` : ''}</span></p>`
     + `<h4>${esc(t('usoTitulo'))}</h4><p>${esc(t('uso.' + p.uso))}</p>${rompe}`
     + `<h4>${esc(t('fidelidad'))}</h4><table class="fact ana"><tr><th>${esc(t('colDim'))}</th><th>${esc(nm(e))}</th><th>${esc(lugarDe(g))}</th><th>${esc(t('colLect'))}</th></tr>${filas}</table>`
     + `<p class="mut peq">${esc(t('notaRef', nombre(cuerpo), (I18N.lang === 'en' && ref.t_nota_en) || ref.t_nota))}</p>`
     + `<h4>${esc(t('logistica'))}</h4><div class="chip-sem"><span class="punto ${ev.sem}"></span><b>${esc(t('sem.' + ev.sem))}</b> · ${esc(t('resumenFactores', ev.res.ok, ev.res.atencion, ev.res.dificil))}</div>`
     + `<h4>${esc(t('noRepro'))}</h4><p>${esc(t('noRepro.' + cuerpo, Math.round(100 * ref.gravedad_ms2 / ANA.tierra.gravedad_ms2), veces))}</p>`
     + `<h4>${esc(t('noEval'))}</h4><p>${esc(t('noEvalLista'))}</p>`
-    + `<p class="pie">${esc(t('pieAna', CLIMA.fuente, ref.fuente))}<br>${esc(t('notaConocidos'))}</p>`;
+    + `<p class="pie">${esc(t('pieAna', CLIMA.fuente))} ${ref.fuentes.map(f => enlace(f.nombre, f.url)).join(' · ')}.<br>${esc(t('notaConocidos'))}</p>`;
   $('clima-panel').showModal();
 }
 const num1v = x => Math.round(x * 10) / 10;

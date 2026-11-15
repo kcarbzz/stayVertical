@@ -154,3 +154,4 @@ h2 b { width:22px; height:22px; border-radius:50%; background:var(--acc); color:
 .fact.ana td:last-child { white-space:normal; color:var(--txt); }
 .fact.ana td:nth-child(2), .fact.ana td:nth-child(3) { text-align:right; white-space:nowrap; }
 #clima-cuerpo > p:not([class]) { font-size:14px; margin:4px 0; line-height:1.45; }
+#clima-cuerpo a { color:var(--acc); }

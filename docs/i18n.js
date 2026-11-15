@@ -52,8 +52,8 @@ const I18N = (() => {
       'noRepro.luna': g => `La gravedad (${g} % de la terrestre), el vacío, la radiación sin atmósfera ni campo magnético y el polvo lunar.`,
       'noRepro.marte': (g, v) => `La gravedad (${g} % de la terrestre), una atmósfera de CO₂ unas ${v} veces más tenue que la nuestra y la radiación en superficie.`,
       noEval: 'Todavía sin evaluar', noEvalLista: 'Geología y minerales, hielo y agua, polvo y viento, iluminación y subsuelo (cuevas y tubos de lava).',
-      pieAna: (f, r) => `Relieve: resultados del equipo. Clima: ${f}, celda de ~55 km. Valores de referencia: ${r}; son aproximados. Los cortes de cada lectura son provisionales.`,
-      notaConocidos: '«Análogo ya usado» es una clasificación provisional del equipo: marca zonas con uso documentado como análogo planetario o en entrenamiento de astronautas.',
+      fuente: 'Fuente', pieAna: f => `Relieve: resultados del equipo. Clima: ${f}, celda de ~55 km. Los cortes de cada lectura son provisionales. Valores de referencia, aproximados:`,
+      notaConocidos: '«Análogo ya usado» es una clasificación provisional del equipo: marca zonas con uso documentado por NASA o ESA como análogo planetario o en entrenamiento de astronautas.',
     },
     en: {
       aviso: 'Exploratory results', avisoTitulo: 'Earth: 49 zones chosen by the team (~13 km each), not a global sweep. Moon and Mars sites are ~3 km windows, not full polygons. The score is not a percentage of geological identity.',
@@ -106,8 +106,8 @@ const I18N = (() => {
       'noRepro.luna': g => `Gravity (${g}% of Earth’s), vacuum, radiation with no atmosphere or magnetic field, and lunar dust.`,
       'noRepro.marte': (g, v) => `Gravity (${g}% of Earth’s), a CO₂ atmosphere about ${v} times thinner than ours, and surface radiation.`,
       noEval: 'Not evaluated yet', noEvalLista: 'Geology and minerals, ice and water, dust and wind, illumination and the subsurface (caves and lava tubes).',
-      pieAna: (f, r) => `Relief: the team’s results. Climate: ${f}, ~55 km cell. Reference values: ${r}; approximate. The cut-offs behind each reading are provisional.`,
-      notaConocidos: '“Already used as analog” is a provisional classification by the team: it marks zones with documented use as a planetary analog or in astronaut training.',
+      fuente: 'Source', pieAna: f => `Relief: the team’s results. Climate: ${f}, ~55 km cell. The cut-offs behind each reading are provisional. Reference values, approximate:`,
+      notaConocidos: '“Already used as analog” is a provisional classification by the team: it marks zones with use documented by NASA or ESA as a planetary analog or in astronaut training.',
     },
   };
   let lang = 'es';

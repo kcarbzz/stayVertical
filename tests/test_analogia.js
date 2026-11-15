@@ -46,8 +46,14 @@ prueba('todos los candidatos publicados tienen perfil completo', () => {
 prueba('las zonas marcadas como análogo conocido existen en el catálogo y tienen motivo en los dos idiomas', () => {
   for (const [id, c] of Object.entries(ana.conocidos)) { assert.ok(clima.regiones[id], id); assert.ok(c.motivo && c.motivo_en, id); }
 });
+/* Regla del equipo: solo fuentes de agencias espaciales (NASA, ESA, JAXA, KASA). */
+const AGENCIA = /^https:\/\/([a-z0-9-]+\.)*(nasa\.gov|esa\.int|jaxa\.jp|kasa\.go\.kr)\//;
+prueba('todas las fuentes de la ficha son de una agencia espacial', () => {
+  for (const [id, c] of Object.entries(ana.conocidos)) { assert.ok(c.fuente, id); assert.ok(AGENCIA.test(c.url), id + ' ' + c.url); }
+  for (const c of ['luna', 'marte']) { assert.ok(ana.cuerpos[c].fuentes.length, c); for (const f of ana.cuerpos[c].fuentes) assert.ok(AGENCIA.test(f.url), f.url); }
+});
 prueba('hay valores de referencia para la Luna y para Marte', () => {
-  for (const c of ['luna', 'marte']) for (const k of ['t_ref_c', 'presion_kpa', 'lluvia_mm', 'gravedad_ms2', 'fuente']) assert.ok(ana.cuerpos[c][k] != null, c + '.' + k);
+  for (const c of ['luna', 'marte']) for (const k of ['t_ref_c', 'presion_kpa', 'lluvia_mm', 'gravedad_ms2', 'fuentes']) assert.ok(ana.cuerpos[c][k] != null, c + '.' + k);
 });
 console.log(`${bien} bien, ${mal} con falla`);
 process.exit(mal ? 1 : 0);
