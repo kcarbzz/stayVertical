@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Vertikal Bot">
+  <!-- sombrero: ala ancha, copa y cinta -->
+  <ellipse cx="32" cy="24" rx="29" ry="6.5" fill="#d9a441"/>
+  <ellipse cx="32" cy="24" rx="29" ry="6.5" fill="none" stroke="#8a5a14" stroke-width="1.5"/>
+  <path d="M19 23 C19 9 24 5 32 5 C40 5 45 9 45 23 Z" fill="#e8b84f" stroke="#8a5a14" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M19.5 19 H44.5" stroke="#c0392b" stroke-width="4"/>
+  <circle cx="32" cy="19" r="1.6" fill="#ffd166"/>
+  <!-- cabeza del robot -->
+  <rect x="14" y="28" width="36" height="26" rx="8" fill="#5ec8ff" stroke="#0b1020" stroke-width="2"/>
+  <circle cx="25" cy="40" r="4.2" fill="#0b1020"/><circle cx="39" cy="40" r="4.2" fill="#0b1020"/>
+  <circle cx="26.2" cy="38.8" r="1.4" fill="#fff"/><circle cx="40.2" cy="38.8" r="1.4" fill="#fff"/>
+  <path d="M25 48 H39" stroke="#0b1020" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- orejas / tornillos -->
+  <rect x="9" y="37" width="5" height="9" rx="2" fill="#8f9bb8"/><rect x="50" y="37" width="5" height="9" rx="2" fill="#8f9bb8"/>
+</svg>
