@@ -361,7 +361,7 @@ function abrirAnalogia(g, e, auto = false) {
   p.clima.forEach(c => { filas += fila(t('dim.' + c.id), refClima[c.id], zonaClima[c.id](c.valor), c.estado, auto ? t('rkb.' + c.id, c.masQue, c.zonas) : t('rk.' + c.id, c.puesto, c.de)); });
   const rompe = p.pendiente && p.pendiente.estado !== 'similar' ? `<p class="nota dif">${esc(t('usoRompe', I18N.num(p.pendiente.zona), I18N.num(p.pendiente.ref)))}</p>` : '';
   const veces = ref.presion_kpa ? Math.round(ANA.tierra.presion_nivel_mar_kpa / ref.presion_kpa / 10) * 10 : 0;
-  $('clima-cuerpo').innerHTML = `<h3>${esc(t('anaTitulo', zona, nm(e)))}</h3>`
+  $('clima-cuerpo').innerHTML = `<p class="solo-imp">Stay Vertical · stay-vertical.wiki · ${esc(new Date().toISOString().slice(0, 10))}</p><button type="button" class="clima-btn pdf-btn" id="ana-pdf">${esc(t('descargarPdf'))}</button><h3>${esc(t('anaTitulo', zona, nm(e)))}</h3>`
     + (auto ? `<p class="mut">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''} · ${esc(t('puntaje'))} ${fmt3(g.score)}</p>`
         + `<p><span class="sello nuevo">${esc(t('hallado'))}</span> <span class="mut peq">${esc(t('halladoNota'))}${g.cobertura === 'sin dato' ? ' ' + esc(t('sinCobertura')) : ''}</span></p>`
       : `<p class="mut">${esc(catDe(g))} · ${esc(t('puntaje'))} ${fmt3(g.score)} · #${g.rank}</p>`
@@ -373,7 +373,17 @@ function abrirAnalogia(g, e, auto = false) {
     + `<h4>${esc(t('noRepro'))}</h4><p>${esc(t('noRepro.' + cuerpo, Math.round(100 * ref.gravedad_ms2 / ANA.tierra.gravedad_ms2), veces))}</p>`
     + `<h4>${esc(t('noEval'))}</h4><p>${esc(t('noEvalLista'))}</p>`
     + `<p class="pie">${esc(t('pieAna', CLIMA.fuente))} ${ref.fuentes.map(f => enlace(f.nombre, f.url)).join(' · ')}.<br>${esc(auto ? t('notaAuto') : t('notaConocidos'))}</p>`;
+  $('ana-pdf').onclick = () => imprimirFicha(`${t('verAnalogia')} - ${zona} - ${nm(e)}`);
   $('clima-panel').showModal();
+}
+/* PDF sin librerías: el navegador imprime solo la ficha (CSS de impresión) y se elige «Guardar como PDF». El título de la página es el nombre sugerido del archivo. */
+function imprimirFicha(nombreArchivo) {
+  const titulo = document.title;
+  document.title = nombreArchivo.replace(/[\\/:*?"<>|#]+/g, ' ').replace(/\s+/g, ' ').trim();
+  document.body.classList.add('imp-ficha');
+  const fin = () => { document.body.classList.remove('imp-ficha'); document.title = titulo; window.removeEventListener('afterprint', fin); };
+  window.addEventListener('afterprint', fin);
+  window.print();
 }
 const num1v = x => Math.round(x * 10) / 10;
 

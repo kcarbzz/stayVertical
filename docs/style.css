@@ -181,3 +181,20 @@ canvas.relieve { width:min(36vw,220px); height:min(36vw,220px); image-rendering:
 @media (max-width:600px) { .fichas { justify-content:flex-start; } .tarj { width:190px; } .tarjw .tarj { width:190px; } }
 .ficha.fija { cursor:default; border-color:var(--acc); }
 .fact.hall td:nth-child(3), .fact.hall td:nth-child(4) { white-space:nowrap; }
+
+/* Ficha de analogía: botón de PDF y vista de impresión (solo la ficha, en claro) */
+.pdf-btn { float:right; margin:0 34px 0 8px; }
+.solo-imp { display:none; }
+@media print {
+  body.imp-ficha > *:not(#clima-panel) { display:none !important; }
+  body.imp-ficha { background:#fff; color:#000; }
+  body.imp-ficha #clima-panel { position:static; display:block; width:auto; max-width:none; max-height:none; overflow:visible; margin:0; padding:0; border:0; background:#fff; color:#000; }
+  body.imp-ficha #cerrar-clima, body.imp-ficha .pdf-btn { display:none !important; }
+  body.imp-ficha .solo-imp { display:block; color:#555; font-size:11px; margin:0 0 8px; }
+  body.imp-ficha #clima-cuerpo h4 { color:#124; }
+  body.imp-ficha .mut, body.imp-ficha .fact td:last-child { color:#444; }
+  body.imp-ficha .fact td { border-bottom-color:#bbb; }
+  body.imp-ficha a { color:#124; }
+  body.imp-ficha .punto, body.imp-ficha .sello { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body.imp-ficha .fact { page-break-inside:avoid; }
+}
