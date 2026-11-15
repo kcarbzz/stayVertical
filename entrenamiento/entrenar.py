@@ -16,12 +16,13 @@ from ejemplos_extra3 import EXTRA3
 from ejemplos_extra4 import EXTRA4
 from ejemplos_extra5 import EXTRA5
 from ejemplos_extra6 import EXTRA6
+from ejemplos_extra7 import EXTRA7
 from ejemplos_ciegos4 import CIEGO4
 from ejemplos_ciegos3 import CIEGO3
 from ejemplos_ciegos import CIEGO
 from ejemplos_ciegos2 import CIEGO2
 
-for _extra in (EXTRA, EXTRA2, EXTRA3, EXTRA4, EXTRA5, EXTRA6):
+for _extra in (EXTRA, EXTRA2, EXTRA3, EXTRA4, EXTRA5, EXTRA6, EXTRA7):
     for _c, _i in _extra.items():
         for _l, _fr in _i.items():
             TRAIN.setdefault(_c, {}).setdefault(_l, [])

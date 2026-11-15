@@ -33,6 +33,46 @@ const Asistente = (() => {
   const alertaCorr = g => (g && g.corr < 0.6 ? S('\nOjo: la correlación de forma es baja, así que la coincidencia es débil.', '\nNote: the shape correlation is low, so the match is weak.') : '');
   const lugar = g => nomC(g);
 
+  /* ---------- seguridad: violencia / odio contra grupos de personas ----------
+     Regla determinista (no depende de la red): violencia + grupo de personas, u odio + grupo. */
+  const VIOLENCIA = /(^| )(matar|mata|matarlos|matarlas|matemos|asesinar|asesinemos|exterminar|exterminemos|linchar|fusilar|ahorcar|violar|disparar|masacrar|genocidio|kill|murder|exterminate|lynch|shoot|rape|massacre|genocide|burn them|hurt)( |$)|(^| )(eliminar|quemar|golpear|burn|beat|attack|hang)( a)?( los| las| all| the)?( |$)/;
+  const ODIO = /(^| )(odio|odiamos|odiar|detesto|hate|hates)( |$)/;
+  const GRUPOS = /(^| )(judio|judios|judia|judias|musulman|musulmanes|negro|negros|negra|negras|gitano|gitanos|gay|gays|homosexual|homosexuales|lesbiana|lesbianas|trans|transexual|transexuales|mujer|mujeres|inmigrante|inmigrantes|migrante|migrantes|indigena|indigenas|cristiano|cristianos|catolico|catolicos|arabe|arabes|asiatico|asiaticos|latino|latinos|extranjero|extranjeros|refugiado|refugiados|ninos|ninas|jew|jews|jewish|muslim|muslims|gypsy|gypsies|lesbians|women|immigrants|migrants|refugees|christians|catholics|arabs|asians|foreigners|children|kids|blacks|black people)( |$)/;
+  const INCITACION = /(^| )(debemos|deberiamos|hay que|vamos a|quiero|queremos|matemos|exterminemos|que mueran|muerte a|we should|we must|lets|let us|i want to|should we|we need to|death to|they should die)( |$)/;
+  function seguridad(t) {
+    if (!GRUPOS.test(t) || !(VIOLENCIA.test(t) || ODIO.test(t))) return null;
+    return INCITACION.test(t) ? 'incitacion' : 'sensible';
+  }
+  const textoSeguridad = tipo => (tipo === 'incitacion'
+    ? S('No voy a ayudar con eso: es un llamado a la violencia contra un grupo de personas. Solo puedo hablar de los resultados de terreno y clima de esta página.',
+        'I will not help with that: it is a call for violence against a group of people. I can only talk about the terrain and climate results on this page.')
+    : S('Ese tema queda fuera de lo que puedo tratar aquí. Solo explico los resultados de terreno y clima de esta página.',
+        'That topic is outside what I can address here. I only explain the terrain and climate results on this page.'));
+
+  /* ---------- puerta de tema: sin ningún término del dominio, la pregunta es "fuera de tema" ---------- */
+  const DOMINIO = new RegExp('(^| )(' + ['terren', 'parec', 'similar', 'semej', 'asemej', 'compar', 'diferen', 'difier', 'igual', 'coinci', 'gemel', 'resultado', 'candidat', 'lugar', 'zona', 'region', 'sitio',
+    'mapa', 'puntaje', 'score', 'correl', 'referenc', 'numero', 'pendient', 'rugos', 'llan', 'plan', 'inclin', 'curvatur', 'aptitud', 'aterriz', 'limit', 'confi', 'fiab', 'fiar', 'sesgo', 'error', 'precis',
+    'subir', 'archivo', 'dato', 'muestra', 'real', 'fuente', 'imagen', 'nasa', 'luna', 'marte', 'tierra', 'crater', 'volcan', 'desierto', 'clima', 'temperat', 'lluvi', 'llov', 'viento', 'helada', 'calor', 'frio',
+    'humed', 'presion', 'solar', 'base', 'viab', 'habit', 'semaforo', 'factor', 'mejor', 'primero', 'lista', 'resumen', 'conclus', 'pantalla', 'tarjeta', 'porcentaje', 'cuantos', 'cuantas', 'cuales', 'otros', 'demas',
+    'todos', 'algoritm', 'sistema', 'empar', 'junta', 'compart', 'comun', 'aparec', 'bot', 'vertikal', 'ia', 'red neuronal', 'modelo', 'servidor', 'internet', 'idioma', 'ayuda', 'funcion', 'usas', 'eres', 'tecnolog',
+    'terrain', 'alike', 'differ', 'match', 'twin', 'result', 'place', 'site', 'candidate', 'reference', 'correlation', 'share', 'resembl', 'pair', 'algorithm', 'list', 'appear', 'common', 'slope', 'rough', 'flat',
+    'curvature', 'suitab', 'land', 'limit', 'reliab', 'trust', 'bias', 'accura', 'precise', 'upload', 'file', 'tif', 'sample', 'source', 'image', 'moon', 'mars', 'earth', 'crater', 'volcan', 'desert', 'climate',
+    'weather', 'rain', 'wind', 'frost', 'freez', 'snow', 'hot', 'cold', 'humid', 'pressure', 'viab', 'habitable', 'traffic', 'best', 'first', 'top', 'summary', 'screen', 'card', 'percent', 'how many', 'which', 'others',
+    'rest', 'all ', 'model', 'server', 'neural', 'language', 'chatgpt', 'help', 'work', 'you use', 'are you', 'technolog', 'map', 'score', 'data', 'number', 'degree', 'meter', 'pais', 'country', 'continente', 'continent', 'lower', 'better', 'sum', 'red', 'green', 'amber', 'rojo', 'verde', 'ambar', 'menor'].join('|') + ')');
+  const EXENTAS = new Set(['saludo', 'gracias', 'acerca', 'otro']);
+  /* Distancia de edición <= 1 entre a y b (tolera una errata). */
+  const casi = (a, b) => {
+    if (Math.abs(a.length - b.length) > 1) return false;
+    let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++;
+    if (i === a.length || i === b.length) return Math.abs(a.length - b.length) <= 1;
+    return a.slice(i + 1) === b.slice(i + 1) || a.slice(i + 1) === b.slice(i) || a.slice(i) === b.slice(i + 1);
+  };
+  const RAICES = DOMINIO.source.replace(/^\(\^\| \)\(/, '').replace(/\)$/, '').split('|').filter(s => s.length >= 5 && !s.includes(' '));
+  const casiDominio = t => t.split(' ').some(w => w.length >= 5 && RAICES.some(r => w.length >= r.length - 1 && casi(w.slice(0, r.length), r)));
+  /* Puerta ESTRECHA: solo preguntas que empiezan con "por qué / why" y no traen ningún término del dominio (p. ej. "por qué el cielo es azul").
+     Una puerta general bloqueaba preguntas legítimas con palabras no previstas, así que se limitó a este patrón. */
+  const sinDominio = t => /^(por que|porque|why|how come)( |$)/.test(t) && t.split(' ').filter(Boolean).length >= 3 && !DOMINIO.test(t) && !casiDominio(t);
+
   /* ---------- clima y viabilidad ---------- */
   const SEM = { verde: ['verde', 'green'], ambar: ['ámbar', 'amber'], rojo: ['rojo', 'red'] };
   const semTxt = s => SEM[s][en() ? 1 : 0];
@@ -204,7 +244,7 @@ const Asistente = (() => {
     return null;
   }
 
-  function entender(texto, c) {
+  function entender0(texto, c) {
     const t = norm(texto);
     if (!t) return { tipo: 'nada' };
     const nombre = porOrdinal(texto, c) || porNombre(t, c);
@@ -222,10 +262,21 @@ const Asistente = (() => {
     return reglas ? { tipo: 'intent', intent: reglas, via: 'reglas' } : { tipo: 'nada' };
   }
 
+  /* La puerta de tema solo corrige a 'otro' los "por qué" sin ninguna palabra del dominio. */
+  function entender(texto, c) {
+    const u = entender0(texto, c), t = norm(texto);
+    if ((u.tipo === 'intent' && !EXENTAS.has(u.intent)) || u.tipo === 'duda') {
+      if (sinDominio(t)) return { tipo: 'intent', intent: 'otro', via: 'puerta' };
+    }
+    return u;
+  }
+
   /* ---------- API ---------- */
   function responder(texto, c) {
     // Pregunta de clima/viabilidad que nombra una de las 50 zonas: se responde sobre ESA zona.
     const tn = norm(texto);
+    const seg = seguridad(tn);
+    if (seg) return { texto: textoSeguridad(seg) };
     if (PALABRAS_CLIMA.test(tn)) {
       const z = porZonaClima(tn, c);
       if (z && z.clima) return { texto: /viab|habit|construir|base|semaforo|vivir|feasib|build|settle|live/.test(tn) ? textoViab(z.clima, c) : textoClima(z.clima, c, texto) };
