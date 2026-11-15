@@ -1,0 +1,39 @@
+{
+  "nota": "Valores de referencia aproximados, tomados de fuentes públicas de NASA. Sirven para dar contexto, no para calcular un puntaje.",
+  "provisional": true,
+  "tierra": { "gravedad_ms2": 9.81, "presion_nivel_mar_kpa": 101.3 },
+  "cuerpos": {
+    "luna": {
+      "t_ref_c": -240,
+      "t_nota": "cráteres en sombra permanente del polo sur; las zonas iluminadas son menos frías",
+      "t_nota_en": "permanently shadowed craters at the south pole; sunlit areas are less cold",
+      "presion_kpa": 0,
+      "lluvia_mm": 0,
+      "gravedad_ms2": 1.62,
+      "fuente": "NASA LRO Diviner; NASA NSSDCA Moon Fact Sheet"
+    },
+    "marte": {
+      "t_ref_c": -63,
+      "t_nota": "media global de la superficie",
+      "t_nota_en": "global surface average",
+      "presion_kpa": 0.6,
+      "lluvia_mm": 0,
+      "gravedad_ms2": 3.71,
+      "fuente": "NASA NSSDCA Mars Fact Sheet"
+    }
+  },
+  "conocidos_nota": "Clasificación del equipo, provisional: marca las zonas con un uso documentado como análogo planetario o en entrenamiento de astronautas. Que una zona no esté marcada no significa que nunca se haya estudiado.",
+  "conocidos": {
+    "Atacama": { "motivo": "Pruebas de rovers e instrumentos y estudios de astrobiología para Marte; el reto lo cita como análogo.", "motivo_en": "Rover and instrument tests and astrobiology studies for Mars; the challenge names it as an analog." },
+    "DeathValley": { "motivo": "Pruebas de instrumentos para misiones a Marte; el reto lo cita como análogo.", "motivo_en": "Instrument tests for Mars missions; the challenge names it as an analog." },
+    "MaunaLoa": { "motivo": "Sede del hábitat de simulación HI-SEAS.", "motivo_en": "Home of the HI-SEAS simulation habitat." },
+    "MeteorCrater": { "motivo": "Entrenamiento geológico de los astronautas del Apollo.", "motivo_en": "Geology training for the Apollo astronauts." },
+    "RiesCrater": { "motivo": "Entrenamiento de astronautas del Apollo y del curso PANGAEA de la ESA.", "motivo_en": "Training of Apollo astronauts and of ESA’s PANGAEA course." },
+    "Etna": { "motivo": "Campañas de robótica lunar del DLR (ROBEX, ARCHES).", "motivo_en": "DLR lunar robotics campaigns (ROBEX, ARCHES)." },
+    "Teide": { "motivo": "Pruebas de rovers para Marte en Tenerife.", "motivo_en": "Mars rover tests on Tenerife." },
+    "GrandCanyon": { "motivo": "Entrenamiento geológico de los astronautas del Apollo.", "motivo_en": "Geology training for the Apollo astronauts." },
+    "NewberryCaldera": { "motivo": "Entrenamiento de astronautas del Apollo en el centro de Oregón.", "motivo_en": "Apollo astronaut training in central Oregon." },
+    "Yellowstone": { "motivo": "Análogo hidrotermal muy usado en astrobiología.", "motivo_en": "Hydrothermal analog widely used in astrobiology." },
+    "LonarCrater": { "motivo": "Cráter de impacto en basalto, comparado con cráteres de Marte.", "motivo_en": "Impact crater in basalt, compared with craters on Mars." }
+  }
+}
