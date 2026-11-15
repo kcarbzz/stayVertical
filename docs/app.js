@@ -325,10 +325,35 @@ function aplicarIdioma() {
 /* ---------- Vertikal Bot ---------- */
 /* Adaptador de datos para el bot: es el ÚNICO lugar que conoce el esquema del JSON.
    Si el JSON de producción cambia, se ajusta aquí y el bot no se toca. */
+/* País y continente de cada una de las 50 zonas: punto en polígono con las fronteras de paises.geojson (Teide cae fuera del mapa de 1:110m y se asigna a mano). */
+const OVERRIDE_PAIS = { Teide: ['España', 'Spain', 'europa'] };
+let _info = null;
+function infoZonas() {
+  if (_info) return _info;
+  _info = {};
+  if (!CLIMA || !TIERRA) return _info;
+  for (const [id, r] of Object.entries(CLIMA.regiones)) {
+    let pais = null, cont = null;
+    outer: for (const c of TIERRA) for (const h of c.hijas) if (puntoEnPais([r.lat, r.lon], h.feat)) { pais = h; cont = c; break outer; }
+    if (!pais && OVERRIDE_PAIS[id]) { const [es, en_, cid] = OVERRIDE_PAIS[id]; cont = TIERRA.find(x => x.id === cid); pais = { nombre: es, nombre_en: en_ }; }
+    _info[id] = { pais: pais && pais.nombre, pais_en: pais && pais.nombre_en, continente: cont && cont.nombre, continente_en: cont && cont.nombre_en };
+  }
+  return _info;
+}
+let _sitios = null;
+function sitiosPor() {
+  if (_sitios) return _sitios;
+  _sitios = {};
+  for (const cuerpo of ['luna', 'marte']) {
+    const p = datos.cruces[`${cuerpo}-tierra`];
+    if (p) _sitios[cuerpo] = p.regiones.map(r => ({ nombre: r.nombre, nombre_en: r.nombre_en, mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr } }));
+  }
+  return _sitios;
+}
 let _zonasClima = null;
 function zonasClima() {
   if (!CLIMA) return [];
-  if (!_zonasClima) _zonasClima = Object.keys(CLIMA.regiones).map(id => ({ nombre: CLIMA.regiones[id].nombre, nombre_en: CLIMA.regiones[id].nombre_en, clima: contextoClima({ region: id }) }));
+  if (!_zonasClima) _zonasClima = Object.keys(CLIMA.regiones).map(id => { const r = CLIMA.regiones[id]; return { id, nombre: r.nombre, nombre_en: r.nombre_en, categoria: r.categoria, categoria_en: r.categoria_en, ...infoZonas()[id], lat: r.lat, lon: r.lon, clima: contextoClima({ region: id }) }; });
   return _zonasClima;
 }
 function contextoClima(g) {
@@ -339,7 +364,8 @@ function contextoClima(g) {
 function contexto() {
   const z = pSel('dest') || zSel('dest');
   return { exploratorio: !!datos.exploratorio, metodo: datos.metodo, origen: nombre(estado.ref.cuerpo), destino: nombre(estado.dest.cuerpo), zona: z ? nm(z) : null,
-           region: entradaActual(), candidatos: (estado.candidatos || []).map(g => ({ ...g, clima: contextoClima(g) })), gemelo: estado.gemelo,
+           region: entradaActual(), candidatos: (estado.candidatos || []).map(g => ({ ...g, clima: contextoClima(g), ...(infoZonas()[g.region] || {}) })), gemelo: estado.gemelo,
+           origenId: estado.ref.cuerpo, sitiosPor: sitiosPor(), paises: TIERRA.flatMap(c => c.hijas.map(h => ({ nombre: h.nombre, nombre_en: h.nombre_en }))), continentes: TIERRA.map(c => ({ nombre: c.nombre, nombre_en: c.nombre_en })),
            clima: contextoClima(estado.gemelo), zonasClima: zonasClima(), viabilidad: (estado.candidatos || []).map(g => { const e = evalDe(g.region); return e ? { lugar: g.lugar, lugar_en: g.lugar_en, sem: e.sem, dificiles: e.res.dificil, atencion: e.res.atencion } : null; }).filter(Boolean),
            climaMeta: CLIMA ? { periodo: CLIMA.periodo, resolucion: CLIMA.resolucion, fuente: CLIMA.fuente } : null };
 }
@@ -347,7 +373,12 @@ function chat(texto, quien, sugerencias) {
   const d = document.createElement('div'); d.className = 'msg ' + quien; d.textContent = texto;
   if (sugerencias && sugerencias.length) {
     const caja = document.createElement('div'); caja.className = 'sug';
-    sugerencias.forEach(q => { const b = document.createElement('button'); b.type = 'button'; b.textContent = q; b.onclick = () => preguntar(q); caja.appendChild(b); });
+    sugerencias.forEach(q => {
+      const b = document.createElement('button'); b.type = 'button';
+      if (typeof q === 'string') { b.textContent = q; b.onclick = () => preguntar(q); }
+      else { b.textContent = q.etiqueta; b.onclick = () => { b.disabled = true; b.remove(); chat(q.respuesta, 'bot'); }; }   // "Más detalle": muestra el texto ampliado
+      caja.appendChild(b);
+    });
     d.appendChild(caja);
   }
   $('chat').appendChild(d); $('chat').scrollTop = $('chat').scrollHeight;

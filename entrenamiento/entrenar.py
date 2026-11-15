@@ -17,18 +17,22 @@ from ejemplos_extra4 import EXTRA4
 from ejemplos_extra5 import EXTRA5
 from ejemplos_extra6 import EXTRA6
 from ejemplos_extra7 import EXTRA7
+from ejemplos_extra8 import EXTRA8
+from ejemplos_extra9 import EXTRA9
+from ejemplos_ciegos5 import CIEGO5
 from ejemplos_ciegos4 import CIEGO4
 from ejemplos_ciegos3 import CIEGO3
 from ejemplos_ciegos import CIEGO
 from ejemplos_ciegos2 import CIEGO2
 
-for _extra in (EXTRA, EXTRA2, EXTRA3, EXTRA4, EXTRA5, EXTRA6, EXTRA7):
+for _extra in (EXTRA, EXTRA2, EXTRA3, EXTRA4, EXTRA5, EXTRA6, EXTRA7, EXTRA8, EXTRA9):
     for _c, _i in _extra.items():
         for _l, _fr in _i.items():
             TRAIN.setdefault(_c, {}).setdefault(_l, [])
             TRAIN[_c][_l] = TRAIN[_c][_l] + _fr
 
 DIM, OCULTAS, SEMILLA, BIGRAMAS = 1024, 48, 7, False
+SEMILLAS_ENSAMBLE = (7, 11, 13)
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SALIDA = os.path.join(RAIZ, "docs", "bot_modelo.json")
 
@@ -145,6 +149,10 @@ def entrenar(X, y, k, epocas=80, lr=0.01, l2=1e-4, dropout=0.2, lote=64):
     return P
 
 
+def predecir_ens(Pqs, X):
+    return np.mean([predecir(Pq, X) for Pq in Pqs], axis=0)
+
+
 def predecir(P, X):
     return softmax(np.maximum(X @ P[0] + P[1], 0) @ P[2] + P[3])
 
@@ -178,22 +186,24 @@ def experimento():
         print(f"{nombre:<26} {np.mean(accs):.1%}  ({', '.join(f'{a:.1%}' for a in accs)})")
 
 
-def main(final=False, ciego3=False, ciego4=False):
+def main(final=False, ciego3=False, ciego4=False, ciego5=False):
+    # Conjunto de SEMILLAS_ENSAMBLE redes (semillas fijas, sin elegir las mejores): promediar baja la varianza entre entrenamientos.
+    Qs, Pqs = [], []
+    for sem in SEMILLAS_ENSAMBLE:
+        configurar(DIM, OCULTAS, BIGRAMAS, sem)
+        r = random.Random(sem)
+        textos, y, clases = preparar(TRAIN, True, r)
+        P = entrenar(matriz(textos), y, len(clases))
+        Q = [cuantizar(p) for p in P]
+        Qs.append(Q); Pqs.append([q.astype(np.float32) * e for q, e in Q])
     rng = random.Random(SEMILLA)
-    textos, y, clases = preparar(TRAIN, True, rng)
-    X = matriz(textos)
-    P = entrenar(X, y, len(clases))
-
-    # Se evalúa el modelo YA cuantizado: es el que usará la web.
-    Q = []
-    for p in P:
-        q, e = cuantizar(p); Q.append((q, e))
-    Pq = [q.astype(np.float32) * e for q, e in Q]
+    textos, y, clases = preparar(TRAIN, True, rng)   # mismo orden que la semilla principal (solo para métricas y vocabulario)
+    # Se evalúa el conjunto YA cuantizado: es el que usará la web.
 
     tt, ty, _ = preparar(TEST, False, rng)
-    pred = predecir(Pq, matriz(tt)).argmax(axis=1)
+    pred = predecir_ens(Pqs, matriz(tt)).argmax(axis=1)
     acc = float((pred == ty).mean())
-    entr = float((predecir(Pq, matriz([t for t in textos[::6]])).argmax(1) == y[::6]).mean())
+    entr = float((predecir_ens(Pqs, matriz([t for t in textos[::6]])).argmax(1) == y[::6]).mean())
     print(f"entrenamiento: {len(textos)} frases | precisión (muestra de entrenamiento): {entr:.1%}")
     print(f"PRUEBA (frases nuevas): {len(tt)} | precisión: {acc:.1%}")
     for c in range(len(clases)):
@@ -204,16 +214,24 @@ def main(final=False, ciego3=False, ciego4=False):
 
     # Conjunto ciego: se mide una sola vez con el modelo final.
     bt, by, _ = preparar(CIEGO, False, rng)
-    pb = predecir(Pq, matriz(bt))
+    pb = predecir_ens(Pqs, matriz(bt))
     print(f"CIEGO (frases nuevas, no usadas para ajustar nada): {len(bt)} | precisión: {float((pb.argmax(1) == by).mean()):.1%}")
     for u in (0.0, 0.4, 0.5, 0.6, 0.7):
-        for nombre, P_, Y_ in (("prueba", predecir(Pq, matriz(tt)), ty), ("ciego", pb, by)):
+        for nombre, P_, Y_ in (("prueba", predecir_ens(Pqs, matriz(tt)), ty), ("ciego", pb, by)):
             conf = P_.max(1); ok = P_.argmax(1) == Y_; usado = conf >= u
             print(f"  umbral {u:.1f} {nombre:<6}: responde {usado.mean():.0%}, acierta {float(ok[usado].mean()) if usado.any() else 0:.0%} de lo que responde")
 
+    if ciego5:
+        b5t, b5y, c5 = preparar(CIEGO5, False, rng)
+        p5 = predecir_ens(Pqs, matriz(b5t))
+        ok5 = np.array([clases[p5[i].argmax()] == c5[b5y[i]] for i in range(len(b5t))])
+        print(f"CIEGO 5 (sitios y zonas, {len(b5t)} frases, evaluadas UNA vez): precisión {float(ok5.mean()):.1%}")
+        for k, nombre in enumerate(c5): print(f"  {nombre:<8} {float(ok5[b5y == k].mean()):.0%}")
+        for i in range(len(b5t)):
+            if not ok5[i]: print("  falla:", (b5t[i], c5[b5y[i]], clases[p5[i].argmax()]))
     if ciego4:
         b4t, b4y, c4 = preparar(CIEGO4, False, rng)
-        p4 = predecir(Pq, matriz(b4t))
+        p4 = predecir_ens(Pqs, matriz(b4t))
         ok4 = np.array([clases[p4[i].argmax()] == c4[b4y[i]] for i in range(len(b4t))])
         print(f"CIEGO 4 (acerca del bot, {len(b4t)} frases, evaluadas UNA vez): precisión {float(ok4.mean()):.1%}")
         for i in range(len(b4t)):
@@ -221,7 +239,7 @@ def main(final=False, ciego3=False, ciego4=False):
     if ciego3:
         # CIEGO 3: solo clima y viabilidad (las intenciones nuevas)
         b3t, b3y, c3 = preparar(CIEGO3, False, rng)
-        p3 = predecir(Pq, matriz(b3t)); idx = {c: i for i, c in enumerate(clases)}
+        p3 = predecir_ens(Pqs, matriz(b3t)); idx = {c: i for i, c in enumerate(clases)}
         ok3 = np.array([clases[p3[i].argmax()] == c3[b3y[i]] for i in range(len(b3t))])
         print(f"CIEGO 3 (clima y viabilidad, {len(b3t)} frases, evaluadas UNA vez): precisión {float(ok3.mean()):.1%}")
         for k, nombre in enumerate(c3): print(f"  {nombre:<11} {float(ok3[b3y == k].mean()):.0%}")
@@ -229,7 +247,7 @@ def main(final=False, ciego3=False, ciego4=False):
             if not ok3[i]: print("  falla:", (b3t[i], c3[b3y[i]], clases[p3[i].argmax()]))
     if final:
         b2t, b2y, _ = preparar(CIEGO2, False, rng)
-        p2 = predecir(Pq, matriz(b2t))
+        p2 = predecir_ens(Pqs, matriz(b2t))
         print(f"CIEGO 2 (160 frases escritas antes de esta tanda, evaluadas UNA vez): precisión {float((p2.argmax(1) == b2y).mean()):.1%}")
         for u in (0.0, 0.5, 0.6):
             conf = p2.max(1); ok = p2.argmax(1) == b2y; us = conf >= u
@@ -240,8 +258,8 @@ def main(final=False, ciego3=False, ciego4=False):
 
     vocab = sorted({w for t in textos for w in normalizar(t).split() if len(w) > 1})
     modelo = {"dim": DIM, "ocultas": OCULTAS, "intents": clases, "vocab": vocab,
-              "w1": {"e": Q[0][1], "q": Q[0][0].flatten().tolist()}, "b1": {"e": Q[1][1], "q": Q[1][0].tolist()},
-              "w2": {"e": Q[2][1], "q": Q[2][0].flatten().tolist()}, "b2": {"e": Q[3][1], "q": Q[3][0].tolist()}}
+              "modelos": [{"w1": {"e": Q[0][1], "q": Q[0][0].flatten().tolist()}, "b1": {"e": Q[1][1], "q": Q[1][0].tolist()},
+                           "w2": {"e": Q[2][1], "q": Q[2][0].flatten().tolist()}, "b2": {"e": Q[3][1], "q": Q[3][0].tolist()}} for Q in Qs]}
     json.dump(modelo, open(SALIDA, "w"), separators=(",", ":"))
     print("modelo:", SALIDA, f"{os.path.getsize(SALIDA)/1024:.0f} KB")
 
@@ -249,7 +267,7 @@ def main(final=False, ciego3=False, ciego4=False):
     casos = ["¿Qué significa el 71% de parecido?", "hola", "Cuéntame un chiste", "what is the flat fraction?",
              "por qué se parecen Atacama y Haworth", "cómo subo mi zona", "de dónde salen los mapas",
              "texto sin relación alguna xyz", "", "  ¿¿¿???  "]
-    paridad = [{"texto": t, "probs": [round(float(x), 5) for x in predecir(Pq, matriz([t]))[0]]} for t in casos]
+    paridad = [{"texto": t, "probs": [round(float(x), 5) for x in predecir_ens(Pqs, matriz([t]))[0]]} for t in casos]
     json.dump({"intents": clases, "casos": paridad, "prueba": TEST, "ciego2": CIEGO2},
               open(os.path.join(RAIZ, "entrenamiento", "referencia.json"), "w"), ensure_ascii=False)
 
@@ -258,11 +276,12 @@ if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
     ap.add_argument("--experimento", action="store_true")
-    ap.add_argument("--dim", type=int, default=DIM); ap.add_argument("--ocultas", type=int, default=OCULTAS)
+    ap.add_argument("--semilla", type=int, default=SEMILLA); ap.add_argument("--dim", type=int, default=DIM); ap.add_argument("--ocultas", type=int, default=OCULTAS)
     ap.add_argument("--bigramas", action="store_true"); ap.add_argument("--ciego3", action="store_true", help="evalúa el conjunto ciego 3 (clima y viabilidad), UNA sola vez")
     ap.add_argument("--ciego4", action="store_true", help="evalúa el conjunto ciego 4 (acerca del bot), UNA sola vez")
+    ap.add_argument("--ciego5", action="store_true", help="evalúa el conjunto ciego 5 (sitios y zonas), UNA sola vez")
     ap.add_argument("--final", action="store_true",
                     help="evalúa también el conjunto ciego 2 (hacerlo UNA sola vez)")
     a = ap.parse_args()
-    configurar(a.dim, a.ocultas, a.bigramas, SEMILLA)
-    experimento() if a.experimento else main(a.final, a.ciego3, a.ciego4)
+    configurar(a.dim, a.ocultas, a.bigramas, a.semilla)
+    experimento() if a.experimento else main(a.final, a.ciego3, a.ciego4, a.ciego5)

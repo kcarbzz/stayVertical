@@ -25,21 +25,27 @@ const BotNN = (() => {
 
   const deq = (o, T = Float32Array) => { const a = new T(o.q.length); for (let i = 0; i < a.length; i++) a[i] = o.q[i] * o.e; return a; };
 
+  /* Formato nuevo: { modelos: [ {w1,b1,w2,b2}, ... ] } (promedio de varias redes); el formato viejo (una sola red) también se acepta. */
   function cargar(json) {
-    M = { dim: json.dim, h: json.ocultas, intents: json.intents, vocab: new Set(json.vocab || []), w1: deq(json.w1), b1: deq(json.b1), w2: deq(json.w2), b2: deq(json.b2) };
+    const lista = json.modelos || [json];
+    M = { dim: json.dim, h: json.ocultas, intents: json.intents, vocab: new Set(json.vocab || []),
+          redes: lista.map(m => ({ w1: deq(m.w1), b1: deq(m.b1), w2: deq(m.w2), b2: deq(m.b2) })) };
     return M;
   }
 
   /* Devuelve [[intención, probabilidad], ...] de mayor a menor, o null si el modelo no está cargado. */
   function clasificar(texto) {
     if (!M) return null;
-    const { dim, h: H, intents, w1, b1, w2, b2 } = M, K = intents.length;
-    const oc = Float32Array.from(b1);
-    for (const [k, v] of caracteristicas(texto, dim)) { const o = k * H; for (let j = 0; j < H; j++) oc[j] += v * w1[o + j]; }
-    const z = Float32Array.from(b2);
-    for (let j = 0; j < H; j++) { const a = oc[j] > 0 ? oc[j] : 0; if (a) for (let c = 0; c < K; c++) z[c] += a * w2[j * K + c]; }
-    const mx = Math.max(...z); let s = 0; const e = Array.from(z, v => { const x = Math.exp(v - mx); s += x; return x; });
-    return intents.map((n, c) => [n, e[c] / s]).sort((a, b) => b[1] - a[1]);
+    const { dim, h: H, intents } = M, K = intents.length, f = caracteristicas(texto, dim), prom = new Float64Array(K);
+    for (const { w1, b1, w2, b2 } of M.redes) {
+      const oc = Float32Array.from(b1);
+      for (const [k, v] of f) { const o = k * H; for (let j = 0; j < H; j++) oc[j] += v * w1[o + j]; }
+      const z = Float32Array.from(b2);
+      for (let j = 0; j < H; j++) { const a = oc[j] > 0 ? oc[j] : 0; if (a) for (let c = 0; c < K; c++) z[c] += a * w2[j * K + c]; }
+      const mx = Math.max(...z); let s = 0; const e = Array.from(z, v => { const x = Math.exp(v - mx); s += x; return x; });
+      for (let c = 0; c < K; c++) prom[c] += e[c] / s / M.redes.length;
+    }
+    return intents.map((n, c) => [n, prom[c]]).sort((a, b) => b[1] - a[1]);
   }
 
   /* Fracción de palabras de la pregunta que aparecieron en el entrenamiento. Con texto desconocido
