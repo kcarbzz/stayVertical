@@ -41,6 +41,29 @@ const Analogia = (() => {
     };
   }
 
-  return { DIMS, puesto, tercio, forma, pendiente, uso, perfil };
+  /* Lista corta: cuántos candidatos, desde el primero, quedan a `tol` o menos del mejor puntaje. Con 2 o más, su orden no es fiable. */
+  const equivalentes = (gem, tol = 0.01) => (gem.length ? gem.filter(g => g.score - gem[0].score <= tol + 1e-12).length : 0);
+
+  /* Brecha de pendiente: el mejor candidato del sitio queda a más de `umbral` grados de la pendiente del sitio (corte provisional).
+     Ahí el parecido es de forma, no de inclinación. */
+  function brecha(e, umbral = 5) {
+    const p = e.gemelos && e.gemelos[0] ? pendiente(e.ficha, e.gemelos[0].ficha) : null;
+    return p && Math.abs(p.dif) > umbral ? p : null;
+  }
+
+  /* Hallazgos: zonas que más se repiten entre los `n` primeros candidatos de los sitios de un cruce.
+     regiones = lista de sitios (cada uno con `gemelos` ordenados). Devuelve, de más a menos repetida:
+     { region, lugar, lugar_en, top, primero, de, sitio } con `sitio` = el sitio donde la zona queda mejor colocada. */
+  function hallazgos(regiones, n = 3) {
+    const z = {};
+    regiones.forEach(e => e.gemelos.slice(0, n).forEach((g, k) => {
+      const x = (z[g.region] ||= { region: g.region, lugar: g.lugar, lugar_en: g.lugar_en, top: 0, primero: 0, de: regiones.length, sitio: null, _pos: n });
+      x.top++; if (k === 0) x.primero++;
+      if (k < x._pos) { x._pos = k; x.sitio = e.id; }
+    }));
+    return Object.values(z).map(({ _pos, ...x }) => x).sort((a, b) => b.top - a.top || b.primero - a.primero || a.region.localeCompare(b.region));
+  }
+
+  return { DIMS, puesto, tercio, forma, pendiente, uso, perfil, equivalentes, brecha, hallazgos };
 })();
 if (typeof module !== 'undefined') module.exports = Analogia;

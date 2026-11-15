@@ -55,5 +55,26 @@ prueba('todas las fuentes de la ficha son de una agencia espacial', () => {
 prueba('hay valores de referencia para la Luna y para Marte', () => {
   for (const c of ['luna', 'marte']) for (const k of ['t_ref_c', 'presion_kpa', 'lluvia_mm', 'gravedad_ms2', 'fuentes']) assert.ok(ana.cuerpos[c][k] != null, c + '.' + k);
 });
+prueba('equivalentes cuenta los candidatos a 0,01 o menos del mejor', () => {
+  assert.strictEqual(Analogia.equivalentes([{ score: 0.1 }, { score: 0.105 }, { score: 0.11 }, { score: 0.2 }]), 3);
+  assert.strictEqual(Analogia.equivalentes([{ score: 0.1 }, { score: 0.2 }]), 1);
+  assert.strictEqual(Analogia.equivalentes([]), 0);
+});
+prueba('brecha de pendiente: marca los cuatro sitios de la auditoría y ninguno más', () => {
+  const marcados = [];
+  for (const par of Object.values(datos.cruces)) for (const e of par.regiones) if (Analogia.brecha(e)) marcados.push(e.id);
+  assert.deepStrictEqual(marcados.sort(), ['faustini', 'gale', 'haworth', 'shackleton']);
+});
+prueba('hallazgos: cuenta, ordena y recuerda el mejor sitio', () => {
+  const g = (r, s) => ({ region: r, lugar: r, score: s });
+  const h = Analogia.hallazgos([{ id: 's1', gemelos: [g('A', 1), g('B', 2), g('C', 3), g('D', 4)] }, { id: 's2', gemelos: [g('B', 1), g('A', 2), g('E', 3)] }, { id: 's3', gemelos: [g('B', 1)] }]);
+  assert.deepStrictEqual(h[0], { region: 'B', lugar: 'B', lugar_en: undefined, top: 3, primero: 2, de: 3, sitio: 's2' });
+  assert.deepStrictEqual([h[1].region, h[1].top, h[1].primero, h[1].sitio], ['A', 2, 1, 's1']);
+  assert.ok(!h.some(x => x.region === 'D'));
+});
+prueba('hallazgos con los datos reales: Fuji en la Luna y Roter Kamm en Marte, 5 sitios cada uno', () => {
+  const l = Analogia.hallazgos(datos.cruces['luna-tierra'].regiones)[0], m = Analogia.hallazgos(datos.cruces['marte-tierra'].regiones)[0];
+  assert.deepStrictEqual([l.region, l.top, l.de], ['Fuji', 5, 8]); assert.deepStrictEqual([m.region, m.top, m.de], ['RoterKamm', 5, 10]);
+});
 console.log(`${bien} bien, ${mal} con falla`);
 process.exit(mal ? 1 : 0);
