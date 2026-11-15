@@ -183,7 +183,7 @@ const Asistente = (() => {
   function buscarLugar(tn, c) {
     const p = ' ' + tn + ' ', cand = [];
     const prueba = (obj, tipo, extra) => {
-      for (const n of [norm(obj.nombre), norm(obj.nombre_en || ''), ...(extra || [])]) if (n && p.includes(' ' + n + ' ')) cand.push({ tipo, obj, n: n.length });
+      for (const n of [norm(obj.nombre), norm(obj.nombre_en || ''), ...(extra || [])]) if (n && p.includes(' ' + n + ' ')) cand.push({ tipo, obj, n: n.length, nombreNorm: n });
     };
     for (const x of (c.paises || [])) prueba(x, 'pais', ALIAS[norm(x.nombre)]);
     for (const x of (c.continentes || [])) prueba(x, 'continente');
@@ -325,7 +325,7 @@ const Asistente = (() => {
     clima: ['clima', 'temperatur', 'lluvi', 'llover', 'llueve', 'viento', 'ventoso', 'helada', 'hiela', 'nieva', 'humedad', 'presion atmos', 'pronost', 'weather', 'climate', 'rain', 'wind', 'frost', 'freez', 'snow', 'humidity', 'forecast'],
     viabilidad: ['viab', 'habitab', 'semaforo', 'construir', 'instalar', 'levantar', 'vivir', 'campamento', 'feasib', 'traffic light', 'build', 'habitable', 'settle', 'inhabit', 'live in', 'camp'],
     sitios: ['que sitio', 'cual sitio', 'sitios', 'ranking', 'which site', 'which crater', 'what crater', 'sites', 'crater de marte', 'crater de la luna', 'mars crater', 'moon site'],
-    zonas: ['que zonas', 'que areas', 'areas disponibles', 'zonas disponibles', 'catalogo', 'que paises', 'which zones', 'what zones', 'which areas', 'what areas', 'available', 'catalog', 'which countries'],
+    zonas: ['que zonas', 'que areas', 'areas disponibles', 'zonas disponibles', 'ubicaciones', 'que ubicaciones', 'catalogo', 'que paises', 'which zones', 'what zones', 'which areas', 'what areas', 'locations', 'available', 'catalog', 'which countries'],
     fuentes: ['mapa', 'fuente', 'de donde', 'source', 'frontera', 'border'], gracias: ['gracias', 'agradez', 'agradecid', 'amable', 'thanks', 'thank', 'grateful', 'thankful'],
   };
   function porReglas(t) {
@@ -373,18 +373,27 @@ const Asistente = (() => {
     return hits.length === 1 ? hits[0][0] : null;          // solo si hay un tema inequívoco
   }
   /* "qué desiertos/volcanes/cañones hay…": catálogo por tipo de zona */
-  const pideZonasPorTipo = t => !!catPregunta(t) && /(^| )(hay|disponib|incluy|catalog|tienen|cuales|cuantos|cuantas|are there|available|include|which|what)/.test(t) && !PALABRAS_CLIMA.test(t);
+  const pideZonasPorTipo = t => !!catPregunta(t) && /(^| )(hay|disponib|incluy|catalog|tienen|are there|available|include)/.test(t) && !PALABRAS_CLIMA.test(t);
 
   /* Preguntas sobre el catálogo terrestre: nombran un país/continente junto con zonas/sitios/lugares disponibles, o dicen "catálogo". */
-  const pideZonasDeLugar = (t, c) => /(zonas|areas|sitios|lugares|places|sites|zones|available|disponib|catalog|tienen|tienes|have|incluy|analiz)/.test(t)
+  const pideZonasDeLugar = (t, c) => /(zonas|areas|sitios|lugares|ubicacion|puntos|places|sites|zones|locations|spots|available|disponib|catalog|tienen|tienes|have|incluy|analiz|existe|exist|hay|there)/.test(t)
     && !/(mejor|best|primero|first|top|ranking|ordena|rank|parecid|similar|alike)/.test(t) && !PALABRAS_CLIMA.test(t) && !!buscarLugar(t, c);
+
+  /* La pregunta es solo un país o continente ("México", "en Perú", "Asia"): se entiende como "qué zonas hay ahí". */
+  const SIN_VALOR = new Set(['en', 'de', 'del', 'la', 'el', 'las', 'los', 'in', 'of', 'the', 'a', 'por', 'sobre', 'about']);
+  function soloLugar(t, c) {
+    const l = buscarLugar(t, c);
+    if (!l) return false;
+    const propios = new Set(l.nombreNorm.split(' '));
+    return t.split(' ').filter(Boolean).every(w => propios.has(w) || SIN_VALOR.has(w));
+  }
 
   function entender0(texto, c) {
     const t = norm(texto);
     if (!t) return { tipo: 'nada' };
     const nombre = porOrdinal(texto, c) || porNombre(t, c);
     if (nombre) return nombre;
-    if (pideZonasPorTipo(t) || /(^| )catalog/.test(t) || pideZonasDeLugar(t, c)) return { tipo: 'intent', intent: 'zonas', via: 'reglas' };
+    if (pideZonasPorTipo(t) || /(^| )catalog/.test(t) || pideZonasDeLugar(t, c) || soloLugar(t, c)) return { tipo: 'intent', intent: 'zonas', via: 'reglas' };
     const reglas = porReglas(t);
     // Si casi ninguna palabra es conocida, la red no es fiable: solo valen las reglas.
     const nn = BotNN.fraccionConocida(texto) >= 0.34 ? BotNN.clasificar(texto) : null;

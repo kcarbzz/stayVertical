@@ -178,6 +178,19 @@ const real = {
 
 for (const q of ['tienen sitios en italia', 'which earth sites did you analyze in the united states', 'que sitios terrestres analizaron en estados unidos', 'hay algo disponible en japon'])
   prueba(`con el contexto real (tiene países): "${q}" -> zonas`, () => comprende(q, 'zonas', real));
+for (const q of ['que ubicaciones en mexico existen', 'Mexico', 'México', 'en Mexico', 'locations in mexico', 'what places exist in peru', 'Asia', 'que hay en chile'])
+  prueba(`lugar: "${q}" -> zonas (no fuera de tema)`, () => comprende(q, 'zonas', real));
+prueba('"what is the highest mountain in the world" sigue siendo fuera de tema (no es una pregunta de catálogo)', () => comprende('what is the highest mountain in the world', 'otro', real));
+prueba('"México" suelto: lista las 3 zonas del catálogo', () => {
+  const t = Asistente.responder('Mexico', real).texto; assert.ok(/(In|En) M[eé]xico/.test(t) && /Monterrey/.test(t) && /Popocat[eé]petl/.test(t) && /Cañón del Cobre|Copper Canyon/.test(t), t);
+});
+prueba('"qué ubicaciones en México existen": respuesta con las 3 zonas y cómo ver sus candidatos', () => {
+  const t = Asistente.responder('que ubicaciones en mexico existen', real).texto; assert.ok(/México hay 3 zonas/.test(t) && /elige México/.test(t), t);
+});
+prueba('un país sin zonas: "Brasil" suelto lo dice sin inventar', () => { assert.ok(/No hay zonas del catálogo en Brasil/.test(Asistente.responder('Brasil', real).texto)); });
+prueba('nombres que no son lugares no se confunden: "Etna", "Marte", "Luna" no van a zonas por país', () => {
+  for (const q of ['Marte', 'Luna', 'Haworth']) { const u = Asistente.entender(q, real); assert.ok(!(u.intent === 'zonas' && u.via === 'reglas'), q + ' ' + JSON.stringify(u)); }
+});
 prueba('"qué sitio de México es el mejor" no se desvía a zonas (pide el mejor)', () => { const u = Asistente.entender('cual es el mejor candidato en mexico', real); assert.ok(u.intent !== 'zonas', JSON.stringify(u)); });
 
 /* ---- Casos de tu historial ---- */
