@@ -70,10 +70,10 @@ python scripts/barrido.py --listar
 ```
 
 ```bash
-python scripts/barrido.py --cuerpo marte --sitios "marte_geotiffs/*.tif" --franjas puna_altiplano,islandia --salida barrido_marte
+python scripts/barrido.py --cuerpo marte --franjas puna_altiplano,islandia --salida barrido_marte
 ```
 
-Los sitios son los GeoTIFF que produce el cuaderno del equipo (uno por sitio, en metros, a 80 m para la Luna y a 200 m para Marte). El resultado queda en `candidatos_<cuerpo>.csv`, `sitios_<cuerpo>.csv`, `recortes_<cuerpo>.npz` y `meta_<cuerpo>.json`. Si se interrumpe, al relanzarlo continúa donde iba.
+Los sitios no hay que prepararlos: el script recorta los 18 de `docs/resultados.json` de su fuente oficial (NASA LOLA a 80 m para la Luna y la mezcla HRSC/MOLA de USGS a 200 m para Marte). El resultado queda en `candidatos_<cuerpo>.csv`, `sitios_<cuerpo>.csv`, `recortes_<cuerpo>.npz` y `meta_<cuerpo>.json`. Si se interrumpe, al relanzarlo continúa donde iba.
 
 Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada.
 

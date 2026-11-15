@@ -49,7 +49,11 @@ class PruebasForma(unittest.TestCase):
 
     def test_plano_no_rompe(self):
         c, _ = correlacion_forma(np.zeros((TAM, TAM)), terreno(TAM, 30, 4, 5))
-        self.assertEqual(c, 0.0)
+        self.assertTrue(np.isnan(c))
+
+    def test_demasiados_huecos_no_se_compara(self):
+        a = terreno(TAM, 30, 4, 6); a[:, :10] = np.nan
+        self.assertTrue(np.isnan(correlacion_forma(a, terreno(TAM, 30, 4, 7))[0]))
 
 
 class PruebasBarrido(unittest.TestCase):

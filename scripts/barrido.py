@@ -12,12 +12,13 @@ Instalación en Colab:
 
 Uso (una ejecución por cuerpo):
   !python scripts/barrido.py --listar
-  !python scripts/barrido.py --cuerpo marte --sitios "marte_geotiffs/*.tif" --franjas puna_altiplano,islandia --salida barrido_marte
-  !python scripts/barrido.py --cuerpo luna  --sitios "luna_geotiffs/*.tif"  --franjas puna_altiplano,islandia --salida barrido_luna
+  !python scripts/barrido.py --cuerpo marte --franjas puna_altiplano,islandia --salida barrido_marte
+  !python scripts/barrido.py --cuerpo luna  --franjas puna_altiplano,islandia --salida barrido_luna
 
-Los sitios son los GeoTIFF que ya produce el cuaderno del equipo: uno por sitio, en metros, a la resolución de
-comparación (Luna 80 m, Marte 200 m) y con el sitio en el centro. El nombre del archivo da el identificador
-(marte_jezero_200m.tif -> jezero).
+Los sitios no hay que prepararlos: el script lee las coordenadas de los 18 sitios en docs/resultados.json y recorta
+cada uno de la fuente oficial (Luna: NASA LOLA LDEM_80S a 80 m; Marte: mezcla HRSC/MOLA de USGS a 200 m).
+Con --sitios se pueden dar GeoTIFF propios en su lugar: uno por sitio, en metros, a la resolución de comparación
+y con el sitio en el centro (marte_jezero_200m.tif -> jezero).
 
 Se puede interrumpir y volver a lanzar: las teselas ya procesadas se guardan en <salida>/cache y no se repiten.
 
@@ -54,6 +55,14 @@ FRANJAS = {
 }
 PREDETERMINADO = {"luna": dict(res=80.0, tam_px=38), "marte": dict(res=200.0, tam_px=15)}
 STAC = "https://planetarycomputer.microsoft.com/api/stac/v1"
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Fuentes oficiales del relieve de los sitios (las mismas del equipo). Se leen por bloques, sin descargar el archivo entero.
+FUENTE_SITIOS = {
+    "luna": dict(url="https://pgda.gsfc.nasa.gov/data/LOLA_20mpp/LDEM_80S_80MPP_ADJ.TIF", radio=1737400.0, nombre="NASA LOLA LDEM_80S_80MPP_ADJ"),
+    "marte": dict(url="https://planetarymaps.usgs.gov/mosaic/Mars/HRSC_MOLA_Blend/Mars_HRSC_MOLA_BlendDEM_Global_200mp_v2.tif", radio=3396190.0,
+                  nombre="USGS HRSC/MOLA blend DEM v2 (NASA MOLA + ESA HRSC)"),
+}
+BORDE_PX = 5          # margen alrededor del cuadro del sitio, como en el cuaderno del equipo
 
 
 def decir(*a):
@@ -138,6 +147,64 @@ def leer_sitio(ruta, res):
     return H
 
 
+def reintentar(f, veces=5):
+    for k in range(veces):
+        try:
+            return f()
+        except Exception:
+            if k == veces - 1: raise
+            time.sleep(2 * (k + 1))
+
+
+def recortar_sitio(cuerpo, lat, lon, res, tam_px):
+    """Relieve del sitio (cuadro + margen) leído de la fuente oficial, sobre una cuadrícula local en metros."""
+    import rasterio
+    from rasterio.transform import from_origin
+    from rasterio.warp import Resampling, reproject, transform
+    from rasterio.windows import Window
+    F, n = FUENTE_SITIOS[cuerpo], tam_px + 2 * BORDE_PX
+    with rasterio.Env(GDAL_DISABLE_READDIR_ON_OPEN="EMPTY_DIR", GDAL_HTTP_MAX_RETRY="4", GDAL_HTTP_RETRY_DELAY="2"):
+        with rasterio.open("/vsicurl/" + F["url"]) as src:
+            if cuerpo == "luna":                                 # el archivo ya está en metros (estereográfica polar)
+                x, y = transform(f"+proj=longlat +R={F['radio']} +no_defs", src.crs, [lon], [lat])
+                if abs(abs(src.transform.a) - res) < 1e-6:       # misma resolución: se leen los píxeles tal cual
+                    f, c = src.index(x[0], y[0])
+                    H = src.read(1, window=Window(c - n // 2, f - n // 2, n, n), boundless=True, fill_value=np.nan).astype("float64")
+                else:
+                    H = np.full((n, n), np.nan, dtype="float32")
+                    reproject(rasterio.band(src, 1), H, dst_transform=from_origin(x[0] - n / 2 * res, y[0] + n / 2 * res, res, res), dst_crs=src.crs,
+                              dst_nodata=np.nan, resampling=Resampling.average)
+            else:                                                # el archivo está en grados: se pasa a metros con la escala de la latitud del sitio
+                crs = f"+proj=eqc +lat_ts={lat} +lat_0=0 +lon_0={lon} +R={F['radio']} +units=m +no_defs"
+                H = np.full((n, n), np.nan, dtype="float32")
+                reproject(rasterio.band(src, 1), H, dst_transform=from_origin(-n / 2 * res, np.radians(lat) * F["radio"] + n / 2 * res, res, res), dst_crs=crs,
+                          dst_nodata=np.nan, resampling=Resampling.bilinear)
+            H = np.asarray(H, dtype="float64")
+            if src.nodata is not None and np.isfinite(src.nodata):
+                H[H == src.nodata] = np.nan
+    return H
+
+
+def sitios_oficiales(cuerpo, res, tam_px, salida):
+    """Los sitios de docs/resultados.json recortados de la fuente oficial. Se guardan para no volver a leerlos."""
+    datos = json.load(open(os.path.join(RAIZ, "docs", "resultados.json"), encoding="utf-8"))
+    publicada = {e["id"]: e["ficha"] for e in datos["cruces"][f"{cuerpo}-tierra"]["regiones"]}
+    ruta = os.path.join(salida, f"sitios_{cuerpo}_{int(res)}m_{tam_px}px.npz")
+    guardados = dict(np.load(ruta)) if os.path.exists(ruta) else {}
+    sitios = {}
+    decir(f"Sitios de {cuerpo} desde {FUENTE_SITIOS[cuerpo]['nombre']}:")
+    for s in datos["conocidas"][cuerpo]:
+        sid, (lat, lon) = s["id"], s["coord"]
+        if sid not in guardados:
+            guardados[sid] = reintentar(lambda: recortar_sitio(cuerpo, lat, lon, res, tam_px))
+            np.savez_compressed(ruta, **guardados)
+        sitios[sid] = sitio_desde_dem(guardados[sid], res, tam_px)
+        f, p = sitios[sid]["ficha"], publicada.get(sid)
+        decir(f"  {sid:<12} pendiente {f['pendiente_media']:.1f}° · rugosidad {f['rugosidad_m']:.1f} m"
+              + (f"  (publicado: {p['pendiente_media']}° · {p['rugosidad_m']} m)" if p else ""))
+    return sitios
+
+
 def id_de(ruta):
     base = os.path.splitext(os.path.basename(ruta))[0]
     m = re.match(r"(?:luna|marte|moon|mars)_(.+?)(?:_\d+m)?$", base, re.I)
@@ -170,7 +237,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--listar", action="store_true", help="muestra las franjas predefinidas y termina")
     ap.add_argument("--cuerpo", choices=["luna", "marte"])
-    ap.add_argument("--sitios", help='patrón de los GeoTIFF de los sitios, entre comillas: "carpeta/*.tif"')
+    ap.add_argument("--sitios", help='opcional: GeoTIFF propios de los sitios, entre comillas: "carpeta/*.tif". Sin esto se recortan de la fuente oficial')
     ap.add_argument("--franjas", default="", help="nombres separados por comas (ver --listar)")
     ap.add_argument("--caja", action="append", default=[], metavar="NOMBRE:SUR,OESTE,NORTE,ESTE", help="franja propia; se puede repetir")
     ap.add_argument("--salida", default="barrido")
@@ -191,8 +258,8 @@ def main():
         for n, (s, o, nn, e) in FRANJAS.items():
             decir(f"  {n:<20} lat {s:>4}..{nn:<4} lon {o:>5}..{e:<5} hasta {(nn - s) * (e - o)} teselas de 1°")
         return
-    if not a.cuerpo or not a.sitios:
-        ap.error("faltan --cuerpo y --sitios (o usa --listar)")
+    if not a.cuerpo:
+        ap.error("falta --cuerpo (o usa --listar)")
     a.res = a.res or PREDETERMINADO[a.cuerpo]["res"]
     a.tam_px = a.tam_px or PREDETERMINADO[a.cuerpo]["tam_px"]
     a.dem = a.dem or ("cop-dem-glo-90" if a.res >= 90 else "cop-dem-glo-30")
@@ -208,14 +275,14 @@ def main():
         if len(cajas[n]) != 4 or cajas[n][0] >= cajas[n][2] or cajas[n][1] >= cajas[n][3]: ap.error(f"caja mal escrita: {c}")
     if not cajas: ap.error("elige al menos una franja con --franjas o --caja")
 
-    rutas = sorted(glob.glob(a.sitios))
-    if not rutas: ap.error(f"ningún archivo coincide con {a.sitios}")
-    sitios = {}
-    for r in rutas:
-        sitios[id_de(r)] = sitio_desde_dem(leer_sitio(r, a.res), a.res, a.tam_px)
-    decir(f"Sitios de {a.cuerpo}: {', '.join(sitios)} | cuadro de {a.tam_px} px a {a.res:.0f} m ({a.tam_px * a.res / 1000:.2f} km)")
-
     cache = os.path.join(a.salida, "cache"); os.makedirs(cache, exist_ok=True)
+    if a.sitios:
+        rutas = sorted(glob.glob(a.sitios))
+        if not rutas: ap.error(f"ningún archivo coincide con {a.sitios}")
+        sitios = {id_de(r): sitio_desde_dem(leer_sitio(r, a.res), a.res, a.tam_px) for r in rutas}
+    else:
+        sitios = sitios_oficiales(a.cuerpo, a.res, a.tam_px, a.salida)
+    decir(f"Sitios de {a.cuerpo}: {', '.join(sitios)} | cuadro de {a.tam_px} px a {a.res:.0f} m ({a.tam_px * a.res / 1000:.2f} km)")
     fuente = PlanetaryComputer(a.dem)
     trabajo = []
     for n, caja in cajas.items():
@@ -287,6 +354,7 @@ def main():
     guardar_csv(f"sitios_{a.cuerpo}.csv", resumen)
     np.savez_compressed(os.path.join(a.salida, f"recortes_{a.cuerpo}.npz"), **recortes)
     meta = {"cuerpo": a.cuerpo, "res_m": a.res, "tam_px": a.tam_px, "solape": a.solape, "candidatos": a.candidatos, "radio_km": a.radio_km,
+            "fuente_sitios": "GeoTIFF propios" if a.sitios else FUENTE_SITIOS[a.cuerpo]["nombre"],
             "fuente_relieve": f"Copernicus DEM ({a.dem}) vía Microsoft Planetary Computer",
             "fuente_cobertura": "ESA WorldCover 2021 vía Microsoft Planetary Computer" if a.cobertura else None,
             "clases_excluidas": [CLASES.get(c, str(c)) for c in a.excluir] if a.cobertura else [],

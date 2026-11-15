@@ -13,6 +13,7 @@ La descarga (Copernicus DEM y ESA WorldCover) está en scripts/barrido.py.
 """
 
 import numpy as np
+from scipy import ndimage as ndi
 from scipy.spatial import cKDTree
 
 from .features import mapas_pixel, vector_8, ficha, tabla_cuadros
@@ -69,35 +70,54 @@ def parches_de_tesela(H, res_m, tam_px, solape=0.5, clases=None, excluir=CLASES_
     return (X.reshape(-1, 8), np.asarray(centros, dtype=int).reshape(-1, 2), fichas, dominante)
 
 
-def _sin_plano(Z):
-    """Quita la inclinación general (mejor plano) y los huecos; devuelve el relieve centrado."""
+def _sin_plano(Z, min_validos=0.85):
+    """Quita la inclinación general (mejor plano por mínimos cuadrados). None si hay demasiados huecos."""
     Z = np.asarray(Z, dtype=float)
     ok = np.isfinite(Z)
-    if ok.sum() < 3:
-        return np.zeros_like(Z)
-    yy, xx = np.mgrid[:Z.shape[0], :Z.shape[1]]
+    if ok.mean() < min_validos:
+        return None
+    yy, xx = np.indices(Z.shape)
     A = np.column_stack([xx[ok], yy[ok], np.ones(ok.sum())])
-    coef, *_ = np.linalg.lstsq(A, Z[ok], rcond=None)
-    R = Z - (coef[0] * xx + coef[1] * yy + coef[2])
-    R[~ok] = 0.0
+    a, b, c = np.linalg.lstsq(A, Z[ok], rcond=None)[0]
+    R = Z - (a * xx + b * yy + c)
+    R[~ok] = np.nan
     return R
 
 
-def correlacion_forma(a, b):
+def _suavizar(Z):
+    """Suavizado gaussiano (sigma = 1 px) que ignora los huecos."""
+    ok = np.isfinite(Z)
+    num = ndi.gaussian_filter(np.where(ok, Z, 0.0), 1)
+    den = ndi.gaussian_filter(ok.astype(float), 1)
+    S = num / np.maximum(den, 1e-12)
+    S[~ok] = np.nan
+    return S
+
+
+def correlacion_forma(a, b, min_validos=0.85):
     """Mayor correlación entre dos relieves sin su inclinación, probando giros de 0, 90, 180 y 270°.
 
-    Devuelve (correlación, giro en grados).
+    Es la misma operación del cuaderno del equipo (PASO 27 y 28): quitar el plano, suavizar y correlacionar.
+    Devuelve (correlación, giro en grados); (nan, 0) si no se puede calcular (relieve plano o con huecos).
     """
-    A = _sin_plano(a)
-    na = np.sqrt((A ** 2).sum())
-    mejor = (-1.0, 0)
+    A, B = _sin_plano(a, min_validos), _sin_plano(b, min_validos)
+    if A is None or B is None:
+        return float("nan"), 0
+    A, B = _suavizar(A), _suavizar(B)
+    mejor = (-np.inf, 0)
     for k in range(4):
-        B = _sin_plano(np.rot90(b, k))
-        nb = np.sqrt((B ** 2).sum())
-        c = float((A * B).sum() / (na * nb)) if na > 0 and nb > 0 else 0.0
-        if c > mejor[0]:
-            mejor = (c, 90 * k)
-    return mejor
+        G = np.rot90(B, k)
+        ok = np.isfinite(A) & np.isfinite(G)
+        if ok.mean() < min_validos:
+            continue
+        aa, bb = A[ok] - A[ok].mean(), G[ok] - G[ok].mean()
+        den = np.linalg.norm(aa) * np.linalg.norm(bb)
+        if den < 1e-12:
+            continue
+        rho = float(np.dot(aa, bb) / den)
+        if rho > mejor[0]:
+            mejor = (rho, 90 * k)
+    return mejor if np.isfinite(mejor[0]) else (float("nan"), 0)
 
 
 class Base:
@@ -137,6 +157,8 @@ def puntuar_sitio(base, sitio, relieve_de, candidatos=500, peso_fisico=0.5):
     salida = []
     for puesto, i in enumerate(orden[:candidatos]):
         corr, rot = correlacion_forma(sitio["relieve"], relieve_de(int(i)))
+        if not np.isfinite(corr):                               # relieve plano o con huecos: no se puede comparar la forma
+            continue
         fis = puesto / len(d)                                   # percentil dentro de TODA la base
         salida.append({"indice": int(i), "dist_fisica": float(d[i]), "fisica_01": float(fis), "corr": corr, "rot": rot,
                        "score": float(peso_fisico * fis + (1 - peso_fisico) * (1 - corr) / 2)})
