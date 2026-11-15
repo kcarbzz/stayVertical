@@ -28,7 +28,7 @@ const Asistente = (() => {
   const norm = t => BotNN.normalizar(t);
 
   /* ---------- idioma de la pregunta ---------- */
-  const PAL_ES = new Set(['que', 'es', 'de', 'la', 'el', 'en', 'los', 'las', 'por', 'para', 'con', 'una', 'un', 'mas', 'como', 'cual', 'cuales', 'donde', 'esta', 'estan', 'hay', 'se', 'del', 'al', 'lo', 'mi', 'tu', 'son', 'sobre', 'tiene', 'tienen', 'sale', 'salen', 'cuantos', 'cuantas', 'quien', 'porque', 'muy', 'pero', 'tambien', 'puedo', 'puedes', 'dime', 'dame', 'zonas', 'areas', 'sitio', 'sitios']);
+  const PAL_ES = new Set(['entre', 'y', 'con', 'que', 'es', 'de', 'la', 'el', 'en', 'los', 'las', 'por', 'para', 'con', 'una', 'un', 'mas', 'como', 'cual', 'cuales', 'donde', 'esta', 'estan', 'hay', 'se', 'del', 'al', 'lo', 'mi', 'tu', 'son', 'sobre', 'tiene', 'tienen', 'sale', 'salen', 'cuantos', 'cuantas', 'quien', 'porque', 'muy', 'pero', 'tambien', 'puedo', 'puedes', 'dime', 'dame', 'zonas', 'areas', 'sitio', 'sitios']);
   const PAL_EN = new Set(['the', 'is', 'are', 'what', 'which', 'how', 'do', 'does', 'of', 'in', 'to', 'for', 'with', 'and', 'an', 'there', 'it', 'this', 'that', 'you', 'can', 'tell', 'about', 'have', 'has', 'where', 'why', 'my', 'your', 'from', 'be', 'was', 'were', 'will', 'would', 'could', 'any', 'more', 'most', 'zones', 'areas', 'site', 'sites']);
   function idiomaDe(t) {
     let a = 0, b = 0;
@@ -191,6 +191,50 @@ const Asistente = (() => {
   }
   const CATS = [[/canon|canyon/, 'cañon|canyon'], [/desiert|desert/, 'desiert|desert'], [/volcan/, 'volcan'], [/montan|mountain/, 'montan|mountain'], [/crater|caldera/, 'crater|caldera']];
   const catPregunta = tn => { for (const [re, clave] of CATS) if (re.test(tn)) return new RegExp(clave); return null; };
+
+  /* ---------- "match entre <sitio> y <país / continente / zona>" ---------- */
+  const MATCHW = /match|parec|similar|semej|asemej|compar|coinci|entre|between|versus|(^| )vs( |$)|resembl|alike|gemel|twin/;
+  function sitioPorNombre(tn, c) {
+    const todos = [], p = ' ' + tn + ' ';
+    for (const cuerpo of ['luna', 'marte']) for (const s of ((c.sitiosPor || {})[cuerpo] || [])) todos.push({ s, cuerpo, w: palabras(s) });
+    for (const x of todos) for (const w of x.w) {
+      if (!p.includes(' ' + w)) continue;
+      if (todos.filter(y => y.w.has(w)).length === 1) return x;
+    }
+    return null;
+  }
+  const sitioActual = c => {
+    if (!c.region || !c.sitiosPor) return null;
+    const s = (c.sitiosPor[c.origenId] || []).find(x => x.nombre === c.region.nombre);
+    return s ? { s, cuerpo: c.origenId } : null;
+  };
+  const avisoRevSitio = s => (s.revision ? S(` El equipo marcó ${nom(s)} para revisión prioritaria (correlación de forma baja).`, ` The team flagged ${nom(s)} for priority review (low shape correlation).`) : '');
+  const filaMatch = (g, n) => S(`${nomC(g)}: puesto #${g.rank} de ${n}, ${corto(g)}`, `${nomC(g)}: rank #${g.rank} of ${n}, ${corto(g)}`);
+  function matchEntre(tn, c) {
+    const lugar = buscarLugar(tn, c), zona = zonaPorNombre(tn, c);
+    if (!lugar && !zona) return null;
+    const explicito = sitioPorNombre(tn, c);
+    if (!explicito && !MATCHW.test(tn)) return null;   // sin sitio nombrado hace falta una palabra de comparación
+    const x = explicito || sitioActual(c);
+    if (!x) return null;
+    const s = x.s, n = s.n_evaluados || 500, gem = s.gemelos || [], mejor = s.mejor;
+    const cierre = S(` Para comparar, el mejor candidato de ${nom(s)} en todo el mundo es ${nomC(mejor)} (${sc(mejor.score)}).`, ` For comparison, the best candidate for ${nom(s)} worldwide is ${nomC(mejor)} (${sc(mejor.score)}).`);
+    if (zona && !lugar) {                       // un sitio y UNA zona concreta (p. ej. Nobile y Atacama)
+      const g = gem.find(y => y.region === zona.id);
+      if (!g) return { t: S(`${nom(zona)} no está entre los candidatos de ${nom(s)}: ninguno de sus parches entró entre los ${n} mejores.`, `${nom(zona)} is not among the candidates for ${nom(s)}: none of its patches made it into the best ${n}.`) + cierre + avisoRevSitio(s) };
+      return { t: S(`${nom(s)} ↔ ${nom(zona)}: puesto #${g.rank} de ${n}, ${corto(g)}.`, `${nom(s)} ↔ ${nom(zona)}: rank #${g.rank} of ${n}, ${corto(g)}.`) + alertaCorr(g) + cierre + avisoRevSitio(s) };
+    }
+    const nombreL = nom(lugar.obj);
+    const catalogo = (c.zonasClima || []).filter(z => (lugar.tipo === 'pais' ? z.pais === lugar.obj.nombre : z.continente === lugar.obj.nombre));
+    if (!catalogo.length) return { t: S(`No hay zonas del catálogo en ${nombreL}, así que no hay con qué comparar a ${nom(s)}.`, `There are no catalog zones in ${nombreL}, so there is nothing to compare ${nom(s)} with.`) };
+    const enLugar = gem.filter(g => (lugar.tipo === 'pais' ? g.pais === lugar.obj.nombre : g.continente === lugar.obj.nombre)).sort((a, b) => a.rank - b.rank);
+    if (!enLugar.length) return { t: S(`Ninguna zona de ${nombreL} (${unir(catalogo.map(nom))}) entra entre los candidatos de ${nom(s)}.`, `No zone in ${nombreL} (${unir(catalogo.map(nom))}) is among the candidates for ${nom(s)}.`) + cierre + avisoRevSitio(s) };
+    const top = enLugar[0];
+    return { t: S(`${nom(s)} ↔ ${nombreL}: la mejor coincidencia es ${filaMatch(top, n)}.`, `${nom(s)} ↔ ${nombreL}: the best match is ${filaMatch(top, n)}.`) + alertaCorr(top)
+              + (enLugar.length > 1 ? S(` También: ${enLugar.slice(1, 3).map(g => filaMatch(g, n)).join('; ')}.`, ` Also: ${enLugar.slice(1, 3).map(g => filaMatch(g, n)).join('; ')}.`) : '')
+              + (catalogo.length > enLugar.length ? S(` Las otras zonas de ${nombreL} no entran entre los candidatos.`, ` The other zones in ${nombreL} are not among the candidates.`) : '') + cierre + avisoRevSitio(s),
+             mas: S(`El «puesto» es la posición del mejor parche de esa zona entre los ${n} evaluados (1 = el más parecido). Cuanto más alto el número, más débil la coincidencia.`, `The “rank” is the position of that zone’s best patch among the ${n} evaluated (1 = the most alike). The higher the number, the weaker the match.`) };
+  }
 
   /* ---------- capa 2: respuestas (cada una: texto corto + "mas" opcional) ---------- */
   const R = {
@@ -430,6 +474,8 @@ const Asistente = (() => {
     L = idiomaDe(tn) || (typeof I18N !== 'undefined' ? I18N.lang : 'es');
     const seg = seguridad(tn);
     if (seg) return { texto: textoSeguridad(seg) };
+    const mt = matchEntre(tn, c);
+    if (mt) return empaquetar(mt);
     // Una zona del catálogo nombrada con una faceta (clima, viabilidad, categoría, ubicación, "en qué destaca"): se responde sobre ESA zona.
     const z = zonaPorNombre(tn, c), f = facetas(tn);
     if (z && f.alguna) return empaquetar(respuestaZona(z, f, c, texto));

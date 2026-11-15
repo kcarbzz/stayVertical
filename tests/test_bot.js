@@ -164,7 +164,9 @@ const ctxClima = (id) => {
   return { nombre: r.nombre, nombre_en: r.nombre_en, sem: Clima.semaforo(res), res, factores: f.map(x => { const v = climaJson.variables.find(y => y.id === x.id); return { id: x.id, nombre: v.nombre, nombre_en: v.nombre_en, valor: x.valor, unidad: v.unidad, estado: x.estado }; }) };
 };
 const zonasClima = Object.keys(climaJson.regiones).map(id => { const r = climaJson.regiones[id]; return { id, nombre: r.nombre, nombre_en: r.nombre_en, categoria: r.categoria, categoria_en: r.categoria_en, ...infoPais(r.lat, r.lon, id), lat: r.lat, lon: r.lon, clima: ctxClima(id) }; });
-const sitiosPor = {}; for (const cuerpo of ['luna', 'marte']) sitiosPor[cuerpo] = datos.cruces[`${cuerpo}-tierra`].regiones.map(r => ({ nombre: r.nombre, nombre_en: r.nombre_en, mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr } }));
+const sitiosPor = {}; for (const cuerpo of ['luna', 'marte']) sitiosPor[cuerpo] = datos.cruces[`${cuerpo}-tierra`].regiones.map(r => ({ id: r.id, nombre: r.nombre, nombre_en: r.nombre_en, revision: !!r.revision, n_evaluados: r.n_evaluados,
+  mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr },
+  gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ...infoPais(climaJson.regiones[g.region].lat, climaJson.regiones[g.region].lon, g.region) })) }));
 const hawo = datos.cruces['luna-tierra'].regiones.find(r => r.id === 'haworth');
 const cands = hawo.gemelos.map(g => ({ ...g, clima: ctxClima(g.region), ...infoPais(climaJson.regiones[g.region].lat, climaJson.regiones[g.region].lon, g.region) }));
 const real = {
@@ -181,6 +183,42 @@ for (const q of ['tienen sitios en italia', 'which earth sites did you analyze i
 for (const q of ['que ubicaciones en mexico existen', 'Mexico', 'México', 'en Mexico', 'locations in mexico', 'what places exist in peru', 'Asia', 'que hay en chile'])
   prueba(`lugar: "${q}" -> zonas (no fuera de tema)`, () => comprende(q, 'zonas', real));
 prueba('"what is the highest mountain in the world" sigue siendo fuera de tema (no es una pregunta de catálogo)', () => comprende('what is the highest mountain in the world', 'otro', real));
+/* ---- match entre un sitio y un país / una zona (caso del historial: "match entre nobile y mexico") ---- */
+const sitioD = id => datos.cruces['luna-tierra'].regiones.find(r => r.id === id);
+const enPaisD = (r, ids) => r.gemelos.filter(g => ids.includes(g.region));
+prueba('"match entre nobile y mexico": usa MÉXICO (Popocatépetl, puesto, puntaje y correlación reales), no solo Nobile', () => {
+  const nob = sitioD('nobile'), g = enPaisD(nob, ['Monterrey', 'Popocatepetl', 'CopperCanyon'])[0];
+  const t = Asistente.responder('match entre nobile y mexico', real).texto;
+  assert.ok(t.includes('Popocatépetl') && t.includes(`#${g.rank} de 500`) && t.includes(String(Number(g.score.toFixed(3))).replace('.', ',')) && t.includes(String(Number(g.corr.toFixed(2))).replace('.', ',')), t);
+  assert.ok(/Mauna Loa/.test(t) && /revisión prioritaria/.test(t) && /Las otras zonas de México no entran/.test(t), t);
+});
+prueba('el mismo match en inglés responde en inglés', () => {
+  const t = Asistente.responder('match between nobile and mexico', real).texto;
+  assert.ok(/the best match is Popocatépetl/.test(t) && /rank #\d+ of 500/.test(t) && /priority review/.test(t), t);
+});
+prueba('otro sitio y país: "Shackleton vs Japón" da la mejor zona de Japón según los datos', () => {
+  const s = sitioD('shackleton'), japon = s.gemelos.filter(g => ['Fuji'].includes(g.region)).sort((a, b) => a.rank - b.rank)[0];
+  const t = Asistente.responder('shackleton vs japon', real).texto;
+  assert.ok(japon ? (t.includes('Monte Fuji') && t.includes(`#${japon.rank} de 500`)) : /Ninguna zona/.test(t), t);
+});
+prueba('un sitio y una ZONA concreta: "nobile y popocatepetl" / una zona que no es candidata', () => {
+  const nob = sitioD('nobile'), g = nob.gemelos.find(y => y.region === 'Popocatepetl');
+  assert.ok(Asistente.responder('match entre nobile y popocatepetl', real).texto.includes(`#${g.rank} de 500`));
+  const fuera = ['Everest', 'Elbrus', 'Matterhorn'].find(id => !nob.gemelos.some(y => y.region === id));
+  if (fuera) assert.ok(/no está entre los candidatos de Nobile/.test(Asistente.responder(`match entre nobile y ${climaJson.regiones[fuera].nombre}`, real).texto));
+});
+prueba('país sin zonas en el catálogo: "match entre nobile y brasil" lo dice sin inventar', () => {
+  assert.ok(/No hay zonas del catálogo en Brasil/.test(Asistente.responder('match entre nobile y brasil', real).texto));
+});
+prueba('un sitio y un lugar nombrados juntos ya son una comparación, aunque no diga "match"', () => {
+  assert.ok(/No hay zonas del catálogo en Brasil/.test(Asistente.responder('nobile y brasil', real).texto));
+  assert.ok(/Nobile \(borde\) ↔ México/.test(Asistente.responder('nobile mexico', real).texto));
+});
+prueba('un lugar sin sitio ni palabra de comparación no activa el match ("qué hay en mexico")', () => { assert.ok(!/↔/.test(Asistente.responder('que hay en mexico', real).texto)); });
+prueba('sin nombrar sitio, usa el sitio seleccionado: "parecido con Mexico" (Haworth)', () => {
+  const t = Asistente.responder('que tan parecido es con mexico', real).texto; assert.ok(/Haworth ↔ México/.test(t) && /Popocatépetl/.test(t), t);
+});
+prueba('"qué zonas hay en México" sigue siendo el catálogo (no se desvía al match)', () => { assert.ok(/México hay 3 zonas/.test(Asistente.responder('que zonas hay en mexico', real).texto)); });
 prueba('"México" suelto: lista las 3 zonas del catálogo', () => {
   const t = Asistente.responder('Mexico', real).texto; assert.ok(/(In|En) M[eé]xico/.test(t) && /Monterrey/.test(t) && /Popocat[eé]petl/.test(t) && /Cañón del Cobre|Copper Canyon/.test(t), t);
 });

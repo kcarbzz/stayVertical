@@ -346,7 +346,9 @@ function sitiosPor() {
   _sitios = {};
   for (const cuerpo of ['luna', 'marte']) {
     const p = datos.cruces[`${cuerpo}-tierra`];
-    if (p) _sitios[cuerpo] = p.regiones.map(r => ({ nombre: r.nombre, nombre_en: r.nombre_en, mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr } }));
+    if (p) _sitios[cuerpo] = p.regiones.map(r => ({ id: r.id, nombre: r.nombre, nombre_en: r.nombre_en, revision: !!r.revision, n_evaluados: r.n_evaluados,
+      mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr },
+      gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ...(infoZonas()[g.region] || {}) })) }));
   }
   return _sitios;
 }
