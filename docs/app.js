@@ -7,9 +7,19 @@ const progreso = (p, t) => { $('progreso').style.width = p + '%'; if (t) $('carg
 const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 
 const TILES = {
-  luna: { url: 'https://trek.nasa.gov/tiles/Moon/EQ/LRO_WAC_Mosaic_Global_303ppd_v02/1.0.0/default/default028mm/{z}/{y}/{x}.jpg', cred: 'NASA/GSFC/ASU · LRO WAC' },
   marte: { url: 'https://trek.nasa.gov/tiles/Mars/EQ/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/default/default028mm/{z}/{y}/{x}.jpg', cred: 'NASA/JPL-Caltech · USGS · Viking MDIM 2.1' },
 };
+/* Luna: vista POLAR del polo sur. Los 8 sitios están entre 84° S y 90° S: en un mapa plano quedan apretados en el borde inferior.
+   Dos capas base de NASA Trek (cuadrícula en metros; ver polar.js). `nativo` = último nivel de zoom con teselas reales. */
+const POLAR = [
+  { id: 'relieve', url: 'https://trek.nasa.gov/tiles/Moon/SP/LRO_LOLA_ClrShade_SPole75_30mp_v04/1.0.0/default/default028mm/{z}/{row}/{col}.png', nativo: 6, radio: 457440 / Polar.RES0, cred: 'NASA/GSFC · LRO LOLA' },
+  { id: 'imagen', url: 'https://trek.nasa.gov/tiles/Moon/SP/LRO_WAC_Mosaic_SPole60_100m_v02/1.0.0/default/default028mm/{z}/{row}/{col}.png', nativo: 5, radio: 1095600 / Polar.RES0, cred: 'NASA/GSFC/ASU · LRO WAC' },
+];
+/* La cuadrícula de Trek empieza en (−1 095 930 m, +1 095 930 m) = ±128 unidades: a partir del nivel 1, fila = y + 2^(z−1) y columna = x + 2^(z−1). */
+const CapaPolar = L.TileLayer.extend({
+  getTileUrl(c) { const o = Math.pow(2, c.z - 1); return this._url.replace('{z}', c.z).replace('{row}', c.y + o).replace('{col}', c.x + o); },
+});
+const pos = (cuerpo, c) => (cuerpo === 'luna' ? Polar.aPolar(c) : c);       // [lat, lon] -> coordenada del mapa de ese cuerpo
 const COLOR = { acc: '#5ec8ff', sol: '#ffd166' };
 const CUERPOS = ['tierra', 'luna', 'marte'];
 
@@ -76,14 +86,32 @@ function nuevoMapa(div, cuerpo, previo) {
   if (cuerpo === 'tierra') {
     mapa = L.map(div, { minZoom: 1 });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(mapa);
-    mapa.setView([15, -30], 2);
+  } else if (cuerpo === 'luna') {
+    mapa = L.map(div, { crs: L.CRS.Simple, minZoom: 1, maxZoom: 9, zoomSnap: 0.25, maxBounds: [[-60, -60], [60, 60]] });
   } else {
     mapa = L.map(div, { crs: L.CRS.EPSG4326, minZoom: 0, maxZoom: 8, zoomSnap: 0.25, maxBounds: [[-95, -190], [95, 190]] });
     L.tileLayer(TILES[cuerpo].url, { maxNativeZoom: 7, noWrap: true, attribution: TILES[cuerpo].cred }).addTo(mapa);
-    mapa.fitBounds([[-90, -180], [90, 180]]);
   }
-  requestAnimationFrame(() => { if (mapa._loaded) mapa.invalidateSize(); });
-  return { mapa, cuerpo, capa: L.layerGroup().addTo(mapa), zonas: L.layerGroup().addTo(mapa), clima: L.layerGroup().addTo(mapa) };
+  const m = { mapa, cuerpo, capa: L.layerGroup().addTo(mapa), zonas: L.layerGroup().addTo(mapa), clima: L.layerGroup().addTo(mapa) };
+  if (cuerpo === 'luna') {
+    m.bases = {};
+    POLAR.forEach(b => { m.bases[b.id] = new CapaPolar(b.url, { tileSize: 256, minZoom: 1, maxNativeZoom: b.nativo, noWrap: true, bounds: [[-b.radio, -b.radio], [b.radio, b.radio]], attribution: b.cred }); });
+    m.bases.relieve.addTo(mapa); rotularBases(m);
+  }
+  vistaInicial(mapa, cuerpo);
+  requestAnimationFrame(() => { if (mapa._loaded) { mapa.invalidateSize(); if (cuerpo === 'luna') vistaInicial(mapa, cuerpo); } });   // la vista se recalcula con el tamaño ya definitivo
+  return m;
+}
+/* Selector de capa base de la Luna (se vuelve a crear al cambiar de idioma para traducir las etiquetas). */
+function rotularBases(m) {
+  if (!m || !m.bases) return;
+  if (m.ctrl) m.ctrl.remove();
+  m.ctrl = L.control.layers({ [t('baseRelieve')]: m.bases.relieve, [t('baseImagen')]: m.bases.imagen }, null, { position: 'topright' }).addTo(m.mapa);
+}
+function vistaInicial(m, cuerpo) {
+  if (cuerpo === 'tierra') m.setView([15, -30], 2);
+  else if (cuerpo === 'luna') m.fitBounds(L.latLngBounds(nodos('luna').map(n => Polar.aPolar(n.coord))), { padding: [34, 34], maxZoom: 5 });
+  else m.fitBounds([[-90, -180], [90, 180]]);
 }
 const estiloPoligono = (act, tenue) => ({ color: act ? COLOR.sol : COLOR.acc, weight: act ? 2 : 1, fillColor: act ? COLOR.sol : COLOR.acc, fillOpacity: act ? 0.35 : tenue ? 0.14 : 0.18 });
 const punto = (c, act, cap, nom, alClic) => L.circleMarker(c, { radius: act ? 9 : 7, color: act ? COLOR.sol : COLOR.acc, weight: 2, fillColor: act ? COLOR.sol : COLOR.acc, fillOpacity: act ? 0.9 : 0.35 })
@@ -110,10 +138,11 @@ function dibujarTierra(l) {
 }
 function dibujarPuntos(l) {
   const cap = M[l].zonas, z = zSel(l);
-  nodos(estado[l].cuerpo).forEach(n => {
-    const act = z && z.id === n.id;
-    if (act && l === 'dest') L.rectangle(aLimites(n.bbox), { color: COLOR.sol, weight: 2, fillOpacity: 0.1 }).addTo(cap);
-    punto(n.coord, act, cap, nm(n), () => elegirNodo(l, n.id));
+  const cuerpo = estado[l].cuerpo;
+  nodos(cuerpo).forEach(n => {
+    const act = z && z.id === n.id, p = pos(cuerpo, n.coord);
+    if (act && l === 'dest') (cuerpo === 'luna' ? L.circleMarker(p, { radius: 16, color: COLOR.sol, weight: 2, fill: false }) : L.rectangle(aLimites(n.bbox), { color: COLOR.sol, weight: 2, fillOpacity: 0.1 })).addTo(cap);
+    punto(p, act, cap, nm(n), () => elegirNodo(l, n.id));
   });
 }
 function dibujarLado(l) {
@@ -129,8 +158,8 @@ function dibujarLado(l) {
 function elegirNodo(l, zona, pais = null) {
   estado[l].zona = zona; estado[l].pais = pais; cambiar();
   const m = M[l].mapa, z = zSel(l), p = pSel(l), cuerpo = estado[l].cuerpo;
-  if (!z) { cuerpo === 'tierra' ? m.setView([15, -30], 2) : m.fitBounds([[-90, -180], [90, 180]]); return; }
-  if (cuerpo !== 'tierra') { m.setView(z.coord, l === 'ref' ? 4 : 3); return; }
+  if (!z) { vistaInicial(m, cuerpo); return; }
+  if (cuerpo !== 'tierra') { m.setView(pos(cuerpo, z.coord), cuerpo === 'luna' ? (l === 'ref' ? 5 : 4) : (l === 'ref' ? 4 : 3)); return; }
   m.fitBounds(aLimites(p ? p.bbox : z.bbox), { padding: [20, 20], maxZoom: 6 });
 }
 function cambiarCuerpo(l, id) {
@@ -295,11 +324,11 @@ function pintar() {
       + (cl ? `<button type="button" class="clima-btn" data-clima="${esc(g.region)}">${esc(t('verClima'))}</button>` : '') + '</div>';
   });
   tira.innerHTML = html;
-  const marcas = gem.map(g => L.marker(g.coord).addTo(m.capa).bindPopup(`<b>${esc(lugarDe(g))}</b><br>${esc(t('puntaje'))}: ${fmt3(g.score)} · ${esc(t('correlacion'))}: ${fmt2(g.corr)}`));
+  const marcas = gem.map(g => L.marker(pos(estado.dest.cuerpo, g.coord)).addTo(m.capa).bindPopup(`<b>${esc(lugarDe(g))}</b><br>${esc(t('puntaje'))}: ${fmt3(g.score)} · ${esc(t('correlacion'))}: ${fmt2(g.corr)}`));
   tira.querySelectorAll('button.tarj').forEach(b => b.onclick = () => {
     const k = +b.dataset.k; estado.gemelo = gem[k];
     tira.querySelectorAll('button.tarj').forEach(x => x.setAttribute('aria-pressed', x === b));
-    m.mapa.setView(gem[k].coord, estado.dest.cuerpo === 'tierra' ? 8 : 4); marcas[k].openPopup();
+    m.mapa.setView(pos(estado.dest.cuerpo, gem[k].coord), estado.dest.cuerpo === 'tierra' ? 8 : 4); marcas[k].openPopup();
   });
   tira.querySelectorAll('button[data-clima]').forEach(b => b.onclick = () => abrirClima(b.dataset.clima));
   tira.querySelectorAll('a[data-img]').forEach(a => a.onclick = () => { $('visor-img').src = a.dataset.img; $('visor').showModal(); });
@@ -319,6 +348,7 @@ function aplicarIdioma() {
   $('rapidas').innerHTML = Asistente.rapidas().map(t => `<button type="button">${esc(t)}</button>`).join('');
   $('rapidas').querySelectorAll('button').forEach(b => b.onclick = () => preguntar(b.textContent));
   llenarCapas();
+  [M.ref, M.dest].forEach(rotularBases);
   if (datos) { _cacheEval.clear(); _zonasClima = null; cambiar(); }
 }
 
