@@ -586,8 +586,8 @@ function sitiosPor() {
   for (const cuerpo of ['luna', 'marte']) {
     const p = datos.cruces[`${cuerpo}-tierra`];
     if (p) _sitios[cuerpo] = p.regiones.map(r => ({ id: r.id, nombre: r.nombre, nombre_en: r.nombre_en, revision: !!r.revision, n_evaluados: r.n_evaluados,
-      mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr },
-      gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ...(infoZonas()[g.region] || {}) })) }));
+      ficha: r.ficha, mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr },
+      gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ficha: g.ficha, conocido: !!esConocido(g.region), ...(infoZonas()[g.region] || {}) })) }));
   }
   return _sitios;
 }
@@ -602,12 +602,19 @@ function contextoClima(g) {
   return { nombre: r.nombre, nombre_en: r.nombre_en, sem: e.sem, res: e.res,
            factores: e.f.map(f => { const v = VAR(f.id); return { id: f.id, nombre: v.nombre, nombre_en: v.nombre_en, valor: f.valor, unidad: v.unidad, estado: f.estado }; }) };
 }
+function contextoBarrido() {
+  const B = barridoDe(estado.ref.cuerpo); if (!B) return null;
+  const z = zSel('ref'), s = z && B.sitios[z.id];
+  return { cuadros: B.meta.cuadros, teselas: B.meta.teselas, franjas: B.meta.franjas.length,
+           sitio: s && z ? { nombre: nm(z), fuera: !!s.fuera_de_rango, top: s.candidatos.slice(0, 3).map(g => ({ franja: franjaDe(g), pais: paisDe(g), score: g.score })) } : null };
+}
 function contexto() {
   const z = pSel('dest') || zSel('dest');
   return { exploratorio: !!datos.exploratorio, metodo: datos.metodo, origen: nombre(estado.ref.cuerpo), destino: nombre(estado.dest.cuerpo), zona: z ? nm(z) : null,
-           region: entradaActual(), candidatos: (estado.candidatos || []).map(g => ({ ...g, clima: contextoClima(g), ...(infoZonas()[g.region] || {}) })), gemelo: estado.gemelo,
+           region: entradaActual(), candidatos: (estado.candidatos || []).map(g => ({ ...g, conocido: !!esConocido(g.region), clima: contextoClima(g), ...(infoZonas()[g.region] || {}) })), gemelo: estado.gemelo,
            origenId: estado.ref.cuerpo, sitiosPor: sitiosPor(), paises: TIERRA.flatMap(c => c.hijas.map(h => ({ nombre: h.nombre, nombre_en: h.nombre_en }))), continentes: TIERRA.map(c => ({ nombre: c.nombre, nombre_en: c.nombre_en })),
            clima: contextoClima(estado.gemelo), zonasClima: zonasClima(), viabilidad: (estado.candidatos || []).map(g => { const e = evalDe(g.region); return e ? { lugar: g.lugar, lugar_en: g.lugar_en, sem: e.sem, dificiles: e.res.dificil, atencion: e.res.atencion } : null; }).filter(Boolean),
+           barrido: contextoBarrido(),
            climaMeta: CLIMA ? { periodo: CLIMA.periodo, resolucion: CLIMA.resolucion, fuente: CLIMA.fuente } : null };
 }
 function chat(texto, quien, sugerencias) {

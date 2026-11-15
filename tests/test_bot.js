@@ -164,9 +164,9 @@ const ctxClima = (id) => {
   return { nombre: r.nombre, nombre_en: r.nombre_en, sem: Clima.semaforo(res), res, factores: f.map(x => { const v = climaJson.variables.find(y => y.id === x.id); return { id: x.id, nombre: v.nombre, nombre_en: v.nombre_en, valor: x.valor, unidad: v.unidad, estado: x.estado }; }) };
 };
 const zonasClima = Object.keys(climaJson.regiones).map(id => { const r = climaJson.regiones[id]; return { id, nombre: r.nombre, nombre_en: r.nombre_en, categoria: r.categoria, categoria_en: r.categoria_en, ...infoPais(r.lat, r.lon, id), lat: r.lat, lon: r.lon, clima: ctxClima(id) }; });
-const sitiosPor = {}; for (const cuerpo of ['luna', 'marte']) sitiosPor[cuerpo] = datos.cruces[`${cuerpo}-tierra`].regiones.map(r => ({ id: r.id, nombre: r.nombre, nombre_en: r.nombre_en, revision: !!r.revision, n_evaluados: r.n_evaluados,
+const sitiosPor = {}; for (const cuerpo of ['luna', 'marte']) sitiosPor[cuerpo] = datos.cruces[`${cuerpo}-tierra`].regiones.map(r => ({ id: r.id, nombre: r.nombre, nombre_en: r.nombre_en, revision: !!r.revision, n_evaluados: r.n_evaluados, ficha: r.ficha,
   mejor: { lugar: r.gemelos[0].lugar, lugar_en: r.gemelos[0].lugar_en, score: r.gemelos[0].score, corr: r.gemelos[0].corr },
-  gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ...infoPais(climaJson.regiones[g.region].lat, climaJson.regiones[g.region].lon, g.region) })) }));
+  gemelos: r.gemelos.map(g => ({ lugar: g.lugar, lugar_en: g.lugar_en, region: g.region, score: g.score, corr: g.corr, rank: g.rank, ficha: g.ficha, ...infoPais(climaJson.regiones[g.region].lat, climaJson.regiones[g.region].lon, g.region) })) }));
 const hawo = datos.cruces['luna-tierra'].regiones.find(r => r.id === 'haworth');
 const cands = hawo.gemelos.map(g => ({ ...g, clima: ctxClima(g.region), ...infoPais(climaJson.regiones[g.region].lat, climaJson.regiones[g.region].lon, g.region) }));
 const real = {
@@ -359,6 +359,44 @@ for (const q of ['por que los pajaros migran', 'por que debemos ahorrar energia'
 prueba('la puerta no afecta a preguntas legítimas con errata ("que es la rugocidad")', () => comprende('que es la rugocidad', 'rugosidad'));
 prueba('preguntas cortas ("por qué?") no se bloquean por la puerta', () => { assert.ok(Asistente.entender('por que?', ctx).via !== 'puerta'); });
 prueba('"qué hora es" sigue siendo fuera de tema (no se confunde con clima)', () => comprende('que hora es', 'otro'));
+
+/* ---- cambios del barrido: "mejores match con <sitio>", lista corta, brecha, análogos y barrido ---- */
+const hawN = sitioD('haworth');
+prueba('"cuales son los mejores match con haworth": lista las zonas candidatas (no solo la ficha del sitio)', () => {
+  const r = Asistente.responder('cuales son los mejores match con haworth', real), t = r.texto;
+  assert.ok(t.startsWith('Mejores coincidencias terrestres de Haworth'), t);
+  assert.ok(t.includes(hawN.gemelos[0].lugar) && t.includes(hawN.gemelos[1].lugar) && t.includes(hawN.gemelos[2].lugar), t);
+  assert.ok(/lista corta/i.test(t) && /fuera de alcance/.test(todo(r)), t);   // Haworth: empate ≤0,01 (corto) y pendiente 13,7° vs 4,1° (en el detalle)
+  assert.ok(t.length < 700, 'debe ser breve: ' + t.length);
+});
+prueba('lo mismo con otro sitio (Shackleton) y en inglés', () => {
+  const s = sitioD('shackleton');
+  assert.ok(Asistente.responder('best matches for shackleton', real).texto.includes(s.gemelos[0].lugar_en || s.gemelos[0].lugar));
+  assert.ok(Asistente.responder('best matches for shackleton', real).texto.startsWith('Best Earth matches for Shackleton'));
+});
+prueba('"qué es la lista corta" explica y cuenta las zonas equivalentes reales', () => {
+  const n = cands.filter(g => g.score - cands[0].score <= 0.01 + 1e-12).length;
+  const t = Asistente.responder('que es la lista corta', real).texto;
+  assert.ok(t.includes(`${n} zonas en la lista corta`) && /orden no es fiable/.test(t), t);
+});
+prueba('"pendiente fuera de alcance" usa las pendientes reales del sitio y del mejor candidato', () => {
+  const t = Asistente.responder('que significa pendiente fuera de alcance', real).texto;
+  assert.ok(t.includes('4,1°') && t.includes('13,7°') && /forma, no de inclinación/.test(t), t);
+});
+prueba('"qué es un análogo ya usado" explica el sello y la ficha de analogía', () => {
+  const t = Asistente.responder('que es un analogo ya usado', { ...real, candidatos: cands.map((g, i) => ({ ...g, conocido: i === 0 })) }).texto;
+  assert.ok(/Análogo ya usado/.test(t) && /fidelidad/.test(t) && /1 de \d+ ya se usan/.test(t), t);
+});
+prueba('"qué es el barrido" sin datos y con datos del barrido', () => {
+  assert.ok(/sin lista previa/.test(Asistente.responder('que es el barrido', real).texto));
+  const b = { cuadros: 2455713, teselas: 745, franjas: 11, sitio: { nombre: 'Haworth', fuera: true, top: [{ franja: 'Puna y Altiplano', pais: 'Chile', score: 0.1457 }] } };
+  const t = Asistente.responder('como funciona el barrido', { ...real, barrido: b }).texto;
+  assert.ok(t.includes('2.455.713') && t.includes('745') && t.includes('11 franjas') && t.includes('Puna y Altiplano') && /fuera del rango terrestre/.test(t), t);
+});
+prueba('"cuál es el mejor" avisa la lista corta en pocas palabras', () => {
+  const t = Asistente.responder('cual es el mejor', real).texto;
+  assert.ok(/lista corta: \d+ zonas equivalentes/.test(t) && t.length < 260, t);
+});
 
 console.log(`\n${ok} bien, ${fallos} con falla`);
 process.exit(fallos ? 1 : 0);

@@ -72,7 +72,7 @@ const Asistente = (() => {
     'subir', 'archivo', 'dato', 'muestra', 'real', 'fuente', 'imagen', 'nasa', 'luna', 'marte', 'tierra', 'crater', 'volcan', 'desierto', 'clima', 'temperat', 'lluvi', 'llov', 'viento', 'helada', 'calor', 'frio',
     'humed', 'presion', 'solar', 'base', 'viab', 'habit', 'semaforo', 'factor', 'mejor', 'primero', 'lista', 'resumen', 'conclus', 'pantalla', 'tarjeta', 'porcentaje', 'cuantos', 'cuantas', 'cuales', 'otros', 'demas',
     'todos', 'algoritm', 'sistema', 'empar', 'junta', 'compart', 'comun', 'aparec', 'bot', 'vertikal', 'ia', 'red neuronal', 'modelo', 'servidor', 'internet', 'idioma', 'ayuda', 'funcion', 'usas', 'eres', 'tecnolog',
-    'area', 'disponib', 'catalog', 'pais', 'continente', 'categoria',
+    'area', 'disponib', 'lista corta', 'barrido', 'analog', 'franja', 'sweep', 'shortlist', 'alcance', 'catalog', 'pais', 'continente', 'categoria',
     'terrain', 'alike', 'differ', 'match', 'twin', 'result', 'place', 'site', 'candidate', 'reference', 'correlation', 'share', 'resembl', 'pair', 'algorithm', 'list', 'appear', 'common', 'slope', 'rough', 'flat',
     'curvature', 'suitab', 'land', 'limit', 'reliab', 'trust', 'bias', 'accura', 'precise', 'upload', 'file', 'tif', 'sample', 'source', 'image', 'moon', 'mars', 'earth', 'crater', 'volcan', 'desert', 'climate',
     'weather', 'rain', 'wind', 'frost', 'freez', 'snow', 'hot', 'cold', 'humid', 'pressure', 'viab', 'habitable', 'traffic', 'best', 'first', 'top', 'summary', 'screen', 'card', 'percent', 'how many', 'which', 'others',
@@ -236,6 +236,28 @@ const Asistente = (() => {
              mas: S(`El «puesto» es la posición del mejor parche de esa zona entre los ${n} evaluados (1 = el más parecido). Cuanto más alto el número, más débil la coincidencia.`, `The “rank” is the position of that zone’s best patch among the ${n} evaluated (1 = the most alike). The higher the number, the weaker the match.`) };
   }
 
+
+  /* ---------- lista corta, brecha de pendiente y análogos (cambios del barrido) ---------- */
+  const TOL = 0.01;
+  const cercanas = l => (l && l.length ? l.filter(g => g.score - l[0].score <= TOL + 1e-12).length : 0);
+  const avisoEmpate = l => { const n = cercanas(l); return n >= 2 ? S(` Ojo: ${n} zonas quedan a ≤0,01 del mejor (lista corta); son equivalentes y su orden no es fiable.`, ` Note: ${n} zones are within 0.01 of the best (shortlist); they are equivalent and their order is not reliable.`) : ''; };
+  const empateCorto = l => { const n = cercanas(l); return n >= 2 ? S(` (lista corta: ${n} zonas equivalentes)`, ` (shortlist: ${n} equivalent zones)`) : ''; };
+  const lugarB = g => (g.pais && !g.franja.includes(g.pais) ? `${g.franja} (${g.pais})` : g.franja);
+  const brechaDe = (ficha, g) => (ficha && g && g.ficha && ficha.pendiente_media != null && g.ficha.pendiente_media != null && Math.abs(g.ficha.pendiente_media - ficha.pendiente_media) > 5
+    ? { ref: ficha.pendiente_media, zona: g.ficha.pendiente_media } : null);
+  const avisoBrecha = (ficha, g) => { const b = brechaDe(ficha, g); return b ? S(` Pendiente fuera de alcance: el mejor candidato tiene ${f1(b.zona)}° frente a ${f1(b.ref)}° del sitio; el parecido es de forma, no de inclinación.`, ` Slope out of reach: the best candidate has ${f1(b.zona)}° versus ${f1(b.ref)}° at the site; the match is in shape, not in steepness.`) : ''; };
+  const MEJORW = /mejor|best|top|match|parec|similar|gemel|twin|alike|candidat|ganador|cual|cuales|which|what are|que zona/;
+  function mejoresSitio(tn, c) {
+    const x = sitioPorNombre(tn, c);
+    if (!x || !MEJORW.test(tn)) return null;
+    const s = x.s, gem = s.gemelos || [];
+    if (!gem.length) return null;
+    const fila = (g, i) => `${i + 1}. ${nomC(g)} — ${corto(g)}`;
+    return { t: S(`Mejores coincidencias terrestres de ${nom(s)}:\n`, `Best Earth matches for ${nom(s)}:\n`) + gem.slice(0, 3).map(fila).join('\n')
+                + empateCorto(gem).replace(/^ \((.)/, (m, a) => '\n(' + a.toUpperCase()) + alertaCorr(gem[0]) + avisoRevSitio(s),
+             mas: gem.slice(0, 10).map(fila).join('\n') + avisoEmpate(gem) + avisoBrecha(s.ficha, gem[0]) + S(`\n\nSe evaluaron ${s.n_evaluados || 500} parches; menor puntaje es mejor.`, `\n\n${s.n_evaluados || 500} patches were evaluated; lower score is better.`) };
+  }
+
   /* ---------- capa 2: respuestas (cada una: texto corto + "mas" opcional) ---------- */
   const R = {
     saludo: () => S('Puedo explicarte los números, comparar el sitio con cada zona terrestre, decirte cuál se parece más y qué límites tiene. Usa los botones o pregúntame.',
@@ -263,8 +285,8 @@ const Asistente = (() => {
         + (c.clima ? S(' Para una base en la Tierra sí hay clima: pregúntame «¿es viable una base ahí?».', ' For a base on Earth there is climate data: ask me “is a base viable there?”.') : ''),
       mas: S('Para hablar de aptitud habría que añadir iluminación, hielo en sombra, visibilidad de la Tierra y criterios de misión, que no están en estos datos.', 'Talking about suitability would need lighting, shadowed ice, Earth visibility and mission criteria, which are not in this data.') }),
     limites: () => ({
-      t: S('Lo principal: la Tierra son 49 zonas elegidas por el equipo (no un barrido global), el puntaje no es un porcentaje y el ganador puede cambiar con el peso, y cada sitio es una ventana de ~3 km.',
-           'The main points: Earth is 49 zones chosen by the team (not a global sweep), the score is not a percentage and the winner can change with the weight, and each site is a ~3 km window.'),
+      t: S('Lo principal: el catálogo son 49 zonas elegidas por el equipo (el modo Barrido recorre franjas, pero no toda la Tierra), el puntaje no es un porcentaje y el ganador puede cambiar con el peso, y cada sitio es una ventana de ~3 km.',
+           'The main points: the catalog is 49 zones chosen by the team (the Sweep mode scans bands, but not the whole Earth), the score is not a percentage and the winner can change with the weight, and each site is a ~3 km window.'),
       mas: S('Detalle: (1) La Tierra son 49 zonas de unos 13 km. (2) Cada sitio lunar o marciano es una ventana de ~3 km, no el cráter completo. (3) El puntaje mezcla, a partes iguales, la posición física del parche (no su distancia) y la forma, sobre los 500 mejores preseleccionados; si cambia ese peso, el ganador puede cambiar, y entre el primero y el segundo suele haber diferencias mínimas. (4) Luna a 80 m y Marte a 200 m (con la Tierra remuestreada). (5) El DEM terrestre incluye árboles y edificios. (6) En algunos sitios las cifras absolutas no coinciden bien aunque la forma sí, por eso hay revisiones prioritarias.',
              'Detail: (1) Earth is 49 zones of about 13 km. (2) Each Moon or Mars site is a ~3 km window, not the whole crater. (3) The score mixes, in equal parts, the patch’s physical rank (not its distance) and the shape, over the 500 best preselected; if that weight changes, the winner can change, and the gap between first and second is often tiny. (4) Moon at 80 m and Mars at 200 m (with Earth resampled). (5) The Earth elevation model includes trees and buildings. (6) At some sites the absolute numbers do not match well even if the shape does, hence the priority reviews.') }),
     subir: () => S('Subir tu zona aún no está disponible. Necesitará un GeoTIFF de alturas (coordenadas en metros, ≥3×3 km, resolución mejor que ~120 m y ≥85 % de píxeles válidos; criterios provisionales).',
@@ -275,8 +297,8 @@ const Asistente = (() => {
       const l = c.candidatos || [];
       if (!l.length) return sinCand();
       const g = l[0], seg = l[1];
-      return { t: S(`${nomC(g)} (#${g.rank}): ${corto(g)}.`, `${nomC(g)} (#${g.rank}): ${corto(g)}.`) + (seg ? S(` Le sigue ${nomC(seg)} (${sc(seg.score)}).`, ` Next: ${nomC(seg)} (${sc(seg.score)}).`) : '') + alertaCorr(g) + alertaRev(c),
-               mas: S(`${nomC(g)}: ${detalle(g)}${g.ficha ? `; ${numeros(g.ficha)}` : ''}.`, `${nomC(g)}: ${detalle(g)}${g.ficha ? `; ${numeros(g.ficha)}` : ''}.`) + aviso(c) };
+      return { t: S(`${nomC(g)} (#${g.rank}): ${corto(g)}.`, `${nomC(g)} (#${g.rank}): ${corto(g)}.`) + (seg ? S(` Le sigue ${nomC(seg)} (${sc(seg.score)}).`, ` Next: ${nomC(seg)} (${sc(seg.score)}).`) : '') + empateCorto(l) + alertaCorr(g) + alertaRev(c),
+               mas: S(`${nomC(g)}: ${detalle(g)}${g.ficha ? `; ${numeros(g.ficha)}` : ''}.`, `${nomC(g)}: ${detalle(g)}${g.ficha ? `; ${numeros(g.ficha)}` : ''}.`) + avisoEmpate(l) + avisoBrecha(c.region && c.region.ficha, g) + aviso(c) };
     },
     lista: c => {
       const l = c.candidatos || [];
@@ -290,12 +312,41 @@ const Asistente = (() => {
       const l = c.candidatos || [], zonaTxt = `${c.destino}${c.zona ? ' · ' + c.zona : ''}`;
       let t = S(`Referencia: ${nom(c.region)} (${c.origen}), ${numeros(c.region.ficha)}.`, `Reference: ${nom(c.region)} (${c.origen}), ${numeros(c.region.ficha)}.`) + alertaRev(c);
       if (!l.length) return { t: t + S(` No hay candidatos en ${zonaTxt}.`, ` No candidates in ${zonaTxt}.`) };
-      t += S(` En ${zonaTxt}: ${l.length} zona${l.length === 1 ? '' : 's'}; la mejor es ${nomC(l[0])} (${corto(l[0])}).`, ` In ${zonaTxt}: ${l.length} zone${l.length === 1 ? '' : 's'}; the best is ${nomC(l[0])} (${corto(l[0])}).`) + alertaCorr(l[0]);
+      t += S(` En ${zonaTxt}: ${l.length} zona${l.length === 1 ? '' : 's'}; la mejor es ${nomC(l[0])} (${corto(l[0])}).`, ` In ${zonaTxt}: ${l.length} zone${l.length === 1 ? '' : 's'}; the best is ${nomC(l[0])} (${corto(l[0])}).`) + empateCorto(l) + alertaCorr(l[0]);
       const mn = Math.min(...l.map(g => g.score)), mx = Math.max(...l.map(g => g.score));
-      return { t, mas: S(`Se evaluaron ${c.region.n_evaluados || 500} parches terrestres a ${c.region.res || ''} m; los puntajes de las zonas van de ${sc(mn)} a ${sc(mx)} (menor es mejor).`, `${c.region.n_evaluados || 500} Earth patches were evaluated at ${c.region.res || ''} m; zone scores range from ${sc(mn)} to ${sc(mx)} (lower is better).`) + aviso(c) };
+      return { t, mas: S(`Se evaluaron ${c.region.n_evaluados || 500} parches terrestres a ${c.region.res || ''} m; los puntajes de las zonas van de ${sc(mn)} a ${sc(mx)} (menor es mejor).`, `${c.region.n_evaluados || 500} Earth patches were evaluated at ${c.region.res || ''} m; zone scores range from ${sc(mn)} to ${sc(mx)} (lower is better).`) + avisoEmpate(l) + avisoBrecha(c.region.ficha, l[0]) + aviso(c) };
     },
     fuentes: () => ({ t: S('Elevación: Copernicus GLO-30 (Tierra), NASA LOLA (Luna) y USGS HRSC/MOLA (Marte). Mapas: OpenStreetMap, NASA LRO WAC y Viking MDIM 2.1.', 'Elevation: Copernicus GLO-30 (Earth), NASA LOLA (Moon) and USGS HRSC/MOLA (Mars). Maps: OpenStreetMap, NASA LRO WAC and Viking MDIM 2.1.'),
       mas: S('Detalle: Tierra, Copernicus GLO-30 vía Microsoft Planetary Computer; Luna, NASA LOLA a 80 m; Marte, mosaico USGS HRSC/MOLA a 200 m. Mapas: Luna, LRO WAC (NASA/GSFC/ASU); Marte, Viking MDIM 2.1 (NASA/JPL-Caltech, USGS). Fronteras: Natural Earth (dominio público).', 'Detail: Earth, Copernicus GLO-30 via Microsoft Planetary Computer; Moon, NASA LOLA at 80 m; Mars, USGS HRSC/MOLA blend at 200 m. Maps: Moon, LRO WAC (NASA/GSFC/ASU); Mars, Viking MDIM 2.1 (NASA/JPL-Caltech, USGS). Borders: Natural Earth (public domain).') }),
+    empate: c => {
+      const l = c.candidatos || [], n = cercanas(l);
+      if (!l.length) return S('La «lista corta» marca los candidatos cuyo puntaje queda a ≤0,01 del mejor: son equivalentes y su orden no es fiable. Elige un sitio de referencia y te digo cuántos hay.', 'The “shortlist” marks candidates whose score is within 0.01 of the best: they are equivalent and their order is not reliable. Pick a reference site and I will tell you how many there are.');
+      return { t: n >= 2 ? S(`Para ${c.region ? nom(c.region) : 'este sitio'} hay ${n} zonas en la lista corta (a ≤0,01 del mejor): ${unir(l.slice(0, n).map(nomC))}. Son equivalentes; su orden no es fiable.`, `For ${c.region ? nom(c.region) : 'this site'} there are ${n} zones on the shortlist (within 0.01 of the best): ${unir(l.slice(0, n).map(nomC))}. They are equivalent; their order is not reliable.`)
+                         : S(`Para ${c.region ? nom(c.region) : 'este sitio'} el mejor candidato (${nomC(l[0])}) se separa de los demás por más de 0,01: no hay lista corta.`, `For ${c.region ? nom(c.region) : 'this site'} the best candidate (${nomC(l[0])}) is more than 0.01 ahead of the rest: there is no shortlist.`),
+               mas: S('La diferencia entre el primero y el segundo suele ser mínima, y el puntaje cambia con el peso entre física y forma; por eso se marca un grupo y no un único ganador.', 'The gap between first and second is often tiny, and the score changes with the weight between physics and shape; that is why a group is flagged instead of a single winner.') };
+    },
+    brecha: c => {
+      const l = c.candidatos || [], g = l[0], b = brechaDe(c.region && c.region.ficha, g);
+      if (!g) return S('«Pendiente fuera de alcance» avisa cuando el mejor candidato tiene una pendiente a más de 5° de la del sitio: el parecido es de forma, no de inclinación. Elige un sitio y te digo si aplica.', '“Slope out of reach” warns when the best candidate’s slope is more than 5° from the site’s: the match is in shape, not in steepness. Pick a site and I will tell you if it applies.');
+      return { t: b ? S(`Sí: el mejor candidato de ${nom(c.region)} (${nomC(g)}) tiene ${f1(b.zona)}° de pendiente frente a ${f1(b.ref)}° del sitio. El parecido es de forma, no de inclinación.`, `Yes: the best candidate for ${nom(c.region)} (${nomC(g)}) has a ${f1(b.zona)}° slope versus ${f1(b.ref)}° at the site. The match is in shape, not in steepness.`)
+                       : S(`No aplica a ${nom(c.region)}: la pendiente del mejor candidato queda a 5° o menos de la del sitio.`, `It does not apply to ${nom(c.region)}: the best candidate’s slope is within 5° of the site’s.`),
+               mas: S('El corte de 5° es provisional. Con pendientes muy distintas, la zona sirve para ensayar la forma del terreno, pero no su inclinación.', 'The 5° cut is provisional. With very different slopes, the zone is useful to rehearse the terrain shape, but not its steepness.') };
+    },
+    analogo: (c, q) => {
+      const l = c.candidatos || [], conoc = l.filter(g => g.conocido), n = conoc.length;
+      return { t: S('«Análogo ya usado» marca zonas con uso documentado por NASA o ESA como análogo planetario; «Poco usado como análogo» son zonas que se parecen por el relieve pero que casi no se han usado así. La ficha de analogía separa la fidelidad (forma, pendiente, frío, aridez y aire) de la logística (el semáforo de clima).', '“Already used as analog” marks zones with documented NASA or ESA use as a planetary analog; “Rarely used as analog” are zones that look alike in relief but have hardly been used that way. The analog profile separates fidelity (shape, slope, cold, dryness and air) from logistics (the climate traffic light).')
+                + (l.length ? S(` En la lista actual, ${n} de ${l.length} ya se usan como análogo${n ? ': ' + unir(conoc.slice(0, 4).map(nomC)) : ''}.`, ` In the current list, ${n} of ${l.length} are already used as analogs${n ? ': ' + unir(conoc.slice(0, 4).map(nomC)) : ''}.`) : ''),
+               mas: S('La clasificación es provisional del equipo. Para la Luna y Marte, «más cerca» en frío, aridez y presión significa el valor más bajo del catálogo. Abre «Ficha de analogía» en una tarjeta para ver las dimensiones.', 'The classification is provisional from the team. For the Moon and Mars, “closer” in cold, dryness and pressure means the lowest value in the catalog. Open “Analog profile” on a card to see the dimensions.') };
+    },
+    barrido: c => {
+      const b = c.barrido;
+      if (!b) return S('El barrido automático recorre franjas enteras de la Tierra, sin lista previa de zonas, y se queda con los cuadros de 3 km que más se parecen a cada sitio. Se activa con el selector Catálogo / Barrido.', 'The automatic sweep scans whole bands of the Earth, with no prior list of zones, and keeps the 3 km patches most similar to each site. Switch it with the Catalog / Sweep selector.');
+      const t = S(`El barrido evaluó ${num(b.cuadros)} cuadros de ${b.teselas} teselas de 1° en ${b.franjas} franjas, sin lista previa de zonas.`, `The sweep evaluated ${num(b.cuadros)} patches from ${b.teselas} one-degree tiles across ${b.franjas} bands, with no prior list of zones.`);
+      const s = b.sitio;
+      return { t: t + (s && s.top.length ? S(` Para ${s.nombre}, lo mejor que encontró: ${s.top.slice(0, 3).map(g => `${lugarB(g)}, puntaje ${sc(g.score)}`).join('; ')}.`, ` For ${s.nombre}, the best it found: ${s.top.slice(0, 3).map(g => `${lugarB(g)}, score ${sc(g.score)}`).join('; ')}.`) : '')
+                + (s && s.fuera ? S(' Ese sitio queda fuera del rango terrestre: nada de la Tierra lo iguala en inclinación.', ' That site is outside the Earth range: nothing on Earth matches it in steepness.') : ''),
+               mas: S('El puntaje suma la diferencia real en pendiente, curvatura y rugosidad y la diferencia de forma. Pasa a la etapa de forma el 0,1 % más parecido; se excluyen bosque, cultivos, construido, nieve, agua y humedales.', 'The score adds the real difference in slope, curvature and roughness and the difference in shape. The most similar 0.1% go to the shape stage; forest, crops, built-up areas, snow, water and wetlands are excluded.') };
+    },
     clima: (c, q) => (c.clima ? climaResp(c.clima, c, q) : sinClima()),
     viabilidad: c => (c.clima ? viabResp(c.clima, c) : S('La viabilidad climática de una base solo se evalúa para zonas de la Tierra. Elige un candidato terrestre y te la resumo.', 'Climate viability for a base is only assessed for Earth zones. Pick an Earth candidate and I will summarize it.')),
     acerca: () => ({ t: S('Soy Vertikal Bot: un conjunto de redes neuronales pequeñas, que corre en tu navegador, entiende tu pregunta; las respuestas y cifras salen de los datos mostrados. No envía tus preguntas a ningún servidor ni usa IA externa.',
@@ -348,6 +399,7 @@ const Asistente = (() => {
     pendiente: ['¿Qué es la pendiente?', 'What is slope?'], rugosidad: ['¿Qué es la rugosidad?', 'What is roughness?'],
     aptitud: ['¿Qué es la aptitud?', 'What is suitability?'], acerca: ['¿Usas inteligencia artificial?', 'Do you use AI?'], clima: ['¿Qué clima tiene?', 'What is the climate like?'],
     viabilidad: ['¿Es viable una base ahí?', 'Is a base viable there?'], muestra: ['¿Son datos reales?', 'Is this real data?'], fuentes: ['¿De dónde salen los mapas?', 'Where do the maps come from?'],
+    empate: ['¿Qué es la lista corta?', 'What is the shortlist?'], brecha: ['¿Qué es pendiente fuera de alcance?', 'What is slope out of reach?'], analogo: ['¿Qué es un análogo ya usado?', 'What is an analog already used?'], barrido: ['¿Qué es el barrido?', 'What is the sweep?'],
     sitios: ['¿Qué sitio se parece más a la Tierra?', 'Which site is most like Earth?'], zonas: ['¿Qué zonas hay en la Tierra?', 'What zones are there on Earth?'],
   };
   const preguntaDe = (i, idioma) => (PREGUNTAS[i] ? PREGUNTAS[i][(idioma || L) === 'en' ? 1 : 0] : null);
@@ -410,6 +462,19 @@ const Asistente = (() => {
     subir: ['subir', 'upload', 'geotiff'], clima: ['clima', 'temperatur', 'lluvi', 'viento', 'helada', 'weather', 'climate'], viabilidad: ['viab', 'semaforo', 'habitab', 'traffic light'],
     acerca: ['inteligencia artificial', 'red neuronal', 'chatgpt'], fuentes: ['fuente', 'source'],
   };
+
+  /* Temas nuevos (lista corta, brecha, análogos, barrido): palabras inequívocas que mandan sobre la red. */
+  const NUEVOS = {
+    empate: ['lista corta', 'shortlist', 'short list', 'empate', 'equivalent', 'orden no es fiable', 'tie '],
+    brecha: ['fuera de alcance', 'out of reach', 'brecha', 'de inclinacion'],
+    analogo: ['analogo', 'analog', 'ficha', 'fidelidad', 'logistica', 'poco usado', 'ya usado', 'fidelity', 'rarely used', 'already used'],
+    barrido: ['barrido', 'barre ', 'barrer', 'sweep', 'franja', 'band ', 'bands', 'sin lista previa', 'automatico', 'automatic'],
+  };
+  function porNuevos(t) {
+    const p = ' ' + t + ' ';
+    const hits = Object.entries(NUEVOS).filter(([, kws]) => kws.some(k => p.includes(' ' + k) || (k.endsWith(' ') && p.includes(' ' + k))));
+    return hits.length === 1 ? hits[0][0] : null;
+  }
   const GENERICOS = new Set(['lista', 'mejor', 'resumen', 'porque', 'sitios', 'saludo']);
   function porFuertes(t) {
     const p = ' ' + t + ' ';
@@ -438,6 +503,8 @@ const Asistente = (() => {
     const nombre = porOrdinal(texto, c) || porNombre(t, c);
     if (nombre) return nombre;
     if (pideZonasPorTipo(t) || /(^| )catalog/.test(t) || pideZonasDeLugar(t, c) || soloLugar(t, c)) return { tipo: 'intent', intent: 'zonas', via: 'reglas' };
+    const nuevo = porNuevos(t);
+    if (nuevo) return { tipo: 'intent', intent: nuevo, via: 'palabra clave' };
     const reglas = porReglas(t);
     // Si casi ninguna palabra es conocida, la red no es fiable: solo valen las reglas.
     const nn = BotNN.fraccionConocida(texto) >= 0.34 ? BotNN.clasificar(texto) : null;
@@ -474,7 +541,7 @@ const Asistente = (() => {
     L = idiomaDe(tn) || (typeof I18N !== 'undefined' ? I18N.lang : 'es');
     const seg = seguridad(tn);
     if (seg) return { texto: textoSeguridad(seg) };
-    const mt = matchEntre(tn, c);
+    const mt = matchEntre(tn, c) || mejoresSitio(tn, c);
     if (mt) return empaquetar(mt);
     // Una zona del catálogo nombrada con una faceta (clima, viabilidad, categoría, ubicación, "en qué destaca"): se responde sobre ESA zona.
     const z = zonaPorNombre(tn, c), f = facetas(tn);
