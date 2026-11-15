@@ -76,5 +76,30 @@ prueba('hallazgos con los datos reales: Fuji en la Luna y Roter Kamm en Marte, 5
   const l = Analogia.hallazgos(datos.cruces['luna-tierra'].regiones)[0], m = Analogia.hallazgos(datos.cruces['marte-tierra'].regiones)[0];
   assert.deepStrictEqual([l.region, l.top, l.de], ['Fuji', 5, 8]); assert.deepStrictEqual([m.region, m.top, m.de], ['RoterKamm', 5, 10]);
 });
+const barrido = leer('barrido.json'), climaB = leer('clima_barrido.json');
+prueba('puestoValor compara un valor suelto con el catálogo', () => {
+  assert.deepStrictEqual(Analogia.puestoValor(R, 'x', 0), { puesto: 1, de: 5, masQue: 4, zonas: 4, valor: 0 });
+  assert.deepStrictEqual(Analogia.puestoValor(R, 'x', 5), { puesto: 2, de: 5, masQue: 1, zonas: 4, valor: 5 });
+  assert.strictEqual(Analogia.puestoValor(R, 'x', 100).masQue, 0);
+  assert.strictEqual(Analogia.puestoValor(R, 'x', undefined), null);
+});
+prueba('todos los candidatos del barrido tienen perfil completo con su clima', () => {
+  for (const [par, c] of Object.entries(barrido.cruces)) for (const e of datos.cruces[par].regiones) for (const g of c.sitios[e.id].candidatos) {
+    const cl = climaB.puntos[`${g.coord[0].toFixed(5)},${g.coord[1].toFixed(5)}`];
+    const p = Analogia.perfilPunto(g, e, cl, clima.regiones);
+    assert.strictEqual(p.clima.length, 3, e.id); assert.ok(p.pendiente && p.uso, e.id);
+    for (const d of p.clima) assert.ok(d.zonas === 50 && d.masQue >= 0 && d.masQue <= 50 && ['cerca', 'medio', 'lejos'].includes(d.estado), e.id);
+  }
+});
+prueba('resumenBarrido: un mejor candidato por sitio, franjas ordenadas y sitios fuera de rango', () => {
+  const g = (f, s) => ({ franja: f, franja_en: f, score: s });
+  const r = Analogia.resumenBarrido({ a: { fuera_de_rango: true, candidatos: [g('X', 1), g('Y', 2)] }, b: { candidatos: [g('Y', 1)] }, c: { candidatos: [g('Y', 3)] }, d: { candidatos: [] } }, ['c', 'a', 'b', 'd']);
+  assert.deepStrictEqual(r.filas.map(x => x.id), ['c', 'a', 'b']); assert.strictEqual(r.de, 3);
+  assert.deepStrictEqual(r.porFranja.map(x => [x.franja, x.n]), [['Y', 2], ['X', 1]]); assert.deepStrictEqual(r.fuera, ['a']);
+});
+prueba('resumenBarrido con los datos reales: los cinco sitios fuera de rango', () => {
+  const fuera = ['luna', 'marte'].flatMap(c => Analogia.resumenBarrido(barrido.cruces[`${c}-tierra`].sitios).fuera).sort();
+  assert.deepStrictEqual(fuera, ['faustini', 'gale', 'haworth', 'shackleton', 'valles']);
+});
 console.log(`${bien} bien, ${mal} con falla`);
 process.exit(mal ? 1 : 0);

@@ -21,7 +21,7 @@ const CapaPolar = L.TileLayer.extend({
 });
 const pos = (cuerpo, c) => (cuerpo === 'luna' ? Polar.aPolar(c) : c);       // [lat, lon] -> coordenada del mapa de ese cuerpo
 const COLOR = { acc: '#5ec8ff', sol: '#ffd166' };
-const CUERPOS = ['tierra', 'luna', 'marte'];
+const CUERPOS_REF = ['luna', 'marte'];        // el terreno de referencia es siempre la Luna o Marte; se buscan parecidos solo en la Tierra
 
 let datos, TIERRA, CLIMA = null, CLIMA_BARRIDO = null, ANA = null, BARRIDO = null;              // TIERRA: continentes con sus países (hijas)
 const estado = { fuente: 'catalogo', modo: 'region', gemelo: null, capa: 'ninguna', soloViables: false, candidatos: [],
@@ -214,8 +214,8 @@ function migas(l) {
 }
 
 function controles() {
-  fichas($('f-origen'), CUERPOS.filter(c => c !== estado.dest.cuerpo), estado.ref.cuerpo, id => cambiarCuerpo('ref', id));
-  fichas($('f-destino'), CUERPOS.filter(c => c !== estado.ref.cuerpo), estado.dest.cuerpo, id => cambiarCuerpo('dest', id));
+  fichas($('f-origen'), CUERPOS_REF, estado.ref.cuerpo, id => cambiarCuerpo('ref', id));
+  $('f-destino').innerHTML = `<span class="ficha fija"><span class="orbe tierra"></span>${esc(nombre('tierra'))}</span>`;
   const modos = ['region', 'subir'].map(v => [v, I18N.t('modo.' + v)]);
   $('t-modo').innerHTML = modos.map(([v, n]) => `<button type="button" data-m="${v}" aria-pressed="${estado.modo === v}">${n}</button>`).join('');
   $('t-modo').querySelectorAll('button').forEach(b => b.onclick = () => { estado.modo = b.dataset.m; cambiar(); });
@@ -346,9 +346,11 @@ const sello = reg => !ANA ? '' : esConocido(reg) ? `<span class="sello conocido"
 const PUNTO = { alta: 'ok', media: 'atencion', baja: 'dificil', similar: 'ok', menor: 'atencion', mayor: 'atencion', cerca: 'ok', medio: 'atencion', lejos: 'dificil' };
 const enlace = (nombreF, url) => `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(nombreF)}</a>`;
 const signo = x => (x < 0 ? '−' : '') + I18N.num(Math.abs(x));
-function abrirAnalogia(g, e) {
-  const cuerpo = estado.ref.cuerpo, ref = ANA.cuerpos[cuerpo], cl = climaDe(g.region), ev = evalDe(g.region); if (!ref || !cl) return;
-  const p = Analogia.perfil(g, e, CLIMA.regiones), con = esConocido(g.region);
+/* auto = true: g es un candidato del barrido automático (sin zona con nombre; su clima viene de clima_barrido.json). */
+function abrirAnalogia(g, e, auto = false) {
+  const cuerpo = estado.ref.cuerpo, ref = ANA.cuerpos[cuerpo], cl = auto ? climaBarridoDe(g) : climaDe(g.region), ev = auto ? evaluarFichaClima(cl) : evalDe(g.region); if (!ref || !cl || !ev) return;
+  const p = auto ? Analogia.perfilPunto(g, e, cl, CLIMA.regiones) : Analogia.perfil(g, e, CLIMA.regiones), con = auto ? null : esConocido(g.region);
+  const zona = auto ? `${franjaDe(g)} #${g.puesto}` : lugarDe(g);
   const fila = (dim, a, b, estadoId, lectura) => `<tr><td>${esc(dim)}</td><td>${esc(a)}</td><td>${esc(b)}</td><td><span class="punto ${PUNTO[estadoId] || 'sin'}"></span> ${esc(lectura)}</td></tr>`;
   const refClima = { frio: `≈ ${signo(ref.t_ref_c)} °C`, aridez: `${I18N.num(ref.lluvia_mm)} mm`, aire: ref.presion_kpa ? `≈ ${I18N.num(ref.presion_kpa)} kPa` : t('vacio') };
   const zonaClima = { frio: v => `${signo(num1v(v))} °C`, aridez: v => `${I18N.num(Math.round(v))} mm`, aire: v => `${I18N.num(Math.round(v))} kPa` };
@@ -356,19 +358,21 @@ function abrirAnalogia(g, e) {
   filas += p.pendiente
     ? fila(t('dim.pendiente'), `${I18N.num(p.pendiente.ref)}°`, `${I18N.num(p.pendiente.zona)}°`, p.pendiente.estado, t('pend.' + p.pendiente.estado, I18N.num(Math.abs(p.pendiente.dif))))
     : fila(t('dim.pendiente'), e.ficha ? `${I18N.num(e.ficha.pendiente_media)}°` : '—', t('sinDato'), 'sin', t('sinDato'));
-  p.clima.forEach(c => { filas += fila(t('dim.' + c.id), refClima[c.id], zonaClima[c.id](c.valor), c.estado, t('rk.' + c.id, c.puesto, c.de)); });
+  p.clima.forEach(c => { filas += fila(t('dim.' + c.id), refClima[c.id], zonaClima[c.id](c.valor), c.estado, auto ? t('rkb.' + c.id, c.masQue, c.zonas) : t('rk.' + c.id, c.puesto, c.de)); });
   const rompe = p.pendiente && p.pendiente.estado !== 'similar' ? `<p class="nota dif">${esc(t('usoRompe', I18N.num(p.pendiente.zona), I18N.num(p.pendiente.ref)))}</p>` : '';
   const veces = ref.presion_kpa ? Math.round(ANA.tierra.presion_nivel_mar_kpa / ref.presion_kpa / 10) * 10 : 0;
-  $('clima-cuerpo').innerHTML = `<h3>${esc(t('anaTitulo', lugarDe(g), nm(e)))}</h3>`
-    + `<p class="mut">${esc(catDe(g))} · ${esc(t('puntaje'))} ${fmt3(g.score)} · #${g.rank}</p>`
-    + `<p>${sello(g.region)} <span class="mut peq">${esc(con ? ((I18N.lang === 'en' && con.motivo_en) || con.motivo) : t('pocoUsadoNota'))}${con ? ` ${esc(t('fuente'))}: ${enlace(con.fuente, con.url)}.` : ''}</span></p>`
+  $('clima-cuerpo').innerHTML = `<h3>${esc(t('anaTitulo', zona, nm(e)))}</h3>`
+    + (auto ? `<p class="mut">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''} · ${esc(t('puntaje'))} ${fmt3(g.score)}</p>`
+        + `<p><span class="sello nuevo">${esc(t('hallado'))}</span> <span class="mut peq">${esc(t('halladoNota'))}${g.cobertura === 'sin dato' ? ' ' + esc(t('sinCobertura')) : ''}</span></p>`
+      : `<p class="mut">${esc(catDe(g))} · ${esc(t('puntaje'))} ${fmt3(g.score)} · #${g.rank}</p>`
+        + `<p>${sello(g.region)} <span class="mut peq">${esc(con ? ((I18N.lang === 'en' && con.motivo_en) || con.motivo) : t('pocoUsadoNota'))}${con ? ` ${esc(t('fuente'))}: ${enlace(con.fuente, con.url)}.` : ''}</span></p>`)
     + `<h4>${esc(t('usoTitulo'))}</h4><p>${esc(t('uso.' + p.uso))}</p>${rompe}`
-    + `<h4>${esc(t('fidelidad'))}</h4><table class="fact ana"><tr><th>${esc(t('colDim'))}</th><th>${esc(nm(e))}</th><th>${esc(lugarDe(g))}</th><th>${esc(t('colLect'))}</th></tr>${filas}</table>`
+    + `<h4>${esc(t('fidelidad'))}</h4><table class="fact ana"><tr><th>${esc(t('colDim'))}</th><th>${esc(nm(e))}</th><th>${esc(zona)}</th><th>${esc(t('colLect'))}</th></tr>${filas}</table>`
     + `<p class="mut peq">${esc(t('notaRef', nombre(cuerpo), (I18N.lang === 'en' && ref.t_nota_en) || ref.t_nota))}</p>`
     + `<h4>${esc(t('logistica'))}</h4><div class="chip-sem"><span class="punto ${ev.sem}"></span><b>${esc(t('sem.' + ev.sem))}</b> · ${esc(t('resumenFactores', ev.res.ok, ev.res.atencion, ev.res.dificil))}</div>`
     + `<h4>${esc(t('noRepro'))}</h4><p>${esc(t('noRepro.' + cuerpo, Math.round(100 * ref.gravedad_ms2 / ANA.tierra.gravedad_ms2), veces))}</p>`
     + `<h4>${esc(t('noEval'))}</h4><p>${esc(t('noEvalLista'))}</p>`
-    + `<p class="pie">${esc(t('pieAna', CLIMA.fuente))} ${ref.fuentes.map(f => enlace(f.nombre, f.url)).join(' · ')}.<br>${esc(t('notaConocidos'))}</p>`;
+    + `<p class="pie">${esc(t('pieAna', CLIMA.fuente))} ${ref.fuentes.map(f => enlace(f.nombre, f.url)).join(' · ')}.<br>${esc(auto ? t('notaAuto') : t('notaConocidos'))}</p>`;
   $('clima-panel').showModal();
 }
 const num1v = x => Math.round(x * 10) / 10;
@@ -376,11 +380,30 @@ const num1v = x => Math.round(x * 10) / 10;
 /* ---------- hallazgos ---------- */
 /* Zonas que más se repiten entre los 3 primeros candidatos de cada cuerpo, con su sello. El cálculo está en analogia.js. */
 function abrirHallazgos() {
-  let html = `<h3>${esc(t('hallazgos'))}</h3><p class="mut">${esc(t('hallIntro'))}</p>`;
+  let html = `<h3>${esc(t('hallazgos'))}</h3>`;
+  /* Primero el barrido automático: lo que encontró el algoritmo sin lista previa. */
+  if (BARRIDO) {
+    html += `<h4>${esc(t('fuente.barrido'))}</h4><p class="mut">${esc(t('hallBarridoIntro'))}</p>`;
+    for (const cuerpo of ['luna', 'marte']) {
+      const B = barridoDe(cuerpo); if (!B) continue;
+      const r = Analogia.resumenBarrido(B.sitios, datos.conocidas[cuerpo].map(s => s.id)), nombreSitio = id => nm(datos.conocidas[cuerpo].find(s => s.id === id));
+      const lider = r.porFranja[0];
+      html += `<p><b>${esc(nombre(cuerpo))}</b>: ${esc(t('hallBarridoCifras', I18N.num(B.meta.cuadros), B.meta.franjas.length))} `
+        + `${esc(t('hallBarridoLider', (I18N.lang === 'en' && lider.franja_en) || lider.franja, lider.n, r.de))} `
+        + (r.fuera.length ? esc(t('hallBarridoFuera', r.fuera.map(nombreSitio).join(', '))) : '') + '</p>'
+        + `<table class="fact hall"><tr><th>${esc(t('colSitio'))}</th><th>${esc(t('colMejor'))}</th><th>${esc(t('pendiente'))}</th><th>${esc(t('puntaje'))}</th><th></th></tr>`
+        + r.filas.map(x => `<tr><td>${esc(nombreSitio(x.id))}${x.fuera ? ` <span class="sello">${esc(t('fueraCorto'))}</span>` : ''}</td>`
+          + `<td>${esc(franjaDe(x.mejor))}${x.mejor.pais ? ' · ' + esc(paisDe(x.mejor)) : ''}</td>`
+          + `<td>${I18N.num(B.sitios[x.id].ficha.pendiente_media)}° → ${I18N.num(x.mejor.ficha.pendiente_media)}°</td><td>${fmt3(x.mejor.score)}</td>`
+          + `<td><button type="button" class="clima-btn" data-cuerpo="${cuerpo}" data-sitio="${esc(x.id)}" data-fuente="barrido">${esc(t('verSitio'))}</button></td></tr>`).join('') + '</table>';
+    }
+    html += `<p class="pie">${esc(t('hallBarridoPie'))}</p><h4>${esc(t('fuente.catalogo'))}</h4>`;
+  }
+  html += `<p class="mut">${esc(t('hallIntro'))}</p>`;
   for (const cuerpo of ['luna', 'marte']) {
     const p = datos.cruces[`${cuerpo}-tierra`]; if (!p) continue;
     const lista = Analogia.hallazgos(p.regiones), nuevo = lista.find(x => !esConocido(x.region));
-    html += `<h4>${esc(nombre(cuerpo))} → ${esc(nombre('tierra'))}</h4>`
+    html += `<p><b>${esc(nombre(cuerpo))}</b></p>`
       + (nuevo ? `<p><b>${esc(lugarDe(nuevo))}</b>: ${esc(t('hallTitular', nuevo.top, nuevo.de, t('para.' + cuerpo)))}</p>` : '')
       + `<table class="fact hall"><tr><th>${esc(t('colZona'))}</th><th>${esc(t('colTop3'))}</th><th>${esc(t('colPrimero'))}</th><th></th></tr>`
       + lista.slice(0, 6).map(x => `<tr><td>${esc(lugarDe(x))} ${sello(x.region)}</td><td>${esc(t('deSitios', x.top, x.de))}</td><td>${x.primero}</td>`
@@ -391,6 +414,7 @@ function abrirHallazgos() {
   $('clima-cuerpo').querySelectorAll('button[data-sitio]').forEach(b => b.onclick = () => {
     $('clima-panel').close();
     estado.modo = 'region'; estado.ref = { cuerpo: b.dataset.cuerpo, zona: b.dataset.sitio, pais: null }; estado.dest = { cuerpo: 'tierra', zona: null, pais: null };
+    estado.fuente = b.dataset.fuente === 'barrido' ? 'barrido' : 'catalogo';
     cambiar();
   });
   $('clima-panel').showModal();
@@ -450,6 +474,7 @@ function pintarBarrido() {
       + (g.cobertura === 'sin dato' ? `<p class="nota dif">${esc(t('sinCobertura'))}</p>` : `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p>`)
       + (c ? `<p class="cl"><span class="punto ${ev.sem}"></span>${esc(t('climaTarj', num1(c.v.t_media_c), Math.round(c.v.lluvia_anual_mm)))}</p>` : `<p class="nota">${esc(t('climaBarridoSinDato'))}</p>`) + '</button>'
       + (g.relieve ? `<button type="button" class="clima-btn" data-rel="${k}">${esc(t('verRelieve'))}</button>` : '')
+      + (c && ANA ? `<button type="button" class="clima-btn" data-ana-barrido="${k}">${esc(t('verAnalogia'))}</button>` : '')
       + (c ? `<button type="button" class="clima-btn" data-clima-barrido="${k}">${esc(t('verClima'))}</button>` : '') + '</div>';
   });
   tira.innerHTML = html;
@@ -460,6 +485,7 @@ function pintarBarrido() {
     m.mapa.setView(cand[k].coord, 9); marcas[k].openPopup();
   });
   tira.querySelectorAll('button[data-rel]').forEach(b => b.onclick = () => abrirRelieve(cand[+b.dataset.rel], s, e, lado));
+  tira.querySelectorAll('button[data-ana-barrido]').forEach(b => b.onclick = () => abrirAnalogia(cand[+b.dataset.anaBarrido], e, true));
   tira.querySelectorAll('button[data-clima-barrido]').forEach(b => b.onclick = () => {
     const r = climaBarridoDe(cand[+b.dataset.climaBarrido]);
     if (r) abrirClima(null, r);

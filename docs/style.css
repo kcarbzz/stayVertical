@@ -179,3 +179,5 @@ canvas.relieve { width:min(36vw,220px); height:min(36vw,220px); image-rendering:
 #cerrar-aviso { position:absolute; right:12px; top:8px; border:0; background:none; font-size:24px; }
 .clima-barrido-pendiente { color:var(--sol); font-size:12px; }
 @media (max-width:600px) { .fichas { justify-content:flex-start; } .tarj { width:190px; } .tarjw .tarj { width:190px; } }
+.ficha.fija { cursor:default; border-color:var(--acc); }
+.fact.hall td:nth-child(3), .fact.hall td:nth-child(4) { white-space:nowrap; }

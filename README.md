@@ -10,9 +10,10 @@ Web: https://stay-vertical.wiki
 - **18 sitios de referencia:** 8 del polo sur lunar (LOLA, 80 m) y 10 de Marte (mezcla HRSC/MOLA de USGS, 200 m).
 - **50 zonas terrestres** candidatas (Copernicus DEM GLO-30), ordenadas por parecido de relieve.
 - **Mapa lunar en proyección polar sur** con capas de NASA Trek (relieve LOLA e imagen LRO WAC); Marte usa el mosaico Viking.
-- **Ficha de analogía** por candidato: separa la fidelidad (forma del relieve, pendiente, frío, aridez y presión del aire frente al sitio) de la logística, dice para qué serviría la zona, qué no reproduce la Tierra y qué falta por evaluar. Marca además las zonas ya usadas como análogo y las poco usadas.
+- **Ficha de analogía** por candidato, tanto del catálogo como del barrido: separa la fidelidad (forma del relieve, pendiente, frío, aridez y presión del aire frente al sitio) de la logística, dice para qué serviría la zona, qué no reproduce la Tierra y qué falta por evaluar. Marca además las zonas ya usadas como análogo y las poco usadas.
 - **Barrido automático:** junto al catálogo de 50 zonas, la web muestra los candidatos que encontró el algoritmo al recorrer franjas enteras de la Tierra, sin lista previa, con la comparación visual del relieve del sitio y del candidato.
-- **Hallazgos:** resumen de las zonas que más se repiten entre los 3 primeros candidatos, destacando las poco usadas como análogo.
+- **Hallazgos:** resumen del barrido automático (mejor candidato de cada sitio y sitios sin análogo de relieve) y de las zonas del catálogo que más se repiten entre los 3 primeros candidatos.
+- **Sentido único:** el terreno de referencia es la Luna o Marte, y los parecidos se buscan en la Tierra.
 - **Lista corta y avisos:** las zonas a ≤0,01 del mejor puntaje se marcan como equivalentes, y se avisa cuando el mejor candidato queda lejos de la pendiente del sitio.
 - **Clima y viabilidad** de cada zona (NASA POWER, 2021-2025) con un semáforo de umbrales provisionales.
 - **Vertikal Bot:** una red neuronal pequeña que corre en el navegador y explica los resultados mostrados.

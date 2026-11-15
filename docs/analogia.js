@@ -41,6 +41,35 @@ const Analogia = (() => {
     };
   }
 
+  /* Un valor suelto (un candidato del barrido) frente al catálogo: cuántas zonas del catálogo quedan por encima de él.
+     `puesto` es el que ocuparía si se añadiera al catálogo (1 = valor más bajo). */
+  function puestoValor(regiones, variable, valor) {
+    if (valor == null || !Number.isFinite(valor)) return null;
+    const vals = Object.values(regiones).map(x => x.v[variable]).filter(x => x != null);
+    return { puesto: 1 + vals.filter(x => x < valor).length, de: vals.length + 1, masQue: vals.filter(x => x > valor).length, zonas: vals.length, valor };
+  }
+
+  /* Perfil de un candidato del barrido automático. g = candidato de barrido.json; e = sitio de referencia;
+     clima = su punto de clima_barrido.json; regiones = el catálogo, que sirve de vara de medir para el clima. */
+  function perfilPunto(g, e, clima, regiones) {
+    return {
+      forma: { corr: g.corr, estado: forma(g.corr) },
+      pendiente: pendiente(e.ficha, g.ficha),
+      clima: DIMS.map(d => { const p = puestoValor(regiones, d.variable, clima && clima.v[d.variable]); return p && { id: d.id, ...p, estado: tercio(p.puesto, p.de) }; }).filter(Boolean),
+      uso: uso(e.ficha),
+    };
+  }
+
+  /* Resumen del barrido de un cuerpo. sitios = barrido.cruces[...].sitios; orden = ids en el orden de la web.
+     Devuelve el mejor candidato de cada sitio, cuántos primeros puestos reúne cada franja y qué sitios quedan fuera de rango. */
+  function resumenBarrido(sitios, orden) {
+    const filas = (orden || Object.keys(sitios)).filter(id => sitios[id] && sitios[id].candidatos.length)
+      .map(id => ({ id, fuera: !!sitios[id].fuera_de_rango, mejor: sitios[id].candidatos[0] }));
+    const f = {};
+    filas.forEach(x => { const k = x.mejor.franja; (f[k] ||= { franja: k, franja_en: x.mejor.franja_en, n: 0 }).n++; });
+    return { filas, porFranja: Object.values(f).sort((a, b) => b.n - a.n || a.franja.localeCompare(b.franja)), fuera: filas.filter(x => x.fuera).map(x => x.id), de: filas.length };
+  }
+
   /* Lista corta: cuántos candidatos, desde el primero, quedan a `tol` o menos del mejor puntaje. Con 2 o más, su orden no es fiable. */
   const equivalentes = (gem, tol = 0.01) => (gem.length ? gem.filter(g => g.score - gem[0].score <= tol + 1e-12).length : 0);
 
@@ -64,6 +93,6 @@ const Analogia = (() => {
     return Object.values(z).map(({ _pos, ...x }) => x).sort((a, b) => b.top - a.top || b.primero - a.primero || a.region.localeCompare(b.region));
   }
 
-  return { DIMS, puesto, tercio, forma, pendiente, uso, perfil, equivalentes, brecha, hallazgos };
+  return { DIMS, puesto, puestoValor, tercio, forma, pendiente, uso, perfil, perfilPunto, resumenBarrido, equivalentes, brecha, hallazgos };
 })();
 if (typeof module !== 'undefined') module.exports = Analogia;
