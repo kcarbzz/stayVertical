@@ -1,0 +1,108 @@
+{
+ "cuerpo": "marte",
+ "res_m": 200.0,
+ "tam_px": 15,
+ "solape": 0.5,
+ "candidatos": 2229,
+ "radio_km": 6.0,
+ "fuente_sitios": "USGS HRSC/MOLA blend DEM v2 (NASA MOLA + ESA HRSC)",
+ "fuente_relieve": "Copernicus DEM (cop-dem-glo-90) vía Microsoft Planetary Computer",
+ "fuente_cobertura": "ESA WorldCover 2021 vía Microsoft Planetary Computer",
+ "clases_excluidas": [
+  "bosque",
+  "cultivos",
+  "construido",
+  "nieve y hielo",
+  "agua",
+  "humedal",
+  "manglar"
+ ],
+ "franjas": {
+  "puna_altiplano": [
+   -28,
+   -70,
+   -18,
+   -65
+  ],
+  "islandia": [
+   63,
+   -25,
+   67,
+   -13
+  ],
+  "namib": [
+   -28,
+   14,
+   -19,
+   18
+  ],
+  "australia_central": [
+   -27,
+   126,
+   -21,
+   136
+  ],
+  "artico_canada": [
+   74,
+   -97,
+   81,
+   -78
+  ],
+  "valles_secos": [
+   -79,
+   158,
+   -76,
+   166
+  ],
+  "sahara_central": [
+   19,
+   5,
+   27,
+   20
+  ],
+  "arabia": [
+   17,
+   44,
+   24,
+   56
+  ],
+  "tibet_qaidam": [
+   32,
+   84,
+   39,
+   97
+  ],
+  "gobi": [
+   39,
+   97,
+   45,
+   108
+  ],
+  "mojave_gran_cuenca": [
+   34,
+   -119,
+   40,
+   -112
+  ]
+ },
+ "teselas": 745,
+ "teselas_fallidas": [],
+ "teselas_sin_cobertura": 22,
+ "cuadros": 2229494,
+ "distancia_tipica": 0.00012256675135395795,
+ "limite_fuera_de_rango": 0.028344874952010487,
+ "sitios": [
+  "jezero",
+  "gale",
+  "oxia",
+  "mawrth",
+  "meridiani",
+  "eberswalde",
+  "utopia",
+  "olimpo",
+  "valles",
+  "hellas"
+ ],
+ "fisica": "distancia",
+ "puntaje": "0,5 × diferencia en los 8 rasgos (raíz de la distancia física) + 0,5 × (1 − correlación de forma) / 2; menor es mejor"
+}

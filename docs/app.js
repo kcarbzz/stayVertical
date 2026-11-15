@@ -23,8 +23,8 @@ const pos = (cuerpo, c) => (cuerpo === 'luna' ? Polar.aPolar(c) : c);       // [
 const COLOR = { acc: '#5ec8ff', sol: '#ffd166' };
 const CUERPOS = ['tierra', 'luna', 'marte'];
 
-let datos, TIERRA, CLIMA = null, ANA = null;              // TIERRA: continentes con sus países (hijas)
-const estado = { modo: 'region', gemelo: null, capa: 'ninguna', soloViables: false, candidatos: [],
+let datos, TIERRA, CLIMA = null, ANA = null, BARRIDO = null;              // TIERRA: continentes con sus países (hijas)
+const estado = { fuente: 'catalogo', modo: 'region', gemelo: null, capa: 'ninguna', soloViables: false, candidatos: [],
   ref: { cuerpo: 'luna', zona: null, pais: null }, dest: { cuerpo: 'tierra', zona: null, pais: null } };
 const M = { ref: null, dest: null };   // { mapa, cuerpo, capa, zonas }
 const SUF = { ref: 'ref', dest: 'dest' };
@@ -213,6 +213,11 @@ function controles() {
   $('t-modo').innerHTML = modos.map(([v, n]) => `<button type="button" data-m="${v}" aria-pressed="${estado.modo === v}">${n}</button>`).join('');
   $('t-modo').querySelectorAll('button').forEach(b => b.onclick = () => { estado.modo = b.dataset.m; cambiar(); });
   migas('ref'); migas('dest');
+  const hayBarrido = !!barridoDe(estado.ref.cuerpo) && estado.dest.cuerpo === 'tierra';
+  if (!hayBarrido) estado.fuente = 'catalogo';
+  $('t-fuente').hidden = !hayBarrido;
+  $('t-fuente').innerHTML = ['catalogo', 'barrido'].map(v => `<button type="button" data-f="${v}" aria-pressed="${estado.fuente === v}">${esc(I18N.t('fuente.' + v))}</button>`).join('');
+  $('t-fuente').querySelectorAll('button').forEach(b => b.onclick = () => { estado.fuente = b.dataset.f; cambiar(); });
   $('q-ref').disabled = estado.modo === 'subir';
 }
 
@@ -352,10 +357,71 @@ function abrirHallazgos() {
   $('clima-panel').showModal();
 }
 
+/* ---------- barrido: candidatos que encontró el algoritmo, sin lista previa ---------- */
+const barridoDe = cuerpo => (BARRIDO && BARRIDO.cruces[`${cuerpo}-tierra`]) || null;
+const coordTxt = ([lat, lon]) => `${I18N.num(Math.abs(lat).toFixed(2))}° ${lat < 0 ? 'S' : 'N'}, ${I18N.num(Math.abs(lon).toFixed(2))}° ${lon < 0 ? t('oeste') : 'E'}`;
+const franjaDe = g => (I18N.lang === 'en' && g.franja_en) || g.franja;
+const paisDe = g => (I18N.lang === 'en' && g.pais_en) || g.pais || '';
+/* Escala de color del relieve: de la cota más baja (azul oscuro) a la más alta (crema). */
+const RAMPA = [[18, 32, 64], [44, 110, 140], [120, 170, 120], [214, 190, 120], [250, 240, 220]];
+function pintarRelieve(lienzo, r) {
+  const bin = atob(r.datos), n = r.n, ctx = lienzo.getContext('2d'), img = ctx.createImageData(n, n);
+  lienzo.width = lienzo.height = n;
+  for (let i = 0; i < n * n; i++) {
+    const v = bin.charCodeAt(i), k = i * 4;
+    if (!v) { img.data[k + 3] = 0; continue; }
+    const x = (v - 1) / 254 * (RAMPA.length - 1), a = Math.min(Math.floor(x), RAMPA.length - 2), f = x - a;
+    for (let c = 0; c < 3; c++) img.data[k + c] = Math.round(RAMPA[a][c] + (RAMPA[a + 1][c] - RAMPA[a][c]) * f);
+    img.data[k + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+function abrirRelieve(g, s, e, lado_km) {
+  const cuadro = (titulo, r, sub) => `<figure><canvas class="relieve"></canvas><figcaption><b>${esc(titulo)}</b><br>${esc(sub || t('desnivel', I18N.num(Math.round(r.max - r.min))))}</figcaption></figure>`;
+  const conForma = s.forma && g.forma;
+  $('clima-cuerpo').innerHTML = `<h3>${esc(t('relieveTitulo', nm(e), franjaDe(g)))}</h3><p class="mut">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''}</p>`
+    + `<h4>${esc(t('relAltura'))}</h4><div class="relieves">${cuadro(nm(e), s.relieve)}${cuadro(`${franjaDe(g)} #${g.puesto}`, g.relieve)}</div>`
+    + (conForma ? `<h4>${esc(t('relForma'))}</h4><div class="relieves">${cuadro(nm(e), s.forma, t('relFormaSub'))}${cuadro(`${franjaDe(g)} #${g.puesto}`, g.forma, t('relFormaSub'))}</div>` : '')
+    + `<p class="pie">${esc(t('relievePie', I18N.num(lado_km), g.rot, fmt2(g.corr)))}</p>`;
+  const lienzos = $('clima-cuerpo').querySelectorAll('canvas');
+  [s.relieve, g.relieve, ...(conForma ? [s.forma, g.forma] : [])].forEach((r, i) => pintarRelieve(lienzos[i], r));
+  $('clima-panel').showModal();
+}
+function pintarBarrido() {
+  const tira = $('tira'), m = M.dest, B = barridoDe(estado.ref.cuerpo), z = zSel('ref'), e = entradaActual();
+  const s = B && z && B.sitios[z.id];
+  if (!s || !e) { tira.innerHTML = `<p class="vacio">${esc(t('sinBarrido'))}</p>`; return; }
+  const meta = B.meta, lado = meta.tam_px * meta.res_m / 1000;
+  const cand = s.candidatos.filter(g => enZonaDestino(g.coord));
+  const franjas = meta.franjas.map(f => (I18N.lang === 'en' && f.nombre_en) || f.nombre).join(', ');
+  let html = `<div class="tarj ref"><span class="tag">${esc(t('referencia', nombre(estado.ref.cuerpo)))}</span><h4>${esc(nm(e))}</h4>${nums(s.ficha)}`
+    + `<p class="nota">${esc(t('barridoNota', I18N.num(meta.cuadros), meta.teselas))}</p>`
+    + `<p class="nota" title="${esc(franjas)}">${esc(t('barridoFranjas', meta.franjas.length))}</p>`
+    + (s.fuera_de_rango ? `<p class="nota dif">${esc(t('fueraRango'))}</p>` : '') + '</div>';
+  if (!cand.length) html += `<p class="vacio">${esc(t('ningun'))}</p>`;
+  cand.forEach((g, k) => {
+    html += `<div class="tarjw"><button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.puesto}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
+      + `<h4>${esc(franjaDe(g))}</h4><p class="cat">${esc(coordTxt(g.coord))}${g.pais ? ' · ' + esc(paisDe(g)) : ''}</p>`
+      + `<dl><dt>${t('correlacion')}</dt><dd>${fmt2(g.corr)}</dd></dl>${nums(g.ficha)}`
+      + (g.cobertura === 'sin dato' ? `<p class="nota dif">${esc(t('sinCobertura'))}</p>` : `<p class="cl">${esc((I18N.lang === 'en' && g.cobertura_en) || g.cobertura)}</p>`) + '</button>'
+      + (g.relieve ? `<button type="button" class="clima-btn" data-rel="${k}">${esc(t('verRelieve'))}</button>` : '') + '</div>';
+  });
+  tira.innerHTML = html;
+  const marcas = cand.map(g => L.marker(g.coord).addTo(m.capa).bindPopup(`<b>${esc(franjaDe(g))} #${g.puesto}</b><br>${esc(coordTxt(g.coord))}<br>${esc(t('puntaje'))}: ${fmt3(g.score)} · ${esc(t('correlacion'))}: ${fmt2(g.corr)}`));
+  tira.querySelectorAll('button.tarj').forEach(b => b.onclick = () => {
+    const k = +b.dataset.k;
+    tira.querySelectorAll('button.tarj').forEach(x => x.setAttribute('aria-pressed', x === b));
+    m.mapa.setView(cand[k].coord, 9); marcas[k].openPopup();
+  });
+  tira.querySelectorAll('button[data-rel]').forEach(b => b.onclick = () => abrirRelieve(cand[+b.dataset.rel], s, e, lado));
+  if (cand.length && !zSel('dest')) m.mapa.fitBounds(L.latLngBounds(cand.map(g => g.coord)).pad(0.15), { maxZoom: 5 });   // los candidatos pueden estar en cualquier franja: se encuadran todos
+}
+
 function pintar() {
   const tira = $('tira'), m = M.dest, e = entradaActual();
   m.capa.clearLayers(); estado.gemelo = null; estado.candidatos = [];
   if (estado.modo === 'subir') { tira.innerHTML = `<p class="vacio">${esc(t('subirPronto'))}</p>`; return; }
+  if (estado.fuente === 'barrido') { pintarBarrido(); return; }
   if (!e) { tira.innerHTML = `<p class="vacio">${esc(t('sinDatos'))}</p>`; return; }
   let gem = e.gemelos.filter(g => enZonaDestino(g.coord));
   let ocultas = 0;
@@ -482,8 +548,8 @@ function abrirChat(v) { $('asistente').hidden = !v; $('abrir-chat').setAttribute
 
 async function iniciar() {
   progreso(15, I18N.t('cargandoDatos'));
-  const [d, paises, clima, ana] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null), traer('analogia.json').catch(() => null)]);
-  datos = d; CLIMA = clima; ANA = ana;
+  const [d, paises, clima, ana, barrido] = await Promise.all([traer('resultados.json'), traer('paises.geojson'), traer('clima.json').catch(() => null), traer('analogia.json').catch(() => null), traer('barrido.json').catch(() => null)]);
+  datos = d; CLIMA = clima; ANA = ana; BARRIDO = barrido;
   progreso(55, I18N.t('preparando'));
   TIERRA = datos.continentes.map(c => ({ ...c, hijas: paises.features.filter(f => f.properties.cont === c.id)
     .map(f => ({ id: f.properties.id, nombre: f.properties.nombre, nombre_en: f.properties.en, feat: f, bbox: mayorPoligono(f.geometry) }))
