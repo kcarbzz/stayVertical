@@ -11,6 +11,8 @@ Web: https://stay-vertical.wiki
 - **50 zonas terrestres** candidatas (Copernicus DEM GLO-30), ordenadas por parecido de relieve.
 - **Mapa lunar en proyección polar sur** con capas de NASA Trek (relieve LOLA e imagen LRO WAC); Marte usa el mosaico Viking.
 - **Ficha de analogía** por candidato: separa la fidelidad (forma del relieve, pendiente, frío, aridez y presión del aire frente al sitio) de la logística, dice para qué serviría la zona, qué no reproduce la Tierra y qué falta por evaluar. Marca además las zonas ya usadas como análogo y las poco usadas.
+- **Hallazgos:** resumen de las zonas que más se repiten entre los 3 primeros candidatos, destacando las poco usadas como análogo.
+- **Lista corta y avisos:** las zonas a ≤0,01 del mejor puntaje se marcan como equivalentes, y se avisa cuando el mejor candidato queda lejos de la pendiente del sitio.
 - **Clima y viabilidad** de cada zona (NASA POWER, 2021-2025) con un semáforo de umbrales provisionales.
 - **Vertikal Bot:** una red neuronal pequeña que corre en el navegador y explica los resultados mostrados.
 - Selector de idioma ES/EN.

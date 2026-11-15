@@ -329,6 +329,29 @@ function abrirAnalogia(g, e) {
 }
 const num1v = x => Math.round(x * 10) / 10;
 
+/* ---------- hallazgos ---------- */
+/* Zonas que más se repiten entre los 3 primeros candidatos de cada cuerpo, con su sello. El cálculo está en analogia.js. */
+function abrirHallazgos() {
+  let html = `<h3>${esc(t('hallazgos'))}</h3><p class="mut">${esc(t('hallIntro'))}</p>`;
+  for (const cuerpo of ['luna', 'marte']) {
+    const p = datos.cruces[`${cuerpo}-tierra`]; if (!p) continue;
+    const lista = Analogia.hallazgos(p.regiones), nuevo = lista.find(x => !esConocido(x.region));
+    html += `<h4>${esc(nombre(cuerpo))} → ${esc(nombre('tierra'))}</h4>`
+      + (nuevo ? `<p><b>${esc(lugarDe(nuevo))}</b>: ${esc(t('hallTitular', nuevo.top, nuevo.de, t('para.' + cuerpo)))}</p>` : '')
+      + `<table class="fact hall"><tr><th>${esc(t('colZona'))}</th><th>${esc(t('colTop3'))}</th><th>${esc(t('colPrimero'))}</th><th></th></tr>`
+      + lista.slice(0, 6).map(x => `<tr><td>${esc(lugarDe(x))} ${sello(x.region)}</td><td>${esc(t('deSitios', x.top, x.de))}</td><td>${x.primero}</td>`
+        + `<td><button type="button" class="clima-btn" data-cuerpo="${cuerpo}" data-sitio="${esc(x.sitio)}">${esc(t('verSitio'))}</button></td></tr>`).join('') + '</table>';
+  }
+  html += `<p class="pie">${esc(t('hallPie'))}<br>${esc(t('notaConocidos'))}</p>`;
+  $('clima-cuerpo').innerHTML = html;
+  $('clima-cuerpo').querySelectorAll('button[data-sitio]').forEach(b => b.onclick = () => {
+    $('clima-panel').close();
+    estado.modo = 'region'; estado.ref = { cuerpo: b.dataset.cuerpo, zona: b.dataset.sitio, pais: null }; estado.dest = { cuerpo: 'tierra', zona: null, pais: null };
+    cambiar();
+  });
+  $('clima-panel').showModal();
+}
+
 function pintar() {
   const tira = $('tira'), m = M.dest, e = entradaActual();
   m.capa.clearLayers(); estado.gemelo = null; estado.candidatos = [];
@@ -338,13 +361,14 @@ function pintar() {
   let ocultas = 0;
   if (estado.soloViables && CLIMA) { const antes = gem.length; gem = gem.filter(g => { const ev = evalDe(g.region); return !ev || ev.res.dificil === 0; }); ocultas = antes - gem.length; }
   estado.gemelo = gem[0] || null; estado.candidatos = gem;
-  const cercanas = gem.filter(g => g.score - gem[0].score <= 0.01).length;
+  const cercanas = Analogia.equivalentes(gem), corta = cercanas >= 2, br = Analogia.brecha(e);
   const nota = cercanas >= 2 ? `<p class="nota dif">${esc(t('empate', cercanas))}</p>` : '';
   const enlaces = [e.img && `<a data-img="${esc(e.img)}">${esc(t('verComparacion'))}</a>`, e.img_top5 && `<a data-img="${esc(e.img_top5)}">${esc(t('verTop5'))}</a>`].filter(Boolean).join('');
   let html = `<div class="tarj ref"><span class="tag">${esc(t('referencia', nombre(estado.ref.cuerpo)))}</span><h4>${esc(nm(e))}</h4>${nums(e.ficha)}`
     + (e.n_evaluados ? `<p class="nota">${esc(t('evaluados', e.n_evaluados, e.resolucion_m))}</p>` : '')
     + (Analogia.uso(e.ficha) ? `<p class="nota uso">${esc(t('uso.' + Analogia.uso(e.ficha)))}</p>` : '')
     + nota
+    + (br ? `<p class="nota dif">${esc(t('brecha', I18N.num(br.zona), I18N.num(br.ref)))}</p>` : '')
     + (ocultas ? `<p class="nota dif">${esc(t('ocultas', ocultas))}</p>` : '')
     + (e.revision ? `<span class="rev">${esc(t('revisar'))}</span>` : '')
     + (enlaces ? `<div class="ver">${enlaces}</div>` : '') + '</div>';
@@ -352,7 +376,8 @@ function pintar() {
   gem.forEach((g, k) => {
     const ev = evalDe(g.region), cl = climaDe(g.region);
     const lineaClima = cl ? `<p class="cl"><span class="punto ${ev.sem}"></span>${esc(t('climaTarj', num1(cl.v.t_media_c), I18N.num(Math.round(cl.v.lluvia_anual_mm))))}</p>` : '';
-    html += `<div class="tarjw"><button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.rank}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
+    const eq = corta && k < cercanas;
+    html += `<div class="tarjw${eq ? ' eq' : ''}">${eq ? `<span class="corta">${esc(t('listaCorta'))}</span>` : ''}<button type="button" class="tarj" data-k="${k}" aria-pressed="${k === 0}"><span class="rk">#${g.rank}<small>${esc(t('puntaje'))} ${fmt3(g.score)} · ${esc(t('menorMejor'))}</small></span>`
       + `<h4>${esc(lugarDe(g))}</h4><p class="cat">${esc(catDe(g))}</p>${sello(g.region)}`
       + `<dl><dt>${t('correlacion')}</dt><dd>${fmt2(g.corr)}</dd></dl>${nums(g.ficha)}`
       + (g.dif ? `<p class="nota dif">${esc(t('difs', I18N.num(g.dif.pendiente), I18N.num(g.dif.rugosidad)))}</p>` : '') + lineaClima + '</button>'
@@ -467,6 +492,7 @@ async function iniciar() {
   $('aviso').hidden = !(datos.muestra || datos.exploratorio);
   $('cerrar-visor').onclick = () => $('visor').close();
   $('cerrar-clima').onclick = () => $('clima-panel').close();
+  $('abrir-hallazgos').onclick = abrirHallazgos; $('abrir-hallazgos').hidden = !ANA;
   $('clima-panel').addEventListener('click', e => { if (e.target === $('clima-panel')) $('clima-panel').close(); });
   $('capa-clima').onchange = e => { estado.capa = e.target.value; dibujarClima(); };
   $('solo-viables').onchange = e => { estado.soloViables = e.target.checked; pintar(); };
