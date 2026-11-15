@@ -414,6 +414,7 @@ function pintarBarrido() {
     m.mapa.setView(cand[k].coord, 9); marcas[k].openPopup();
   });
   tira.querySelectorAll('button[data-rel]').forEach(b => b.onclick = () => abrirRelieve(cand[+b.dataset.rel], s, e, lado));
+  if (cand.length && !zSel('dest')) m.mapa.fitBounds(L.latLngBounds(cand.map(g => g.coord)).pad(0.15), { maxZoom: 5 });   // los candidatos pueden estar en cualquier franja: se encuadran todos
 }
 
 function pintar() {

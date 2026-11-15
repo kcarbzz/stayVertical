@@ -21,7 +21,7 @@ FRANJAS = {
     "australia_central": ("Australia central", "Central Australia"), "tibet_qaidam": ("Tíbet y Qaidam", "Tibet and Qaidam"),
     "gobi": ("Gobi", "Gobi"), "mojave_gran_cuenca": ("Mojave y Gran Cuenca", "Mojave and Great Basin"),
     "islandia": ("Islandia", "Iceland"), "artico_canada": ("Ártico canadiense", "Canadian Arctic"),
-    "svalbard": ("Svalbard", "Svalbard"), "valles_secos": ("Valles Secos (Antártida)", "Dry Valleys (Antarctica)"),
+    "svalbard": ("Svalbard", "Svalbard"), "valles_secos": ("Tierra Victoria y Valles Secos (Antártida)", "Victoria Land and Dry Valleys (Antarctica)"),
 }
 COBERTURA_EN = {"sin dato": "no data", "bosque": "forest", "matorral": "shrubland", "pastizal": "grassland", "cultivos": "cropland",
                 "construido": "built-up", "suelo desnudo o vegetación escasa": "bare or sparse vegetation", "nieve y hielo": "snow and ice",

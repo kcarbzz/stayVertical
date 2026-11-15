@@ -82,7 +82,7 @@ Para llevarlo a la web:
 python3 -I scripts/construir_barrido.py --marte barrido_marte --luna barrido_luna
 ```
 
-Eso escribe `docs/barrido.json`, que la web muestra en la pestaña «Barrido automático».
+Eso escribe `docs/barrido.json`, que la web muestra en la pestaña «Barrido automático». La salida del barrido publicado (seis franjas, 342 teselas por cuerpo) está guardada en `data/barrido/`.
 
 Límites: compara solo relieve, con el mismo puntaje que el resto del proyecto; los cuadros que cruzan el borde entre dos teselas de 1° no se evalúan; la Antártida no tiene mapa de cobertura, así que ahí no se descarta nada y un candidato puede estar sobre hielo.
 
