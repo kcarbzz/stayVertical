@@ -3,14 +3,15 @@
 Lee las líneas tal como están en el repositorio, las colorea con Pygments y las dibuja con su número de línea.
 Las líneas muy largas se parten (la continuación no lleva número). Las líneas marcadas se resaltan.
 
-  python presentacion/generar_capturas.py      → presentacion/salida/codigo_*.png
+  python presentacion/generar_capturas.py                 → presentacion/salida/codigo_*.png      (Visión por Computadora)
+  python presentacion/generar_capturas.py --conjunto ia2  → presentacion/ia2/salida/codigo_*.png  (Inteligencia Artificial 2)
 """
 
 import os
 
 from PIL import Image, ImageDraw, ImageFont
 from pygments import lex
-from pygments.lexers import PythonLexer
+from pygments.lexers import JavascriptLexer, PythonLexer
 from pygments.token import Token
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -42,6 +43,26 @@ CAPTURAS = {
     "ncc": ("stayvertical/barrido.py", [(98, 98), (104, 121)], [104, 107, 110, 114, 115, 118]),
     "puntaje": ("stayvertical/barrido.py", [(150, 150), (164, 175)], [164, 165, 167, 168, 174], 78),
 }
+
+
+CAPTURAS_IA2 = {
+    "texto": ("entrenamiento/entrenar.py", [(50, 55), (58, 58), (60, 70), (75, 76)], [53, 54, 63, 64, 65, 68, 69, 75, 76]),
+    "aumento": ("entrenamiento/entrenar.py", [(90, 107)], [97, 99, 101, 103, 105]),
+    "entrenar": ("entrenamiento/entrenar.py", [(127, 149)], [137, 138, 140, 141, 142, 143, 144, 147, 148], 92),
+    "ensamble": ("entrenamiento/entrenar.py", [(152, 163)], [153, 157, 161, 162]),
+    "clasificar_js": ("docs/bot_nn.js", [(37, 49)], [41, 42, 44, 45, 46, 48], 92),
+    "decision": ("docs/asistente.js", [(500, 521)], [509, 510, 511, 515, 516, 517, 518, 520], 96),
+    "evaluar": ("tests/evaluar_ciego2.js", [(10, 17)], [12, 13, 14, 15], 92),
+    "reordenar": ("stayvertical/barrido.py", [(164, 168), (171, 175)], [164, 165, 167, 168, 174], 84),
+}
+
+
+# Sin ligaduras tipográficas: «>=» debe verse como se escribe, no como «≥».
+try:
+    from PIL import features as _f
+    SIN_LIGADURAS = {"features": ["-liga", "-calt"]} if _f.check("raqm") else {}
+except Exception:
+    SIN_LIGADURAS = {}
 
 
 def color(tipo):
@@ -91,10 +112,10 @@ def _fuente(negrita, tam):
     return ImageFont.truetype(os.path.join(matplotlib.get_data_path(), "fonts", "ttf", alt), tam)
 
 
-def tokens_por_linea(texto):
+def tokens_por_linea(texto, lexer=None):
     """Colorea el archivo entero (así los docstrings de varias líneas salen bien) y lo parte por líneas."""
     lineas, actual = [], []
-    for tipo, valor in lex(texto, PythonLexer()):
+    for tipo, valor in lex(texto, lexer or PythonLexer()):
         partes = valor.split("\n")
         for k, parte in enumerate(partes):
             if parte:
@@ -107,7 +128,7 @@ def tokens_por_linea(texto):
 
 def captura(nombre, archivo, tramos, resaltar, ancho=88, tam=30):
     with open(os.path.join(RAIZ, archivo), encoding="utf-8") as f:
-        todas = tokens_por_linea(f.read())
+        todas = tokens_por_linea(f.read(), JavascriptLexer() if archivo.endswith(".js") else PythonLexer())
     fuente = _fuente(False, tam)
     negrita = _fuente(True, tam)
     cw = fuente.getbbox("M")[2]
@@ -139,7 +160,7 @@ def captura(nombre, archivo, tramos, resaltar, ancho=88, tam=30):
             d.text((pad + gutter - 2 * cw, y), f"{num:>3}", font=fuente, fill=TITULO if hl else NUM, anchor="ra")
         x = pad + gutter
         for tipo, valor in fila:
-            d.text((x, y), valor, font=fuente, fill=color(tipo))
+            d.text((x, y), valor, font=fuente, fill=color(tipo), **SIN_LIGADURAS)
             x += cw * len(valor)
         y += lh
     os.makedirs(SALIDA, exist_ok=True)
@@ -149,5 +170,13 @@ def captura(nombre, archivo, tramos, resaltar, ancho=88, tam=30):
 
 
 if __name__ == "__main__":
-    for n, (a, tramos, r, *ancho) in CAPTURAS.items():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--conjunto", choices=["vc", "ia2"], default="vc")
+    if ap.parse_args().conjunto == "ia2":
+        SALIDA = os.path.join(RAIZ, "presentacion", "ia2", "salida")
+        conjunto = CAPTURAS_IA2
+    else:
+        conjunto = CAPTURAS
+    for n, (a, tramos, r, *ancho) in conjunto.items():
         captura(n, a, tramos, r, *ancho)
