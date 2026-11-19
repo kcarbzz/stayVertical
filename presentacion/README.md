@@ -1,3 +1,7 @@
+# Presentaciones finales
+
+- `Stay_Vertical_Presentacion_Conjunta.pptx`: las dos materias en una sola presentación (57 diapositivas): introducción común, Parte A (Visión por Computadora), Parte B (Inteligencia Artificial 2), demostración en vivo y código de ambas, y un cierre común. Usa las mismas figuras y demos que las presentaciones por separado.
+
 # Presentación final · Visión por Computadora
 
 | Archivo | Qué es |
